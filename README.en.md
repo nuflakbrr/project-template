@@ -52,18 +52,29 @@ Then you can answer some questions asked by package `BikinProject`:
 ◇  Pick a project type within "./your-project"
 │  Next.js App Router (Tailwind + TypeScript)
 │
-◇  Install dependencies?
-│  No
-│
 ◇  ⏳ Creating project...
 │
-◇  🎉 Project Created!
+◇  ✅ Project created successfully!
+│
+◇  Do you want to install dependencies for ./your-project?
+│  Yes
+│
+◇  Pick a package manager to install dependencies for "./your-project"
+│  PNPM
+│
+◇  📦 Installing dependencies using pnpm...
+│
+◇  ✅ Dependencies installed successfully!
+│
+◇  🎉 Project ready to use!
 │
 ◇  Next steps. ───────────────╮
 │                             │
 │  cd ./your-project          │
-│  npm install                │
-│  npm run dev                │
+│  pnpm install               │
+│  pnpm run dev               │
+│                             │
+│  Happy Coding!              │
 │                             │
 ├─────────────────────────────╯
 │
