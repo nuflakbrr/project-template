@@ -17,7 +17,7 @@ const CONFIG = {
         { value: 'reactjs-js', label: 'React.js (Tailwind + JavaScript)' },
         { value: 'nextjs-ts', label: 'Next.js App Router (Tailwind + TypeScript)' },
         { value: 'nextjs-js', label: 'Next.js App Router (Tailwind + JavaScript)' },
-        { value: 'laranextjs-ts', label: 'Laravel Breeze API w/ Next.js App Router (Tailwind + TypeScript)' },
+        { value: 'laranext-ts', label: 'Laravel Breeze API w/ Next.js App Router (Tailwind + TypeScript)' },
     ],
     PACKAGE_MANAGERS: [
         { value: 'npm', label: 'NPM' },
