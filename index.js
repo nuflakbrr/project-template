@@ -28,7 +28,7 @@ const CONFIG = {
 };
 
 // Utility functions
-const getOperatingSystem = () => {
+const getOperatingSystem = async () => {
     const platform = process.platform;
     const osMap = {
         darwin: 'mac',
@@ -38,13 +38,13 @@ const getOperatingSystem = () => {
     return osMap[platform] || 'unknown';
 };
 
-const validateProjectPath = (value) => {
+const validateProjectPath = async (value) => {
     if (!value) return 'Please enter a path.';
     if (value[0] !== '.') return 'Please enter a relative path.';
     return;
 };
 
-const validateProjectDirectory = (dirPath) => {
+const validateProjectDirectory = async (dirPath) => {
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath);
         return true;
@@ -79,7 +79,7 @@ const replicateTemplates = async (templatePath, projectPath) => {
 };
 
 // Project setup functions
-const setupFrontendProject = (projectPath, templateType) => {
+const setupFrontendProject = async (projectPath, templateType) => {
     shell.cd(projectPath);
     const os = getOperatingSystem();
     const silentFlag = os === 'windows' ? '> nul 2>&1' : '> /dev/null 2>&1';
@@ -106,7 +106,7 @@ const installDependencies = async (projectPath, projectName, spinner) => {
     return null;
 };
 
-const displayNextSteps = (projectPath, packageManager, install) => {
+const displayNextSteps = async (projectPath, packageManager, install) => {
     let nextSteps = '';
 
     if (install) {
@@ -167,7 +167,7 @@ async function main() {
     validateProjectDirectory(project.path);
 
     if (CONFIG.FRONTEND_TEMPLATES.includes(project.type)) {
-        setupFrontendProject(project.path, project.type);
+        await setupFrontendProject(project.path, project.type);
     } else {
         await replicateTemplates(templatePath, projectPath);
     }
