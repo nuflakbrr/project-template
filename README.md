@@ -44,7 +44,7 @@ npx bikinproject@latest
 
 Lalu Anda dapat menjawan beberapa pertanyaan yang diajukan oleh package `BikinProject`:
 
-```bash
+```
 ┌   create-bikinproject-app
 │
 ◇  Where should we create your project?

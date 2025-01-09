@@ -43,7 +43,7 @@ npx bikinproject@latest
 
 Then you can answer some questions asked by package `BikinProject`:
 
-```bash
+```
 ┌   create-bikinproject-app
 │
 ◇  Where should we create your project?
