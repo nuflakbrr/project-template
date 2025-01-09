@@ -28,7 +28,7 @@ const CONFIG = {
 };
 
 // Utility functions
-const getOperatingSystem = async () => {
+const getOperatingSystem = () => {
     const platform = process.platform;
     const osMap = {
         darwin: 'mac',
@@ -44,14 +44,14 @@ const validateProjectPath = (value) => {
     return;
 };
 
-const validateProjectDirectory = async (dirPath) => {
+const validateProjectDirectory = (dirPath) => {
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath);
         return true;
     }
 
     if (fs.readdirSync(dirPath).length > 0) {
-        p.cancel('Directory is not empty! Please create a project in an empty directory.');
+        p.log.error('Directory is not empty! Please create a project in an empty directory.');
         process.exit(1);
     }
     return true;
@@ -59,68 +59,100 @@ const validateProjectDirectory = async (dirPath) => {
 
 // Template handling
 const replicateTemplates = async (templatePath, projectPath) => {
-    const templateFiles = fs.readdirSync(templatePath)
-        .filter(name => !CONFIG.SKIP_FILES.includes(name));
+    try {
+        const templateFiles = fs.readdirSync(templatePath)
+            .filter(name => !CONFIG.SKIP_FILES.includes(name));
 
-    templateFiles.forEach(name => {
-        const originPath = path.join(templatePath, name);
-        const destinationPath = path.join(projectPath, name);
-        const stats = fs.statSync(originPath);
+        templateFiles.forEach(name => {
+            const originPath = path.join(templatePath, name);
+            const destinationPath = path.join(projectPath, name);
+            const stats = fs.statSync(originPath);
 
-        if (stats.isFile()) {
-            fs.writeFileSync(destinationPath, fs.readFileSync(originPath, 'utf8'));
-        } else if (stats.isDirectory()) {
-            if (!fs.existsSync(destinationPath)) {
-                fs.mkdirSync(destinationPath);
+            if (stats.isFile()) {
+                fs.writeFileSync(destinationPath, fs.readFileSync(originPath, 'utf8'));
+            } else if (stats.isDirectory()) {
+                if (!fs.existsSync(destinationPath)) {
+                    fs.mkdirSync(destinationPath);
+                }
+                replicateTemplates(originPath, destinationPath);
             }
-            replicateTemplates(originPath, destinationPath);
-        }
-    });
+        });
+        return true;
+    } catch (error) {
+        p.log.error(`Failed to replicate templates: ${error.message}`);
+        process.exit(1);
+    }
 };
 
 // Project setup functions
 const setupFrontendProject = async (projectPath, templateType) => {
-    shell.cd(projectPath);
-    const os = getOperatingSystem();
-    const silentFlag = os === 'windows' ? '> nul 2>&1' : '> /dev/null 2>&1';
-
-    shell.exec(`npx degit nuflakbrr/frontend-template#${templateType} . --silent ${silentFlag}`);
-};
-
-const installDependencies = async (projectPath, projectName, spinner) => {
-    const packageManager = await p.select({
-        message: `Pick a package manager to install dependencies for "${projectName}"`,
-        initialValue: 'npm',
-        options: CONFIG.PACKAGE_MANAGERS,
-    });
-
-    if (packageManager) {
-        spinner.start(`📦 Installing dependencies using ${packageManager}...`);
-        await setTimeout(2500);
-
+    try {
         shell.cd(projectPath);
-        shell.exec(`${packageManager} install --silent`);
+        const os = getOperatingSystem();
+        const silentFlag = os === 'windows' ? '> nul 2>&1' : '> /dev/null 2>&1';
 
-        return packageManager;
+        const result = shell.exec(`npx degit nuflakbrr/frontend-template#${templateType} . --silent ${silentFlag}`);
+        if (result.code !== 0) {
+            p.log.error('Failed to setup frontend project');
+            process.exit(1);
+        }
+        return true;
+    } catch (error) {
+        p.log.error(`Failed to setup frontend project: ${error.message}`);
+        process.exit(1);
     }
-    return null;
 };
 
-const displayNextSteps = async (projectPath, packageManager, install) => {
-    let nextSteps = '';
+const installDependencies = async (projectPath, spinner) => {
+    try {
+        const packageManager = await p.select({
+            message: `Pick a package manager to install dependencies for "${projectPath}"`,
+            initialValue: 'npm',
+            options: CONFIG.PACKAGE_MANAGERS,
+        });
 
-    if (install) {
-        nextSteps = `cd ${projectPath}
-${packageManager} run dev
+        if (packageManager) {
+            spinner.start(`📦 Installing dependencies using ${packageManager}...`);
+            await setTimeout(2500);
+            shell.cd(projectPath);
+            const os = getOperatingSystem();
+            const silentRedirect = os === 'windows' ? '2>NUL' : '2>/dev/null';
 
-${color.underline(color.cyan('Happy Coding!'))}`;
-    } else {
-        nextSteps = `cd ${projectPath}
-${packageManager} install
-${packageManager} run dev
+            const commands = {
+                npm: `npm install --silent ${silentRedirect}`,
+                yarn: `yarn install --silent ${silentRedirect}`,
+                bun: `bun install --silent --no-summary ${silentRedirect}`,
+                pnpm: `pnpm install --silent ${silentRedirect}`
+            };
 
-${color.underline(color.cyan('Happy Coding!'))}`;
+            const installCommand = commands[packageManager];
+            if (!installCommand) {
+                p.log.error(`Unsupported package manager: ${packageManager}`);
+            }
+
+            const result = shell.exec(installCommand);
+
+            if (result.code !== 0) {
+                spinner.stop(`Failed to install dependencies using ${packageManager}`);
+                if (result.stderr) {
+                    console.error(`Error details: ${result.stderr}`);
+                }
+                process.exit(1);
+            }
+
+            return packageManager;
+        }
+        return null;
+    } catch (error) {
+        p.log.error(`Failed to install dependencies: ${error.message}`);
+        process.exit(1);
     }
+};
+
+const displayNextSteps = (projectPath, packageManager, install = false) => {
+    const nextSteps = install
+        ? `cd ${projectPath}\n${packageManager} run dev\n\n${color.underline(color.cyan('Happy Coding!'))}`
+        : `cd ${projectPath}\n${packageManager} install\n${packageManager} run dev\n\n${color.underline(color.cyan('Happy Coding!'))}`;
 
     const contact = `Have a Problems? Report to ${color.underline(color.cyan('https://github.com/nuflakbrr/bikinproject/issues'))}`;
 
@@ -130,69 +162,81 @@ ${color.underline(color.cyan('Happy Coding!'))}`;
 
 // Main application flow
 async function main() {
-    console.clear();
-    await setTimeout(1000);
-    p.intro(`${color.bgCyan(color.black(' create-bikinproject-app '))}`);
+    try {
+        console.clear();
+        await setTimeout(1000);
+        p.intro(`${color.bgCyan(color.black(' create-bikinproject-app '))}`);
 
-    const project = await p.group(
-        {
-            path: () => p.text({
-                message: 'Where should we create your project?',
-                placeholder: './your-project',
-                validate: validateProjectPath,
-            }),
-            type: ({ results }) => p.select({
-                message: `Pick a starter project type within "${results.path}"`,
-                initialValue: 'react-ts-template',
-                options: CONFIG.TEMPLATE_OPTIONS,
-            }),
-        },
-        {
-            onCancel: () => {
-                p.cancel('Operation cancelled.');
-                process.exit(1);
+        const project = await p.group(
+            {
+                path: () => p.text({
+                    message: 'Where should we create your project?',
+                    placeholder: './your-project',
+                    validate: validateProjectPath,
+                }),
+                type: ({ results }) => p.select({
+                    message: `Pick a starter project type within "${results.path}"`,
+                    initialValue: 'react-ts-template',
+                    options: CONFIG.TEMPLATE_OPTIONS,
+                }),
             },
-        }
-    );
-
-    if (!project) return;
-
-    const spinner = p.spinner();
-    const projectPath = path.join(process.cwd(), project.path);
-    const templatePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates', project.type);
-
-    spinner.start('⏳ Creating project...');
-    await setTimeout(2500);
-
-    validateProjectDirectory(project.path);
-
-    if (CONFIG.FRONTEND_TEMPLATES.includes(project.type)) {
-        await setupFrontendProject(project.path, project.type);
-    } else {
-        await replicateTemplates(templatePath, projectPath);
-    }
-
-    spinner.stop('✅ Project created!');
-
-    if (fs.existsSync(path.join(projectPath, 'package.json'))) {
-        const install = await p.confirm({
-            message: `Do you want to install dependencies for ${project.path}?`,
-            initialValue: true,
-        });
-
-        if (install) {
-            const packageManager = await installDependencies(projectPath, project.path, spinner);
-            if (packageManager) {
-                spinner.stop('✅ Dependencies installed!');
-                p.log.step('🎉 Project ready to use!');
-                displayNextSteps(project.path, packageManager, install);
-                return;
+            {
+                onCancel: () => {
+                    p.cancel('Operation cancelled.');
+                    process.exit(1);
+                },
             }
-        }
-    }
+        );
 
-    spinner.stop('🎉 Project created!');
-    displayNextSteps(project.path, 'npm');
+        if (!project) return;
+
+        const spinner = p.spinner();
+        const projectPath = path.join(process.cwd(), project.path);
+        const templatePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates', project.type);
+
+        try {
+            spinner.start('⏳ Creating project...');
+            await setTimeout(2500);
+
+            validateProjectDirectory(project.path);
+
+            if (CONFIG.FRONTEND_TEMPLATES.includes(project.type)) {
+                await setupFrontendProject(project.path, project.type);
+            } else {
+                await replicateTemplates(templatePath, projectPath);
+            }
+
+            spinner.stop('✅ Project created successfully!');
+
+            if (fs.existsSync(path.join(projectPath, 'package.json'))) {
+                const install = await p.confirm({
+                    message: `Do you want to install dependencies for ${project.path}?`,
+                    initialValue: true,
+                });
+
+                if (install) {
+                    const packageManager = await installDependencies(projectPath, spinner);
+                    if (packageManager) {
+                        spinner.stop('✅ Dependencies installed successfully!');
+                        p.log.step('🎉 Project ready to use!');
+                        displayNextSteps(project.path, packageManager, true);
+                        return;
+                    }
+                }
+            }
+
+            displayNextSteps(project.path, 'npm');
+        } catch (error) {
+            spinner.stop(`❌ Error: ${error.message}`);
+            process.exit(1);
+        }
+    } catch (error) {
+        p.log.error(`Fatal error: ${error.message}`);
+        process.exit(1);
+    }
 }
 
-main().catch(console.error);
+main().catch((error) => {
+    p.log.error(`Unhandled error: ${error.message}`);
+    process.exit(1);
+});
