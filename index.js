@@ -215,7 +215,7 @@ async function main() {
                 });
 
                 if (install) {
-                    const packageManager = await installDependencies(projectPath, spinner);
+                    const packageManager = await installDependencies(project.path, spinner);
                     if (packageManager) {
                         spinner.stop('✅ Dependencies installed successfully!');
                         p.log.step('🎉 Project ready to use!');
