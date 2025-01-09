@@ -103,10 +103,10 @@ const setupFrontendProject = async (projectPath, templateType) => {
     }
 };
 
-const installDependencies = async (projectPath, spinner) => {
+const installDependencies = async (originalPath, projectName, spinner) => {
     try {
         const packageManager = await p.select({
-            message: `Pick a package manager to install dependencies for "${projectPath}"`,
+            message: `Pick a package manager to install dependencies for "${projectName}"`,
             initialValue: 'npm',
             options: CONFIG.PACKAGE_MANAGERS,
         });
@@ -114,7 +114,7 @@ const installDependencies = async (projectPath, spinner) => {
         if (packageManager) {
             spinner.start(`📦 Installing dependencies using ${packageManager}...`);
             await setTimeout(2500);
-            shell.cd(projectPath);
+            shell.cd(originalPath);
             const os = getOperatingSystem();
             const silentRedirect = os === 'windows' ? '2>NUL' : '2>/dev/null';
 
@@ -215,7 +215,7 @@ async function main() {
                 });
 
                 if (install) {
-                    const packageManager = await installDependencies(project.path, spinner);
+                    const packageManager = await installDependencies(projectPath, project.path, spinner);
                     if (packageManager) {
                         spinner.stop('✅ Dependencies installed successfully!');
                         p.log.step('🎉 Project ready to use!');
