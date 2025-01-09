@@ -112,6 +112,6 @@ This work is licensed under the [MIT LICENSE](./LICENSE).
 Author name and contact info,
 
 Naufal Akbar Nugroho
-[Website](https://nuflakbrr.vercel.app)
-[@nuflakbrr](https://github.com/nuflakbrr)
-[@kbrnugroho](https://instagram.com/kbrnugroho)
+[Website](https://nuflakbrr.github.io)
+[Github](https://github.com/nuflakbrr)
+[Instagram](https://instagram.com/kbrnugroho)
