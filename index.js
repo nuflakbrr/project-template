@@ -38,7 +38,7 @@ const getOperatingSystem = async () => {
     return osMap[platform] || 'unknown';
 };
 
-const validateProjectPath = async (value) => {
+const validateProjectPath = (value) => {
     if (!value) return 'Please enter a path.';
     if (value[0] !== '.') return 'Please enter a relative path.';
     return;
