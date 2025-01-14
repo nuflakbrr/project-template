@@ -2,7 +2,7 @@
 
 import * as p from '@clack/prompts';
 import { setTimeout } from 'node:timers/promises';
-import { fileURLToPath } from 'node:url';
+// import { fileURLToPath } from 'node:url';
 import color from 'picocolors';
 import shell from 'shelljs';
 import path from 'node:path';
@@ -12,12 +12,14 @@ import fs from 'node:fs';
 const CONFIG = {
     SKIP_FILES: ['node_modules', 'build', 'dist'],
     FRONTEND_TEMPLATES: ['reactjs-ts', 'reactjs-js', 'nextjs-ts', 'nextjs-js'],
+    FULLSTACK_TEMPLATES: ['laranext-ts', 'laravel-filament'],
     TEMPLATE_OPTIONS: [
         { value: 'reactjs-ts', label: 'React.js (Tailwind + TypeScript)' },
         { value: 'reactjs-js', label: 'React.js (Tailwind + JavaScript)' },
         { value: 'nextjs-ts', label: 'Next.js App Router (Tailwind + TypeScript)' },
         { value: 'nextjs-js', label: 'Next.js App Router (Tailwind + JavaScript)' },
         { value: 'laranext-ts', label: 'Laravel Breeze API w/ Next.js App Router (Tailwind + TypeScript)' },
+        { value: 'laravel-filament', label: 'Laravel + Filament' },
     ],
     PACKAGE_MANAGERS: [
         { value: 'npm', label: 'NPM' },
@@ -58,31 +60,31 @@ const validateProjectDirectory = (dirPath) => {
 };
 
 // Template handling
-const replicateTemplates = async (templatePath, projectPath) => {
-    try {
-        const templateFiles = fs.readdirSync(templatePath)
-            .filter(name => !CONFIG.SKIP_FILES.includes(name));
+// const replicateTemplates = async (templatePath, projectPath) => {
+//     try {
+//         const templateFiles = fs.readdirSync(templatePath)
+//             .filter(name => !CONFIG.SKIP_FILES.includes(name));
 
-        templateFiles.forEach(name => {
-            const originPath = path.join(templatePath, name);
-            const destinationPath = path.join(projectPath, name);
-            const stats = fs.statSync(originPath);
+//         templateFiles.forEach(name => {
+//             const originPath = path.join(templatePath, name);
+//             const destinationPath = path.join(projectPath, name);
+//             const stats = fs.statSync(originPath);
 
-            if (stats.isFile()) {
-                fs.writeFileSync(destinationPath, fs.readFileSync(originPath, 'utf8'));
-            } else if (stats.isDirectory()) {
-                if (!fs.existsSync(destinationPath)) {
-                    fs.mkdirSync(destinationPath);
-                }
-                replicateTemplates(originPath, destinationPath);
-            }
-        });
-        return true;
-    } catch (error) {
-        p.log.error(`Failed to replicate templates: ${error.message}`);
-        process.exit(1);
-    }
-};
+//             if (stats.isFile()) {
+//                 fs.writeFileSync(destinationPath, fs.readFileSync(originPath, 'utf8'));
+//             } else if (stats.isDirectory()) {
+//                 if (!fs.existsSync(destinationPath)) {
+//                     fs.mkdirSync(destinationPath);
+//                 }
+//                 replicateTemplates(originPath, destinationPath);
+//             }
+//         });
+//         return true;
+//     } catch (error) {
+//         p.log.error(`Failed to replicate templates: ${error.message}`);
+//         process.exit(1);
+//     }
+// };
 
 // Project setup functions
 const setupFrontendProject = async (projectPath, templateType) => {
@@ -99,6 +101,24 @@ const setupFrontendProject = async (projectPath, templateType) => {
         return true;
     } catch (error) {
         p.log.error(`Failed to setup frontend project: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+const setupFullstackProject = async (projectPath, templateType) => {
+    try {
+        shell.cd(projectPath);
+        const os = getOperatingSystem();
+        const silentFlag = os === 'windows' ? '> nul 2>&1' : '> /dev/null 2>&1';
+
+        const result = shell.exec(`npx degit nuflakbrr/fullstack-template#${templateType} . --silent ${silentFlag}`);
+        if (result.code !== 0) {
+            p.log.error('Failed to setup fullstack project');
+            process.exit(1);
+        }
+        return true;
+    } catch (error) {
+        p.log.error(`Failed to setup fullstack project: ${error.message}`);
         process.exit(1);
     }
 };
@@ -192,7 +212,7 @@ async function main() {
 
         const spinner = p.spinner();
         const projectPath = path.join(process.cwd(), project.path);
-        const templatePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates', project.type);
+        // const templatePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates', project.type);
 
         try {
             spinner.start('⏳ Creating project...');
@@ -202,8 +222,8 @@ async function main() {
 
             if (CONFIG.FRONTEND_TEMPLATES.includes(project.type)) {
                 await setupFrontendProject(project.path, project.type);
-            } else {
-                await replicateTemplates(templatePath, projectPath);
+            } else if (CONFIG.FULLSTACK_TEMPLATES.includes(project.type)) {
+                await setupFullstackProject(project.path, project.type);
             }
 
             spinner.stop('✅ Project created successfully!');

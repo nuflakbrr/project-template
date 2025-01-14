@@ -98,6 +98,7 @@ Then you can answer some questions asked by package `BikinProject`:
 
 - Laravel Breeze API w/ Next.js App Router (Tailwind + TypeScript)
 - Laravel Breeze API w/ Next.js App Router (Tailwind + JavaScript) 🚧
+- Laravel + Filament
 
 ## How to Contribute
 

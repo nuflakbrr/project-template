@@ -99,6 +99,7 @@ Lalu Anda dapat menjawan beberapa pertanyaan yang diajukan oleh package `BikinPr
 
 - Laravel Breeze API w/ Next.js App Router (Tailwind + TypeScript)
 - Laravel Breeze API w/ Next.js App Router (Tailwind + JavaScript) 🚧
+- Laravel + Filament
 
 ## Cara Berkontribusi
 
