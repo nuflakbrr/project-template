@@ -1,0 +1,36 @@
+{
+  "name": "@bikinproject/backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Convex backend package for bikinproject — a CLI tool to scaffold modern fullstack project boilerplates.",
+  "homepage": "https://nuflakbrr.github.io/bikinproject/",
+  "bugs": {
+    "url": "https://github.com/nuflakbrr/bikinproject/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Naufal Akbar Nugroho",
+    "email": "naufalakbar378@gmail.com",
+    "url": "https://github.com/nuflakbrr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nuflakbrr/bikinproject.git",
+    "directory": "packages/backend"
+  },
+  "scripts": {
+    "dev": "convex dev",
+    "dev:setup": "convex dev --configure --until-success",
+    "deploy": "convex deploy"
+  },
+  "dependencies": {
+    "@bikinproject/types": "^1.0.0",
+    "@convex-dev/crons": "^0.2.0",
+    "@erquhart/convex-oss-stats": "^0.8.2",
+    "convex": "^1.31.7",
+    "convex-helpers": "^0.1.111"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

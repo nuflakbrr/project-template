@@ -30,6 +30,7 @@ dist
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
+bun.lock
 
 # Debug
 npm-debug.log*

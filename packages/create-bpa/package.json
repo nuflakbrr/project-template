@@ -1,0 +1,70 @@
+{
+  "name": "create-bpa",
+  "version": "1.0.0",
+  "description": "A modern CLI tool to generate type-safe TypeScript project with best practices and customizable configurations",
+  "keywords": [
+    "bikinproject",
+    "bikinproject-app",
+    "biome",
+    "boilerplate",
+    "cli",
+    "create-bpa",
+    "drizzle",
+    "fullstack",
+    "hono",
+    "monorepo",
+    "prisma",
+    "pwa",
+    "react",
+    "shadcn",
+    "starter",
+    "tailwind",
+    "tanstack",
+    "trpc",
+    "turborepo",
+    "type-safety",
+    "typescript"
+  ],
+  "homepage": "https://nuflakbrr.github.io/bikinproject/",
+  "bugs": {
+    "url": "https://github.com/nuflakbrr/bikinproject/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Naufal Akbar Nugroho",
+    "email": "naufalakbar378@gmail.com",
+    "url": "https://github.com/nuflakbrr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nuflakbrr/bikinproject.git",
+    "directory": "packages/create-bpa"
+  },
+  "bin": {
+    "create-bpa": "cli.js"
+  },
+  "files": [
+    "cli.js",
+    "index.d.ts",
+    "index.js"
+  ],
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js"
+    },
+    "./cli": {
+      "import": "./cli.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "create-better-t-stack": "^3.22.2"
+  }
+}
