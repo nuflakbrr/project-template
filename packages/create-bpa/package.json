@@ -65,6 +65,6 @@
     "access": "public"
   },
   "dependencies": {
-    "create-better-t-stack": "^3.22.2"
+    "create-bikinproject-app": "^2.0.0"
   }
 }

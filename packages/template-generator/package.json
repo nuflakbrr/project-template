@@ -52,7 +52,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@better-t-stack/types": "^3.22.2",
+    "@bikinproject/types": "^1.0.0",
     "better-result": "^2.3.0",
     "handlebars": "^4.7.8",
     "memfs": "^4.51.1",
