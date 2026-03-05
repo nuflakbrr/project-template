@@ -1,7 +1,6 @@
 {
   "name": "@bikinproject/backend",
   "version": "1.0.0",
-  "private": true,
   "description": "Convex backend package for bikinproject — a CLI tool to scaffold modern fullstack project boilerplates.",
   "homepage": "https://nuflakbrr.github.io/bikinproject/",
   "bugs": {
