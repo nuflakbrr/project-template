@@ -1,0 +1,79 @@
+import { DEFAULT_CONFIG } from "../constants";
+import type { Backend, Frontend } from "../types";
+import { UserCancelledError } from "../utils/errors";
+import { isCancel, navigableSelect } from "./navigable";
+
+// Frontends that support backend="self" (fullstack mode with built-in server routes)
+const FULLSTACK_FRONTENDS: readonly Frontend[] = [
+  "next",
+  "tanstack-start",
+  "nuxt",
+  "astro",
+  // "svelte",    // TODO: Add support in future update
+] as const;
+
+export async function getBackendFrameworkChoice(
+  backendFramework?: Backend,
+  frontends?: Frontend[],
+) {
+  if (backendFramework !== undefined) return backendFramework;
+
+  const hasIncompatibleFrontend = frontends?.some((f) => f === "solid" || f === "astro");
+  const hasFullstackFrontend = frontends?.some((f) => FULLSTACK_FRONTENDS.includes(f));
+
+  const backendOptions: Array<{
+    value: Backend;
+    label: string;
+    hint: string;
+  }> = [];
+
+  if (hasFullstackFrontend) {
+    backendOptions.push({
+      value: "self" as const,
+      label: "Self (Fullstack)",
+      hint: "Use frontend's built-in api routes",
+    });
+  }
+
+  backendOptions.push(
+    {
+      value: "hono" as const,
+      label: "Hono",
+      hint: "Lightweight, ultrafast web framework",
+    },
+    {
+      value: "express" as const,
+      label: "Express",
+      hint: "Fast, unopinionated, minimalist web framework for Node.js",
+    },
+    {
+      value: "fastify" as const,
+      label: "Fastify",
+      hint: "Fast, low-overhead web framework for Node.js",
+    },
+  );
+
+  if (!hasIncompatibleFrontend) {
+    backendOptions.push({
+      value: "convex" as const,
+      label: "Convex",
+      hint: "Reactive backend-as-a-service platform",
+    });
+  }
+
+  backendOptions.push({
+    value: "none" as const,
+    label: "None",
+    hint: "No backend server",
+  });
+
+  const response = await navigableSelect<Backend>({
+    message: "Select backend",
+    options: backendOptions,
+    initialValue: hasFullstackFrontend ? "self" : DEFAULT_CONFIG.backend,
+  });
+
+  if (isCancel(response)) throw new UserCancelledError({ message: "Operation cancelled" });
+
+  return response;
+}
