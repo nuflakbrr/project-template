@@ -32,11 +32,13 @@ import { navigableGroup } from "./navigable-group";
 import { getORMChoice } from "./orm";
 import { getPackageManagerChoice } from "./package-manager";
 import { getPaymentsChoice } from "./payments";
+import { getProjectTypeChoice, type ProjectType } from "./project-type";
 import { getRuntimeChoice } from "./runtime";
 import { getServerDeploymentChoice } from "./server-deploy";
 import { getDeploymentChoice } from "./web-deploy";
 
 type PromptGroupResults = {
+  projectType: ProjectType;
   frontend: Frontend[];
   backend: Backend;
   runtime: Runtime;
@@ -87,50 +89,103 @@ export async function gatherConfig(
 
   const result = await navigableGroup<PromptGroupResults>(
     {
-      frontend: () => getFrontendChoice(flags.frontend, flags.backend, flags.auth),
-      backend: ({ results }) => getBackendFrameworkChoice(flags.backend, results.frontend),
-      runtime: ({ results }) => getRuntimeChoice(flags.runtime, results.backend),
-      database: ({ results }) =>
-        getDatabaseChoice(flags.database, results.backend, results.runtime),
-      orm: ({ results }) =>
-        getORMChoice(
+      projectType: () => getProjectTypeChoice(),
+      frontend: ({ results }) => {
+        if (results.projectType === "backend") return Promise.resolve(["none" as Frontend]);
+        return getFrontendChoice(flags.frontend, flags.backend, flags.auth);
+      },
+      backend: ({ results }) => {
+        if (results.projectType === "frontend") return Promise.resolve("none" as Backend);
+        return getBackendFrameworkChoice(flags.backend, results.frontend);
+      },
+      runtime: ({ results }) => {
+        if (results.projectType === "frontend") return Promise.resolve("none" as Runtime);
+        return getRuntimeChoice(flags.runtime, results.backend);
+      },
+      database: ({ results }) => {
+        if (results.projectType === "frontend") return Promise.resolve("none" as Database);
+        return getDatabaseChoice(flags.database, results.backend, results.runtime);
+      },
+      orm: ({ results }) => {
+        if (results.projectType === "frontend") return Promise.resolve("none" as ORM);
+        return getORMChoice(
           flags.orm,
           results.database !== "none",
           results.database,
           results.backend,
           results.runtime,
-        ),
-      api: ({ results }) =>
-        getApiChoice(flags.api, results.frontend, results.backend) as Promise<API>,
-      auth: ({ results }) => getAuthChoice(flags.auth, results.backend, results.frontend),
-      payments: ({ results }) =>
-        getPaymentsChoice(flags.payments, results.auth, results.backend, results.frontend),
-      addons: ({ results }) => getAddonsChoice(flags.addons, results.frontend, results.auth),
-      examples: ({ results }) =>
-        getExamplesChoice(
+        );
+      },
+      api: ({ results }) => {
+        if (results.projectType === "frontend") return Promise.resolve("none" as API);
+        return getApiChoice(flags.api, results.frontend, results.backend) as Promise<API>;
+      },
+      auth: ({ results }) => {
+        if (results.projectType === "backend") return Promise.resolve("none" as Auth);
+        return getAuthChoice(flags.auth, results.backend, results.frontend);
+      },
+      payments: ({ results }) => {
+        if (results.projectType === "backend") return Promise.resolve("none" as Payments);
+        return getPaymentsChoice(flags.payments, results.auth, results.backend, results.frontend);
+      },
+      addons: ({ results }) => {
+        return getAddonsChoice(flags.addons, results.frontend, results.auth);
+      },
+      examples: ({ results }) => {
+        if (results.projectType === "frontend") {
+          return getExamplesChoice(
+            flags.examples,
+            "none",
+            results.frontend,
+            "none",
+            "none",
+          ) as Promise<Examples[]>;
+        }
+        if (results.projectType === "backend") {
+          return getExamplesChoice(
+            flags.examples,
+            results.database,
+            ["none"],
+            results.backend,
+            "none",
+          ) as Promise<Examples[]>;
+        }
+        return getExamplesChoice(
           flags.examples,
           results.database,
           results.frontend,
           results.backend,
           results.api,
-        ) as Promise<Examples[]>,
-      dbSetup: ({ results }) =>
-        getDBSetupChoice(
+        ) as Promise<Examples[]>;
+      },
+      dbSetup: ({ results }) => {
+        if (results.projectType === "frontend") return Promise.resolve("none" as DatabaseSetup);
+        return getDBSetupChoice(
           results.database ?? "none",
           flags.dbSetup,
           results.orm,
           results.backend,
           results.runtime,
-        ),
-      webDeploy: ({ results }) =>
-        getDeploymentChoice(flags.webDeploy, results.runtime, results.backend, results.frontend),
-      serverDeploy: ({ results }) =>
-        getServerDeploymentChoice(
+        );
+      },
+      webDeploy: ({ results }) => {
+        if (results.projectType === "backend") return Promise.resolve("none" as WebDeploy);
+        return getDeploymentChoice(
+          flags.webDeploy,
+          results.runtime,
+          results.backend,
+          results.frontend,
+        );
+      },
+      serverDeploy: ({ results }) => {
+        if (results.projectType === "frontend") return Promise.resolve("none" as ServerDeploy);
+        return getServerDeploymentChoice(
           flags.serverDeploy,
           results.runtime,
           results.backend,
           results.webDeploy,
-        ),
+        );
+      },
       git: () => getGitChoice(flags.git),
       packageManager: () => getPackageManagerChoice(flags.packageManager),
       install: () => getinstallChoice(flags.install),
