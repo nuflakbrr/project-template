@@ -198,9 +198,9 @@ export default defineConfig({
   images: ["public/logo.png"],
 });
 `],
-  ["addons/ruler/.ruler/bpa.md.hbs", `# Bikinproject Project Rules
+  ["addons/ruler/.ruler/bpa.md.hbs", `# BikinProject Project Rules
 
-This is a {{projectName}} project created with Bikinproject CLI.
+This is a {{projectName}} project created with BikinProject CLI.
 
 ## Project Structure
 
@@ -294,7 +294,7 @@ Authentication is powered by Better Auth:
 
 ## Project Configuration
 
-This project includes a \`bpa.jsonc\` configuration file that stores your Bikinproject settings:
+This project includes a \`bpa.jsonc\` configuration file that stores your BikinProject settings:
 
 - Contains your selected stack configuration (database, ORM, backend, frontend, etc.)
 - Used by the CLI to understand your project structure
@@ -8372,7 +8372,7 @@ lerna-debug.log*
 # Turbo
 .turbo
 
-# Bikinproject
+# BikinProject
 .alchemy
 
 # Testing

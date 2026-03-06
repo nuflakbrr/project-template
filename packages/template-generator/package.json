@@ -1,7 +1,7 @@
 {
   "name": "@bikinproject/template-generator",
   "version": "1.0.0",
-  "description": "Virtual file system generator for Bikinproject templates - works in browsers and Node.js",
+  "description": "Virtual file system generator for BikinProject templates - works in browsers and Node.js",
   "keywords": [
     "bikinproject",
     "cli",

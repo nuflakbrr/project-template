@@ -35,7 +35,7 @@ function generateReadmeContent(options: ProjectConfig): string {
 
   return `# ${projectName}
 
-This project was created with [Bikinproject](https://github.com/nuflakbrr/bikinproject), a modern TypeScript stack${
+This project was created with [BikinProject](https://github.com/nuflakbrr/bikinproject), a modern TypeScript stack${
     stackDescription ? ` that combines ${stackDescription}` : ""
   }.
 
