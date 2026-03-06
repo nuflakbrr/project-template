@@ -1,0 +1,46 @@
+import type { ProjectConfig } from "@bikinproject/types";
+
+import type { VirtualFileSystem } from "../core/virtual-fs";
+import { type TemplateData, processTemplatesFromPrefix } from "./utils";
+
+export async function processFrontendTemplates(
+  vfs: VirtualFileSystem,
+  templates: TemplateData,
+  config: ProjectConfig,
+): Promise<void> {
+  const hasReactWeb = config.frontend.some((f) =>
+    ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
+  );
+  const hasNuxtWeb = config.frontend.includes("nuxt");
+  const hasSvelteWeb = config.frontend.includes("svelte");
+  const hasSolidWeb = config.frontend.includes("solid");
+  const hasAstroWeb = config.frontend.includes("astro");
+  const isConvex = config.backend === "convex";
+
+  if (hasReactWeb || hasNuxtWeb || hasSvelteWeb || hasSolidWeb || hasAstroWeb) {
+    if (hasReactWeb) {
+      processTemplatesFromPrefix(vfs, templates, "frontend/react/web-base", "apps/web", config);
+
+      const reactFramework = config.frontend.find((f) =>
+        ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
+      );
+      if (reactFramework) {
+        processTemplatesFromPrefix(
+          vfs,
+          templates,
+          `frontend/react/${reactFramework}`,
+          "apps/web",
+          config,
+        );
+      }
+    } else if (hasNuxtWeb) {
+      processTemplatesFromPrefix(vfs, templates, "frontend/nuxt", "apps/web", config);
+    } else if (hasSvelteWeb) {
+      processTemplatesFromPrefix(vfs, templates, "frontend/svelte", "apps/web", config);
+    } else if (hasSolidWeb) {
+      processTemplatesFromPrefix(vfs, templates, "frontend/solid", "apps/web", config);
+    } else if (hasAstroWeb) {
+      processTemplatesFromPrefix(vfs, templates, "frontend/astro", "apps/web", config);
+    }
+  }
+}
