@@ -48,7 +48,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "dev:cli": "turbo run dev --filter=create-bikinproject-app",
+    "dev:cli": "turbo run dev --filter=create-bikinproject-app --filter=@bikinproject/template-generator --filter=create-bpa",
     "cli": "cd apps/cli && node dist/cli.js",
     "dev:web": "turbo run dev --filter=web",
     "build:web": "turbo run build --filter=web",

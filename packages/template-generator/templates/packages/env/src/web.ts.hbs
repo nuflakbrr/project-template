@@ -1,12 +1,3 @@
-{{#if (includes frontend "next")}}
-import { createEnv } from "@t3-oss/env-nextjs";
-{{else if (includes frontend "nuxt")}}
-import { createEnv } from "@t3-oss/env-nuxt";
-{{else if (or (includes frontend "svelte") (includes frontend "astro"))}}
-import { createEnv } from "@t3-oss/env-core";
-{{else}}
-import { createEnv } from "@t3-oss/env-core";
-{{/if}}
 import { z } from "zod";
 
 {{#if (includes frontend "nuxt")}}
