@@ -37,7 +37,6 @@ export const AddonsSchema = z
     "husky",
     "ruler",
     "mcp",
-    "turborepo",
     "fumadocs",
     "ultracite",
     "oxlint",
@@ -165,12 +164,14 @@ export const ProjectConfigSchema = z.object({
   api: APISchema,
   webDeploy: WebDeploySchema,
   serverDeploy: ServerDeploySchema,
+  projectType: z.enum(["frontend", "backend", "fullstack"]),
 });
 
 export const BikinProjectConfigSchema = z.object({
   version: z.string().describe("CLI version used to create this project"),
   createdAt: z.string().describe("Timestamp when the project was created"),
   reproducibleCommand: z.string().optional().describe("Command to reproduce this project setup"),
+  projectType: z.enum(["frontend", "backend", "fullstack"]),
   database: DatabaseSchema,
   orm: ORMSchema,
   backend: BackendSchema,
