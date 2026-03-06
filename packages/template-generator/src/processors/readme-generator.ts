@@ -35,7 +35,7 @@ function generateReadmeContent(options: ProjectConfig): string {
 
   return `# ${projectName}
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack${
+This project was created with [Bikinproject](https://github.com/nuflakbrr/bikinproject), a modern TypeScript stack${
     stackDescription ? ` that combines ${stackDescription}` : ""
   }.
 
@@ -280,7 +280,6 @@ function generateFeaturesList(
     hono: "- **Hono** - Lightweight, performant server framework",
     express: "- **Express** - Fast, unopinionated web framework",
     fastify: "- **Fastify** - Fast, low-overhead web framework",
-    elysia: "- **Elysia** - Type-safe, high-performance framework",
   };
 
   if (backendFeatures[backend]) {
@@ -496,7 +495,7 @@ function generateDeploymentCommands(
 
   lines.push(
     "",
-    "For more details, see the guide on [Deploying to Cloudflare with Alchemy](https://www.better-t-stack.dev/docs/guides/cloudflare-alchemy).",
+    "For more details, see the guide on [Deploying to Cloudflare with Alchemy](https://nuflakbrr.github.io/bikinproject/docs/guides/cloudflare-alchemy).",
   );
 
   return `${lines.join("\n")}\n`;

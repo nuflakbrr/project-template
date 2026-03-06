@@ -85,7 +85,7 @@ export async function generate(
       processCatalogs(vfs, config);
       processReadme(vfs, config);
 
-      // Write bts.jsonc config file
+      // Write bpa.jsonc config file
       if (options.version) {
         const reproducibleCommand = generateReproducibleCommand(config);
         writeBpaConfigToVfs(vfs, config, options.version, reproducibleCommand);
