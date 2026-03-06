@@ -73,8 +73,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@bikinproject/template-generator": "workspace:*",
-    "@bikinproject/types": "workspace:*",
+    "@bikinproject/template-generator": "^1.0.0",
+    "@bikinproject/types": "^1.0.0",
     "@clack/core": "^1.0.0",
     "@clack/prompts": "^1.0.0",
     "@orpc/server": "^1.13.4",
