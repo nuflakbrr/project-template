@@ -33,7 +33,7 @@ jobs:
       - name: Install Dependencies
         run: bun install --frozen-lockfile
         env:
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
 
       - name: Generate Preview Version
         id: version
@@ -64,12 +64,12 @@ jobs:
         run: cd packages/types && bun publish --access public --tag ${{ steps.version.outputs.tag }}
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
 
       - name: Update template-generator package version and types dependency
         run: |
           cd packages/template-generator
-          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v | .dependencies["@better-t-stack/types"] = $v' package.json > tmp.json && mv tmp.json package.json
+          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v | .dependencies["@bikinproject/types"] = $v' package.json > tmp.json && mv tmp.json package.json
 
       - name: Build template-generator package
         run: cd packages/template-generator && bun run build
@@ -78,34 +78,34 @@ jobs:
         run: cd packages/template-generator && bun publish --access public --tag ${{ steps.version.outputs.tag }}
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
 
       - name: Update CLI package version and dependencies
         run: |
           cd apps/cli
-          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v | .dependencies["@better-t-stack/types"] = $v | .dependencies["@better-t-stack/template-generator"] = $v' package.json > tmp.json && mv tmp.json package.json
+          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v | .dependencies["@bikinproject/types"] = $v | .dependencies["@bikinproject/template-generator"] = $v' package.json > tmp.json && mv tmp.json package.json
 
-      - name: Update create-bts alias package version
+      - name: Update create-bpa alias package version
         run: |
-          cd packages/create-bts
-          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v | .dependencies["create-better-t-stack"] = $v' package.json > tmp.json && mv tmp.json package.json
+          cd packages/create-bpa
+          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v | .dependencies["create-bikinproject-app"] = $v' package.json > tmp.json && mv tmp.json package.json
 
       - name: Build CLI
         run: cd apps/cli && bun run build
         env:
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
 
       - name: Publish CLI to NPM
         run: cd apps/cli && bun publish --access public --tag ${{ steps.version.outputs.tag }}
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
 
-      - name: Publish create-bts to NPM
-        run: cd packages/create-bts && bun publish --access public --tag ${{ steps.version.outputs.tag }}
+      - name: Publish create-bpa to NPM
+        run: cd packages/create-bpa && bun publish --access public --tag ${{ steps.version.outputs.tag }}
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
 
       - name: Find existing preview comment
         uses: peter-evans/find-comment@v3
@@ -128,10 +128,10 @@ jobs:
 
             | Package | Version | NPM Tag |
             |---------|---------|---------|
-            | `create-better-t-stack` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
-            | `create-bts` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
-            | `@better-t-stack/types` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
-            | `@better-t-stack/template-generator` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
+            | `create-bikinproject-app` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
+            | `create-bpa` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
+            | `@bikinproject/types` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
+            | `@bikinproject/template-generator` | `${{ steps.version.outputs.version }}` | `pr${{ steps.version.outputs.pr }}` |
 
             **Commit:** `${{ steps.version.outputs.commit }}`
 
@@ -139,23 +139,23 @@ jobs:
 
             ```bash
             # Using the PR tag (always gets latest for this PR)
-            bunx create-better-t-stack@pr${{ steps.version.outputs.pr }}
-            npx create-better-t-stack@pr${{ steps.version.outputs.pr }}
+            bunx create-bikinproject-app@pr${{ steps.version.outputs.pr }}
+            npx create-bikinproject-app@pr${{ steps.version.outputs.pr }}
 
             # Using exact version
-            bunx create-better-t-stack@${{ steps.version.outputs.version }}
-            npx create-better-t-stack@${{ steps.version.outputs.version }}
+            bunx create-bikinproject-app@${{ steps.version.outputs.version }}
+            npx create-bikinproject-app@${{ steps.version.outputs.version }}
 
             # Using the alias
-            bunx create-bts@pr${{ steps.version.outputs.pr }}
-            npx create-bts@pr${{ steps.version.outputs.pr }}
+            bunx create-bpa@pr${{ steps.version.outputs.pr }}
+            npx create-bpa@pr${{ steps.version.outputs.pr }}
             ```
 
             ### NPM Links
-            - [create-better-t-stack@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/create-better-t-stack/v/${{ steps.version.outputs.version }})
-            - [create-bts@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/create-bts/v/${{ steps.version.outputs.version }})
-            - [@better-t-stack/types@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/@better-t-stack/types/v/${{ steps.version.outputs.version }})
-            - [@better-t-stack/template-generator@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/@better-t-stack/template-generator/v/${{ steps.version.outputs.version }})
+            - [create-bikinproject-app@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/create-bikinproject-app/v/${{ steps.version.outputs.version }})
+            - [create-bpa@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/create-bpa/v/${{ steps.version.outputs.version }})
+            - [@bikinproject/types@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/@bikinproject/types/v/${{ steps.version.outputs.version }})
+            - [@bikinproject/template-generator@${{ steps.version.outputs.version }}](https://www.npmjs.com/package/@bikinproject/template-generator/v/${{ steps.version.outputs.version }})
 
             ---
             *To publish a new preview after more commits, remove and re-add the `preview` label.*

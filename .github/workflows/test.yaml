@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: bun install --frozen-lockfile
         env:
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
 
       - name: Build Types
         run: cd packages/types && bun run build
@@ -43,4 +43,4 @@ jobs:
         run: bun run build && bun run test:ci
         env:
           AGENT: 1
-          BTS_TELEMETRY: 0
+          BPA_TELEMETRY: 0
