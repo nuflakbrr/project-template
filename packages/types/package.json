@@ -1,6 +1,6 @@
 {
   "name": "@bikinproject/types",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "TypeScript types and schemas for create-bikinproject-app CLI",
   "keywords": [
     "bikinproject",
