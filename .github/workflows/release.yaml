@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - v2
+      - dev
 
 permissions:
   contents: write
@@ -32,9 +33,9 @@ jobs:
         id: version
         run: |
           MSG="${{ github.event.head_commit.message }}"
-          if [[ $MSG =~ chore\(release\):[[:space:]]*([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+          if [[ $MSG =~ chore\(release\):[[:space:]]*v?([0-9]+\.[0-9]+\.[0-9]+) ]]; then
             VERSION="${BASH_REMATCH[1]}"
-          elif [[ $MSG =~ release/v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+          elif [[ $MSG =~ v?([0-9]+\.[0-9]+\.[0-9]+) ]]; then
             VERSION="${BASH_REMATCH[1]}"
           else
             echo "Error: Could not extract version from message: $MSG"
