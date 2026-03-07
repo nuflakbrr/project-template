@@ -17,7 +17,9 @@ concurrency:
 jobs:
   release:
     name: Release to NPM
-    if: startsWith(github.event.head_commit.message, 'chore(release):')
+    if: |
+      contains(github.event.head_commit.message, 'chore(release):') ||
+      contains(github.event.head_commit.message, 'release/v')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -29,7 +31,15 @@ jobs:
       - name: Extract version from commit message
         id: version
         run: |
-          VERSION=$(echo "${{ github.event.head_commit.message }}" | sed -E 's/^chore\(release\): ([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          MSG="${{ github.event.head_commit.message }}"
+          if [[ $MSG =~ chore\(release\):[[:space:]]*([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+          elif [[ $MSG =~ release/v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+          else
+            echo "Error: Could not extract version from message: $MSG"
+            exit 1
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Releasing version: $VERSION"
 
