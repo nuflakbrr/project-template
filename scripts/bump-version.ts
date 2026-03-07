@@ -114,13 +114,16 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  // Get current branch to use as base
+  const currentBranch = (await $`git branch --show-current`.text()).trim();
+  console.log(`\n📦 Current branch: ${currentBranch}`);
+
   // Create release branch
   const branchName = `release/v${newCliVersion}`;
-  console.log(`\n📦 Creating release branch: ${branchName}`);
+  console.log(`📦 Creating release branch: ${branchName}`);
 
-  // Make sure we're on main and up to date
-  await $`git checkout main`;
-  await $`git pull origin main`;
+  // Make sure we're up to date on current branch
+  await $`git pull origin ${currentBranch}`;
 
   // Create and checkout the release branch
   await $`git checkout -b ${branchName}`;
@@ -175,7 +178,7 @@ This PR bumps the package versions.
 ---
 *This PR was automatically created by \`bun run bump\`*`;
 
-  await $`gh pr create --title ${prTitle} --body ${prBody} --base main --head ${branchName}`;
+  await $`gh pr create --title ${prTitle} --body ${prBody} --base ${currentBranch} --head ${branchName}`;
 
   // Ask if user wants to enable auto-merge
   const shouldAutoMerge = await confirm({
@@ -199,8 +202,8 @@ This PR bumps the package versions.
     `   ${shouldAutoMerge ? "2" : "3"}. The release workflow will automatically publish to NPM`,
   );
 
-  // Switch back to main
-  await $`git checkout main`;
+  // Switch back to original branch
+  await $`git checkout ${currentBranch}`;
 }
 
 main().catch(console.error);
