@@ -162,10 +162,13 @@ async function main(): Promise<void> {
   console.log(`\n🚀 Pushing release branch...`);
   await $`git push -u origin ${branchName}`;
 
-  // Create PR using GitHub CLI
-  console.log(`\n📝 Creating pull request...`);
-  const prTitle = `chore(release): v${newCliVersion}`;
-  const prBody = `## Release v${newCliVersion}
+  // Create PR using GitHub CLI if available
+  const hasGh = (await $`which gh`.nothrow()).exitCode === 0;
+
+  if (hasGh) {
+    console.log(`\n📝 Creating pull request...`);
+    const prTitle = `chore(release): v${newCliVersion}`;
+    const prBody = `## Release v${newCliVersion}
 
 This PR bumps the package versions.
 
@@ -178,29 +181,33 @@ This PR bumps the package versions.
 ---
 *This PR was automatically created by \`bun run bump\`*`;
 
-  await $`gh pr create --title ${prTitle} --body ${prBody} --base ${currentBranch} --head ${branchName}`;
+    await $`gh pr create --title ${prTitle} --body ${prBody} --base ${currentBranch} --head ${branchName}`;
 
-  // Ask if user wants to enable auto-merge
-  const shouldAutoMerge = await confirm({
-    message: "Enable auto-merge? (PR will merge automatically when tests pass)",
-    initialValue: true,
-  });
+    // Ask if user wants to enable auto-merge
+    const shouldAutoMerge = await confirm({
+      message: "Enable auto-merge? (PR will merge automatically when tests pass)",
+      initialValue: true,
+    });
 
-  if (shouldAutoMerge) {
-    console.log(`\n🔄 Enabling auto-merge...`);
-    await $`gh pr merge ${branchName} --auto --squash --delete-branch`;
-    console.log(`✅ Auto-merge enabled. PR will merge automatically when tests pass.`);
+    if (shouldAutoMerge) {
+      console.log(`\n🔄 Enabling auto-merge...`);
+      await $`gh pr merge ${branchName} --auto --squash --delete-branch`;
+      console.log(`✅ Auto-merge enabled. PR will merge automatically when tests pass.`);
+    }
+
+    console.log(`\n✅ Release PR created for v${newCliVersion}`);
+  } else {
+    console.log(`\n⚠️  GitHub CLI (gh) not found. Please create the pull request manually.`);
+    const repoUrl = (await $`git config --get remote.origin.url`.text())
+      .trim()
+      .replace(/\.git$/, "");
+    console.log(`🔗 Create PR: ${repoUrl}/pull/new/${branchName}`);
   }
 
-  console.log(`\n✅ Release PR created for v${newCliVersion}`);
   console.log(`\n📋 Next steps:`);
   console.log(`   1. Wait for the "Test Suite" check to pass`);
-  if (!shouldAutoMerge) {
-    console.log(`   2. Merge the PR manually`);
-  }
-  console.log(
-    `   ${shouldAutoMerge ? "2" : "3"}. The release workflow will automatically publish to NPM`,
-  );
+  console.log(`   2. Merge the PR`);
+  console.log(`   3. The release workflow will automatically publish to NPM`);
 
   // Switch back to original branch
   await $`git checkout ${currentBranch}`;
