@@ -86,7 +86,7 @@ jobs:
             echo "Release v$VERSION already exists, skipping"
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Update types package version
         if: steps.check-version.outputs.exists == 'false'
