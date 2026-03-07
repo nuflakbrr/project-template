@@ -1,6 +1,6 @@
 {
   "name": "@bikinproject/template-generator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Virtual file system generator for BikinProject templates - works in browsers and Node.js",
   "keywords": [
     "bikinproject",
@@ -52,7 +52,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@bikinproject/types": "^1.1.0",
+    "@bikinproject/types": "^1.1.1",
     "better-result": "^2.3.0",
     "handlebars": "^4.7.8",
     "memfs": "^4.51.1",
