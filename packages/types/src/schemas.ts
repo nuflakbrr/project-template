@@ -47,10 +47,6 @@ export const AddonsSchema = z
   ])
   .describe("Additional addons");
 
-export const ExamplesSchema = z
-  .enum(["todo", "ai", "none"])
-  .describe("Example templates to include");
-
 export const PackageManagerSchema = z.enum(["npm", "pnpm", "bun"]).describe("Package manager");
 
 export const DatabaseSetupSchema = z
@@ -115,7 +111,6 @@ export const CreateInputSchema = z.object({
   payments: PaymentsSchema.optional(),
   frontend: z.array(FrontendSchema).optional(),
   addons: z.array(AddonsSchema).optional(),
-  examples: z.array(ExamplesSchema).optional(),
   git: z.boolean().optional(),
   packageManager: PackageManagerSchema.optional(),
   install: z.boolean().optional(),
@@ -154,7 +149,6 @@ export const ProjectConfigSchema = z.object({
   runtime: RuntimeSchema,
   frontend: z.array(FrontendSchema),
   addons: z.array(AddonsSchema),
-  examples: z.array(ExamplesSchema),
   auth: AuthSchema,
   payments: PaymentsSchema,
   git: z.boolean(),
@@ -164,21 +158,20 @@ export const ProjectConfigSchema = z.object({
   api: APISchema,
   webDeploy: WebDeploySchema,
   serverDeploy: ServerDeploySchema,
-  projectType: z.enum(["frontend", "backend", "fullstack"]),
+  projectType: z.enum(["frontend", "backend"]),
 });
 
 export const BikinProjectConfigSchema = z.object({
   version: z.string().describe("CLI version used to create this project"),
   createdAt: z.string().describe("Timestamp when the project was created"),
   reproducibleCommand: z.string().optional().describe("Command to reproduce this project setup"),
-  projectType: z.enum(["frontend", "backend", "fullstack"]),
+  projectType: z.enum(["frontend", "backend"]),
   database: DatabaseSchema,
   orm: ORMSchema,
   backend: BackendSchema,
   runtime: RuntimeSchema,
   frontend: z.array(FrontendSchema),
   addons: z.array(AddonsSchema),
-  examples: z.array(ExamplesSchema),
   auth: AuthSchema,
   payments: PaymentsSchema,
   packageManager: PackageManagerSchema,
@@ -216,7 +209,6 @@ export const BACKEND_VALUES = BackendSchema.options;
 export const RUNTIME_VALUES = RuntimeSchema.options;
 export const FRONTEND_VALUES = FrontendSchema.options;
 export const ADDONS_VALUES = AddonsSchema.options;
-export const EXAMPLES_VALUES = ExamplesSchema.options;
 export const PACKAGE_MANAGER_VALUES = PackageManagerSchema.options;
 export const DATABASE_SETUP_VALUES = DatabaseSetupSchema.options;
 export const API_VALUES = APISchema.options;

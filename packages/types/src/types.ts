@@ -7,7 +7,6 @@ import type {
   RuntimeSchema,
   FrontendSchema,
   AddonsSchema,
-  ExamplesSchema,
   PackageManagerSchema,
   DatabaseSetupSchema,
   APISchema,
@@ -33,7 +32,6 @@ export type Backend = z.infer<typeof BackendSchema>;
 export type Runtime = z.infer<typeof RuntimeSchema>;
 export type Frontend = z.infer<typeof FrontendSchema>;
 export type Addons = z.infer<typeof AddonsSchema>;
-export type Examples = z.infer<typeof ExamplesSchema>;
 export type PackageManager = z.infer<typeof PackageManagerSchema>;
 export type DatabaseSetup = z.infer<typeof DatabaseSetupSchema>;
 export type API = z.infer<typeof APISchema>;
