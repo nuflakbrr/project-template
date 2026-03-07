@@ -1,0 +1,202 @@
+<section
+  class="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-white pt-32 pb-20 dark:bg-zinc-950"
+>
+  {/* Decorative background elements */}
+  <div class="absolute top-0 left-1/2 -z-10 h-full w-full -translate-x-1/2">
+    <div
+      class="absolute top-[-10%] left-[-10%] h-[40%] w-[40%] rounded-full bg-blue-600/10 blur-[120px] dark:bg-blue-500/10"
+    >
+    </div>
+    <div
+      class="absolute right-[-10%] bottom-[-10%] h-[40%] w-[40%] rounded-full bg-cyan-600/10 blur-[120px] dark:bg-cyan-500/10"
+    >
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col items-center gap-16 lg:flex-row">
+      {/* Left Side: Content */}
+      <div class="space-y-8 text-left lg:w-1/2">
+        <div
+          class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-semibold text-blue-700 shadow-sm dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+        >
+          <span class="relative flex h-2 w-2">
+            <span
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"
+            ></span>
+            <span
+              class="relative inline-flex h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-500"
+            ></span>
+          </span>
+          CLI-Based Project Generator
+        </div>
+
+        <h1
+          class="text-5xl leading-tight font-extrabold tracking-tight text-zinc-950 md:text-6xl dark:text-white"
+        >
+          Bikin Project Jadi <br />
+          <span
+            class="inline-block bg-linear-to-r from-blue-700 to-sky-400 bg-clip-text py-1 text-transparent dark:from-blue-400 dark:to-cyan-400"
+          >
+            Lebih Sat-Set & Terstruktur
+          </span>
+        </h1>
+
+        <p
+          class="max-w-xl text-lg leading-relaxed font-medium text-zinc-700 md:text-xl dark:text-zinc-400"
+        >
+          Generator starter project yang didesain untuk kenyamanan developer.
+          Lupakan setup manual, cukup satu perintah dan project Anda siap
+          tempur.
+        </p>
+
+        <div
+          class="group flex items-center justify-between rounded-2xl border-2 border-zinc-200 bg-zinc-100 p-4 font-mono text-sm md:text-base dark:border-zinc-800 dark:bg-zinc-900"
+        >
+          <span class="text-zinc-800 dark:text-zinc-200">
+            <span class="text-blue-600 dark:text-blue-400">$</span> npx bikinproject@latest
+          </span>
+          <button
+            id="copy-btn"
+            class="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-blue-600 dark:hover:bg-zinc-800"
+            title="Copy to clipboard"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex flex-col items-center gap-4 pt-4 sm:flex-row">
+          <a
+            href="/register"
+            class="w-full rounded-2xl bg-blue-600 px-8 py-4 font-bold text-white shadow-xl shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02] hover:bg-blue-700 active:scale-[0.98] sm:w-auto"
+          >
+            Coba Sekarang
+          </a>
+          <a
+            href="#features"
+            class="w-full rounded-2xl border-2 border-zinc-200 bg-white px-8 py-4 font-bold text-zinc-900 transition-all duration-300 hover:bg-zinc-50 sm:w-auto dark:border-zinc-800 dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-800"
+          >
+            Lihat Fitur
+          </a>
+        </div>
+      </div>
+
+      {/* Right Side: Terminal Mock-up */}
+      <div class="w-full lg:w-1/2">
+        <div
+          class="mx-auto w-full max-w-2xl overflow-hidden rounded-3xl border-2 border-zinc-200 shadow-2xl dark:border-zinc-800"
+        >
+          <div
+            class="flex items-center gap-2 border-b-2 border-zinc-200 bg-zinc-100 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900"
+          >
+            <div class="flex gap-1.5">
+              <div class="h-3.5 w-3.5 rounded-full bg-rose-500/40"></div>
+              <div class="h-3.5 w-3.5 rounded-full bg-amber-500/40"></div>
+              <div class="h-3.5 w-3.5 rounded-full bg-emerald-500/40"></div>
+            </div>
+            <div class="mx-auto font-mono text-xs font-medium text-zinc-500">
+              bash — create-bikinproject-app
+            </div>
+          </div>
+          <div
+            class="h-[400px] overflow-x-auto bg-white p-6 font-mono text-sm leading-relaxed dark:bg-zinc-950"
+          >
+            <div class="space-y-2">
+              <p class="text-zinc-400">┌ create-bikinproject-app</p>
+              <p class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span class="text-zinc-800 dark:text-zinc-200">
+                  ◇ Where should we create your project?
+                </span>
+              </p>
+              <p class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span
+                  class="font-bold text-cyan-600 underline dark:text-cyan-400"
+                >
+                  ./your-project
+                </span>
+              </p>
+              <p class="text-zinc-400">│</p>
+              <p class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span class="text-zinc-800 dark:text-zinc-200"
+                  >◇ Pick a project type</span
+                >
+              </p>
+              <p class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span class="font-bold text-cyan-600 dark:text-cyan-400">
+                  ● Next.js App Router (Tailwind + TypeScript)
+                </span>
+              </p>
+              <div class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span class="text-zinc-500"
+                  >○ React.js (Tailwind + JavaScript)</span
+                >
+              </div>
+              <div class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span class="text-zinc-500"
+                  >○ Laravel Breeze API w/ Next.js</span
+                >
+              </div>
+              <p class="text-zinc-400">│</p>
+              <p class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span class="text-emerald-600 dark:text-emerald-400">
+                  ⏳ Creating project...
+                </span>
+              </p>
+              <p class="flex gap-3">
+                <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                <span class="text-emerald-600 dark:text-emerald-400">
+                  ✅ Project created successfully!
+                </span>
+              </p>
+              <p class="text-zinc-400">│</p>
+              <p class="text-xs text-zinc-400">────────────────────────╮</p>
+              <p class="font-bold text-blue-600 dark:text-blue-400">
+                {" "}
+                🎉 Project ready to use!
+              </p>
+              <p class="text-xs text-zinc-400">────────────────────────╯</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const copyBtn = document.getElementById("copy-btn");
+  copyBtn?.addEventListener("click", () => {
+    navigator.clipboard.writeText("npx bikinproject@latest");
+
+    // Simple feedback
+    const originalContent = copyBtn.innerHTML;
+    copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    copyBtn.classList.add("text-emerald-500");
+
+    setTimeout(() => {
+      copyBtn.innerHTML = originalContent;
+      copyBtn.classList.remove("text-emerald-500");
+    }, 2000);
+  });
+</script>

@@ -1,0 +1,69 @@
+---
+const steps = [
+  {
+    number: "01",
+    title: "Jalankan Command",
+    description:
+      'Buka terminal favorit Anda dan jalankan "npx bikinproject@latest". Tidak perlu instalasi global yang memberatkan sistem.',
+  },
+  {
+    number: "02",
+    title: "Pilih Konfigurasi",
+    description:
+      "Pilih framework (Next.js, React, Laravel), bahasa (TS/JS), dan CSS framework melalui antarmuka CLI yang interaktif.",
+  },
+  {
+    number: "03",
+    title: "Project Siap!",
+    description:
+      "BikinProject akan men-generate starter project lengkap dengan best practices, siap untuk Anda kembangkan lebih lanjut.",
+  },
+];
+---
+
+<section id="steps" class="bg-white py-24 dark:bg-zinc-950">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col items-center gap-16 lg:flex-row">
+      <div class="space-y-8 lg:w-1/2">
+        <h2
+          class="text-3xl leading-tight font-extrabold text-zinc-950 md:text-5xl dark:text-white"
+        >
+          Langkah Sederhana <br /> Untuk Project Terpercaya
+        </h2>
+        <p
+          class="text-lg font-medium tracking-tight text-zinc-700 dark:text-zinc-400"
+        >
+          Kami menyederhanakan proses kompleks menjadi langkah-langkah yang
+          mudah dipahami, memastikan Anda selalu terlibat dalam setiap progres.
+        </p>
+        <div class="pt-4">
+          <button
+            class="rounded-2xl bg-zinc-950 px-8 py-4 font-bold text-white shadow-lg shadow-zinc-500/10 transition-transform duration-300 hover:scale-105 dark:bg-white dark:text-zinc-900"
+          >
+            Mulai Konsultasi
+          </button>
+        </div>
+      </div>
+
+      <div class="w-full space-y-8 lg:w-1/2">
+        {
+          steps.map((step) => (
+            <div class="group flex items-start gap-6 rounded-3xl border-2 border-transparent p-6 transition-all duration-300 hover:border-zinc-100 hover:bg-zinc-50 dark:hover:border-zinc-800 dark:hover:bg-zinc-900/50">
+              <div class="shrink-0 text-4xl font-black text-blue-600/20 transition-colors duration-300 group-hover:text-blue-600 dark:text-blue-500/20 dark:group-hover:text-blue-500">
+                {step.number}
+              </div>
+              <div class="space-y-2">
+                <h3 class="text-xl font-bold text-zinc-950 dark:text-white">
+                  {step.title}
+                </h3>
+                <p class="text-justify leading-relaxed font-medium text-zinc-700 dark:text-zinc-400">
+                  {step.description}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

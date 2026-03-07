@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/about</loc>
+    <lastmod>2026-03-07T15:21:56.715Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/contact</loc>
+    <lastmod>2026-03-07T15:21:56.716Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject</loc>
+    <lastmod>2026-03-07T15:21:56.716Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/login</loc>
+    <lastmod>2026-03-07T15:21:56.716Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/register</loc>
+    <lastmod>2026-03-07T15:21:56.716Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

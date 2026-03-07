@@ -1,0 +1,21 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ErrorState from "@/components/Common/ErrorState.astro";
+
+interface Props {
+  error: unknown;
+}
+
+const { error } = Astro.props;
+
+// Coba ekstrak status code dari error (contoh: error.status atau error.statusCode)
+// Jika tidak ada, gunakan default 500
+const isErrorObject = typeof error === "object" && error !== null;
+const statusCode = isErrorObject && "status" in error ? Number((error as any).status) : isErrorObject && "statusCode" in error ? Number((error as any).statusCode) : 500;
+
+const normalizedError = error instanceof Error ? error : new Error(String(error));
+---
+
+<Layout title="Terjadi Kesalahan Server">
+  <ErrorState code={statusCode} error={normalizedError} />
+</Layout>

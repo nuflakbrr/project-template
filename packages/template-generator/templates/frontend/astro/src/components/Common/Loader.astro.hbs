@@ -1,0 +1,18 @@
+---
+interface Props {
+  size?: string;
+  color?: string;
+}
+
+const { size = "h-12 w-12", color = "text-blue-500" } = Astro.props;
+---
+
+<div class="flex items-center justify-center">
+  <div
+    class={`${size} ${color} animate-spin rounded-full border-4 border-current border-t-transparent`}
+    role="status"
+    aria-label="loading"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+---
+
+---
+
+<div class="fixed right-6 bottom-6">
+  <button
+    id="scroll-to-top"
+    type="button"
+    class="flex cursor-default flex-col items-center justify-center rounded-lg bg-blue-500 p-2 text-white opacity-0 transition-all hover:bg-blue-600"
+    aria-label="Scroll to top"
+  >
+    <svg
+      class="h-5 w-5"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 384 512"
+      fill="currentColor"
+    >
+      <path
+        d="M352 352c-8.188 0-16.38-3.125-22.62-9.375L192 205.3l-137.4 137.4c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25C368.4 348.9 360.2 352 352 352z"
+      ></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  import { polyfill } from "smoothscroll-polyfill";
+
+  const scrollBtn = document.getElementById("scroll-to-top");
+
+  if (scrollBtn) {
+    const toggleVisibility = () => {
+      if (window.scrollY > 300) {
+        scrollBtn.classList.remove("opacity-0", "cursor-default");
+        scrollBtn.classList.add("opacity-100");
+      } else {
+        scrollBtn.classList.add("opacity-0", "cursor-default");
+        scrollBtn.classList.remove("opacity-100");
+      }
+    };
+
+    const scrollTop = () => {
+      polyfill();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
+
+    window.addEventListener("scroll", toggleVisibility);
+    scrollBtn.addEventListener("click", scrollTop);
+  }
+</script>

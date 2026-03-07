@@ -1,0 +1,72 @@
+---
+import GithubIcon from "@/components/Common/CustomIcons/Github.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Daftar">
+  <section class="flex min-h-screen items-center justify-center bg-white p-4 transition-colors duration-300 dark:bg-zinc-950">
+    <div class="w-full max-w-md overflow-hidden rounded-3xl border-2 border-zinc-100 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-950">
+      <div class="flex items-center justify-between border-b-2 border-zinc-100 bg-zinc-50 px-6 py-4 dark:border-zinc-800 dark:bg-zinc-900/50">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📦</span>
+          <span class="font-mono font-bold text-zinc-900 dark:text-white"> auth --register </span>
+        </div>
+        <div class="flex gap-1.5 opacity-30">
+          <div class="h-3 w-3 rounded-full bg-zinc-400"></div>
+          <div class="h-3 w-3 rounded-full bg-zinc-400"></div>
+          <div class="h-3 w-3 rounded-full bg-zinc-400"></div>
+        </div>
+      </div>
+
+      <div class="space-y-8 p-8">
+        <div class="space-y-2 text-center">
+          <h1 class="text-3xl font-black text-zinc-950 dark:text-white">Buat Akun Baru</h1>
+          <p class="font-medium text-zinc-500 dark:text-zinc-400">Bergabung dengan komunitas BikinProject.</p>
+        </div>
+
+        <form class="space-y-5">
+          <div class="space-y-2">
+            <label html-for="email" class="block font-mono text-sm font-bold text-zinc-700 dark:text-zinc-300"> $ user.email </label>
+            <input
+              type="email"
+              id="email"
+              class="w-full rounded-2xl border-2 border-zinc-100 bg-zinc-50 px-5 py-3.5 font-mono text-zinc-900 transition-all placeholder:text-zinc-400 focus:border-blue-600 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-blue-500"
+              placeholder="email@example.com"
+              required
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label html-for="password" class="block font-mono text-sm font-bold text-zinc-700 dark:text-zinc-300"> $ user.password </label>
+            <input
+              type="password"
+              id="password"
+              class="w-full rounded-2xl border-2 border-zinc-100 bg-zinc-50 px-5 py-3.5 font-mono text-zinc-900 transition-all placeholder:text-zinc-400 focus:border-blue-600 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-blue-500"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <button type="submit" class="mt-4 w-full rounded-2xl bg-blue-600 py-4 font-black text-white shadow-xl shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] hover:bg-blue-700 active:scale-[0.98]">
+            Daftar Sekarang
+          </button>
+
+          <div class="relative flex items-center justify-center">
+            <span class="absolute inset-x-0 h-px bg-zinc-100 dark:bg-zinc-800"></span>
+            <span class="relative bg-white px-4 text-xs font-bold tracking-widest text-zinc-500 uppercase dark:bg-zinc-950 dark:text-zinc-400"> Atau </span>
+          </div>
+
+          <button class="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-zinc-100 py-3.5 font-bold text-zinc-900 transition-all hover:bg-zinc-50 dark:border-zinc-800 dark:text-white dark:hover:bg-zinc-900">
+            <GithubIcon />
+            <span>GitHub Authentication</span>
+          </button>
+        </form>
+
+        <p class="text-center font-medium text-zinc-500 dark:text-zinc-400">
+          Sudah punya akun?{" "}
+          <a href="/login" class="font-bold text-blue-600 hover:underline dark:text-blue-400"> Masuk Saja </a>
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

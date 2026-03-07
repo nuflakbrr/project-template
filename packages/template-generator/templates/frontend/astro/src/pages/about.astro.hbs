@@ -1,0 +1,60 @@
+---
+import { siteMetadata } from "@/data/siteMetadata";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Tentang">
+  <section class="mx-auto flex min-h-screen items-center justify-center bg-white text-zinc-950 transition-colors duration-300 dark:bg-zinc-950 dark:text-white">
+    <div class="container">
+      <div class="flex flex-wrap">
+        <div class="w-full px-4">
+          <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:gap-12">
+            <div class="group relative h-64 overflow-hidden rounded-3xl border-2 border-zinc-100 bg-zinc-100 shadow-2xl transition-all duration-300 md:h-[700px] dark:border-zinc-800 dark:bg-zinc-900">
+              <img
+                src="https://images.unsplash.com/photo-1610465299996-30f240ac2b1c?auto=format&q=75&fit=crop&w=600&h=750"
+                loading="lazy"
+                alt="Laptop"
+                class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-linear-to-t from-zinc-950/20 to-transparent"></div>
+            </div>
+
+            <div class="space-y-6 md:pt-8">
+              <h1 class="text-4xl leading-tight font-extrabold text-zinc-950 md:text-5xl dark:text-white">
+                Tentang <span class="text-blue-600 dark:text-blue-500">BikinProject.</span>
+              </h1>
+
+              <p class="text-justify text-lg leading-relaxed font-medium text-zinc-700 md:text-xl dark:text-zinc-400">
+                <span class="rounded-xl border border-blue-100 bg-blue-50 p-1 px-3 font-mono font-bold text-blue-700 dark:border-blue-800/50 dark:bg-blue-900/30 dark:text-blue-400"> BikinProject </span>{" "}
+                adalah sebuah CLI-based starter project generator yang dirancang untuk mempercepat proses inisialisasi aplikasi dengan standar industri. Proyek ini mendukung berbagai framework populer seperti Next.js, React, dan Laravel.
+              </p>
+
+              <p class="text-justify text-lg leading-relaxed font-medium text-zinc-700 md:text-xl dark:text-zinc-400">
+                Dibuatnya BikinProject berawal dari kebutuhan{" "}
+                <a
+                  href={siteMetadata.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-bold text-blue-600 underline decoration-blue-500/30 underline-offset-4 transition duration-200 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  Saya
+                </a>{" "}
+                akan standarisasi struktur proyek saat memulai development baru. Alih-alih melakukan setup manual yang repetitif, BikinProject mengotomatisasi segalanya mulai dari pemilihan bahasa, styling framework, hingga struktur folder terbaik.
+              </p>
+
+              <div class="space-y-4">
+                <p class="text-justify text-lg leading-relaxed font-medium text-zinc-700 md:text-xl dark:text-zinc-400">Hanya dengan satu perintah di terminal, Anda bisa langsung fokus membangun fitur tanpa pusing dengan boilerplate:</p>
+                <div class="group rounded-2xl border border-zinc-800 bg-zinc-950 p-5 font-mono text-sm text-emerald-400 shadow-xl transition-all duration-300 hover:border-emerald-500/30 md:text-base">
+                  <div class="flex items-center gap-3">
+                    <span class="text-zinc-600">$</span>
+                    <span class="transition-colors group-hover:text-emerald-300">npx bikinproject@latest</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

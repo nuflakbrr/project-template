@@ -1,0 +1,73 @@
+---
+interface Props {
+  defaultTheme?: "light" | "dark" | "system";
+  storageKey?: string;
+}
+
+const { defaultTheme = "system", storageKey = "theme-preference" } =
+  Astro.props;
+---
+
+<script is:inline define:vars=\{{ defaultTheme, storageKey }}>
+  function getTheme() {
+    if (
+      typeof localStorage !== "undefined" &&
+      localStorage.getItem(storageKey)
+    ) {
+      return localStorage.getItem(storageKey);
+    }
+    return defaultTheme;
+  }
+
+  function applyTheme(theme) {
+    let resolvedTheme = theme;
+    if (theme === "system") {
+      resolvedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    }
+
+    const root = document.documentElement;
+    if (resolvedTheme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+
+    // Dispatch custom event for components that need to respond to theme changes
+    window.dispatchEvent(
+      new CustomEvent("theme-change", { detail: { theme, resolvedTheme } }),
+    );
+  }
+
+  // Initial application to prevent FOUC
+  const initialTheme = getTheme();
+  applyTheme(initialTheme);
+
+  // Re-apply on view transitions if using them
+  document.addEventListener("astro:after-swap", () => {
+    applyTheme(getTheme());
+  });
+
+  // Listen for system preference changes
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+      if (getTheme() === "system") {
+        applyTheme("system");
+      }
+    });
+
+  // Listen for storage changes (cross-tab sync)
+  window.addEventListener("storage", (e) => {
+    if (e.key === storageKey) {
+      applyTheme(e.newValue || defaultTheme);
+    }
+  });
+
+  // Global helper for toggling/setting theme
+  window.setTheme = (newTheme) => {
+    localStorage.setItem(storageKey, newTheme);
+    applyTheme(newTheme);
+  };
+</script>

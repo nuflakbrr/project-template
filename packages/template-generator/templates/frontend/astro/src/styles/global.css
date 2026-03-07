@@ -1,8 +1,6 @@
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
 
-/* Add your theme customizations here. */
-/* See the TailwindCSS v4 docs for more info: https://tailwindcss.com/docs/v4-beta */
-
-@theme {
-  --font-sans: "Inter", sans-serif;
+html {
+  scroll-behavior: smooth;
 }
