@@ -1,7 +1,10 @@
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import ReactDOM from "react-dom/client";
-import Loader from "./components/loader";
 import { routeTree } from "./routeTree.gen";
+import "./index.css";
+
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 {{#if (eq api "orpc")}}
   import { QueryClientProvider } from "@tanstack/react-query";
@@ -29,7 +32,6 @@ import { routeTree } from "./routeTree.gen";
 const router = createRouter({
   routeTree,
   defaultPreload: "intent",
-  defaultPendingComponent: () => <Loader />,
   {{#if (eq api "orpc")}}
   context: { orpc, queryClient },
   Wrap: function WrapComponent({ children }: { children: React.ReactNode }) {
@@ -78,13 +80,19 @@ declare module "@tanstack/react-router" {
   }
 }
 
-const rootElement = document.getElementById("app");
+const rootElement = document.getElementById("root");
 
 if (!rootElement) {
   throw new Error("Root element not found");
 }
 
 if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(<RouterProvider router={router} />);
+  const root = createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <ThemeProvider defaultTheme="light" storageKey="theme-preference">
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </StrictMode>,
+  );
 }

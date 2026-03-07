@@ -1,4 +1,3 @@
-import "@{{projectName}}/env/web";
 {{#if (eq webDeploy "cloudflare")}}
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 {{/if}}
@@ -7,6 +6,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
 	typedRoutes: true,
 	reactCompiler: true,
+	reactStrictMode: true,
 	{{#if (includes examples "ai")}}
 	transpilePackages: ["shiki"],
 	{{/if}}

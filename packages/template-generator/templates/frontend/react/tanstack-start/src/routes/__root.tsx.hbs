@@ -1,4 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
+/// <reference types="vite/client" />
+import type { ReactNode } from 'react'
 {{#unless (eq backend "convex")}} {{#unless (eq api "none")}}
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 {{/unless}} {{/unless}}
@@ -12,8 +14,14 @@ import {
 {{/if}}
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import Header from "../components/header";
-import appCss from "../index.css?url";
+import { siteMetadata } from '@/data/siteMetadata'
+import { ThemeProvider } from '@/providers/ThemeProvider'
+import Navbar from '@/components/Mixins/Navbar'
+import Footer from '@/components/Mixins/Footer'
+import ScrollToTop from '@/components/Common/ScrollToTop'
+import ErrorState from '@/components/Common/ErrorState'
+import '../index.css'
+
 {{#if (eq backend "convex")}}
 import type { QueryClient } from "@tanstack/react-query";
 import type { ConvexQueryClient } from "@convex-dev/react-query";
@@ -73,28 +81,117 @@ export interface RouterAppContext {
 {{/if}}
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
+  errorComponent: (props: { error: Error }) => {
+    const error = props.error as unknown as Record<string, unknown>
+    const statusCode =
+      typeof error.status === 'number'
+        ? error.status
+        : typeof error.statusCode === 'number'
+          ? error.statusCode
+          : 500
+    return <ErrorState code={statusCode} error={props.error} />
+  },
   head: () => ({
     meta: [
       {
-        charSet: "utf-8",
+        charSet: 'utf-8',
       },
       {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
       },
       {
-        title: "My App",
+        title: siteMetadata.title,
+      },
+      {
+        name: 'description',
+        content: siteMetadata.description,
+      },
+      {
+        name: 'author',
+        content: siteMetadata.author,
+      },
+      {
+        name: 'keywords',
+        content:
+          'tanstack, react, start, template, frontend, seo, sitemap, naufal akbar nugroho',
+      },
+      // Open Graph / Facebook
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: siteMetadata.siteUrl,
+      },
+      {
+        property: 'og:title',
+        content: siteMetadata.title,
+      },
+      {
+        property: 'og:description',
+        content: siteMetadata.description,
+      },
+      {
+        property: 'og:image',
+        content: `${siteMetadata.siteUrl}${siteMetadata.socialBanner}`,
+      },
+      // Twitter
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:url',
+        content: siteMetadata.siteUrl,
+      },
+      {
+        name: 'twitter:title',
+        content: siteMetadata.title,
+      },
+      {
+        name: 'twitter:description',
+        content: siteMetadata.description,
+      },
+      {
+        name: 'twitter:image',
+        content: `${siteMetadata.siteUrl}${siteMetadata.socialBanner}`,
+      },
+      {
+        name: 'twitter:creator',
+        content: siteMetadata.x,
       },
     ],
     links: [
       {
-        rel: "stylesheet",
-        href: appCss,
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon-16x16.png',
+      },
+      {
+        rel: 'manifest',
+        href: '/site.webmanifest',
+      },
+      {
+        rel: 'canonical',
+        href: siteMetadata.siteUrl,
       },
     ],
   }),
-
-  component: RootDocument,
+  component: RootComponent,
   {{#if (and (eq backend "convex") (eq auth "clerk"))}}
   beforeLoad: async (ctx) => {
     const { userId, token } = await fetchClerkAuth();
@@ -115,32 +212,55 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
     };
   },
   {{/if}}
-});
+})
 
-function RootDocument() {
-  {{#if (and (eq backend "convex") (eq auth "clerk"))}}
+function RootComponent() {
+  return (
+    <ThemeProvider>
+      {{#if (and (eq backend "convex") (eq auth "clerk"))}}
+      <ClerkWrapper>
+        <RootDocument>
+          <Outlet />
+          <TanStackRouterDevtools initialIsOpen={false} />
+        </RootDocument>
+      </ClerkWrapper>
+      {{else if (and (eq backend "convex") (eq auth "better-auth"))}}
+      <BetterAuthWrapper>
+        <RootDocument>
+          <Outlet />
+          <TanStackRouterDevtools initialIsOpen={false} />
+        </RootDocument>
+      </BetterAuthWrapper>
+      {{else if (eq backend "convex")}}
+      <ConvexWrapper>
+        <RootDocument>
+          <Outlet />
+          <TanStackRouterDevtools initialIsOpen={false} />
+        </RootDocument>
+      </ConvexWrapper>
+      {{else}}
+      <RootDocument>
+        <Outlet />
+        <TanStackRouterDevtools initialIsOpen={false} />
+      </RootDocument>
+      {{/if}}
+    </ThemeProvider>
+  )
+}
+
+{{#if (and (eq backend "convex") (eq auth "clerk"))}}
+function ClerkWrapper({ children }: { children: ReactNode }) {
   const context = useRouteContext({ from: Route.id });
   return (
     <ClerkProvider>
       <ConvexProviderWithClerk client={context.convexQueryClient.convexClient} useAuth={useAuth}>
-        <html lang="en" className="dark">
-          <head>
-            <HeadContent />
-          </head>
-          <body>
-            <div className="grid h-svh grid-rows-[auto_1fr]">
-              <Header />
-              <Outlet />
-            </div>
-            <Toaster richColors />
-            <TanStackRouterDevtools position="bottom-left" />
-            <Scripts />
-          </body>
-        </html>
+        {children}
       </ConvexProviderWithClerk>
     </ClerkProvider>
-  );
-  {{else if (and (eq backend "convex") (eq auth "better-auth"))}}
+  )
+}
+{{else if (and (eq backend "convex") (eq auth "better-auth"))}}
+function BetterAuthWrapper({ children }: { children: ReactNode }) {
   const context = useRouteContext({ from: Route.id });
   return (
     <ConvexBetterAuthProvider
@@ -148,61 +268,38 @@ function RootDocument() {
       authClient={authClient}
       initialToken={context.token}
     >
-      <html lang="en" className="dark">
-        <head>
-          <HeadContent />
-        </head>
-        <body>
-          <div className="grid h-svh grid-rows-[auto_1fr]">
-            <Header />
-            <Outlet />
-          </div>
-          <Toaster richColors />
-          <TanStackRouterDevtools position="bottom-left" />
-          <Scripts />
-        </body>
-      </html>
+      {children}
     </ConvexBetterAuthProvider>
-  );
-  {{else if (eq backend "convex")}}
+  )
+}
+{{else if (eq backend "convex")}}
+function ConvexWrapper({ children }: { children: ReactNode }) {
   const { convexQueryClient } = Route.useRouteContext();
   return (
     <ConvexProvider client={convexQueryClient.convexClient}>
-      <html lang="en" className="dark">
-        <head>
-          <HeadContent />
-        </head>
-        <body>
-          <div className="grid h-svh grid-rows-[auto_1fr]">
-            <Header />
-            <Outlet />
-          </div>
-          <Toaster richColors />
-          <TanStackRouterDevtools position="bottom-left" />
-          <Scripts />
-        </body>
-      </html>
+      {children}
     </ConvexProvider>
-  );
-  {{else}}
+  )
+}
+{{/if}}
+
+function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <div className="grid h-svh grid-rows-[auto_1fr]">
-          <Header />
-          <Outlet />
-        </div>
+        <Navbar />
+        <main className="min-h-screen">{children}</main>
+        <ScrollToTop />
+        <Footer />
         <Toaster richColors />
-        <TanStackRouterDevtools position="bottom-left" />
         {{#unless (eq api "none")}}
         <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
         {{/unless}}
         <Scripts />
       </body>
     </html>
-  );
-  {{/if}}
+  )
 }

@@ -1,0 +1,116 @@
+import { FC, useState, useEffect } from 'react';
+import { Link } from '@tanstack/react-router';
+
+import { cn } from '@/lib/utils';
+import { navlinks } from './constant/navLinks';
+import ThemeToggle from '@/components/Common/ThemeToggle';
+import useMobileResponsive from '@/hooks/useMobileResponsive';
+import styles from './Navbar.module.css';
+
+const Navbar: FC = () => {
+  const isMobile = useMobileResponsive();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+
+  // Navbar fixed position if scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.pageYOffset > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <header
+      className={cn(
+        'fixed top-0 left-0 w-full flex items-center z-[50] transition-all duration-300',
+        (isScrolled || (isMobile && isOpen)) ? styles.navbarFixed : 'bg-transparent'
+      )}
+    >
+      <div className="container mx-auto">
+        <div className="flex items-center justify-between relative">
+          <div className="px-4">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 font-primary font-bold text-xl lg:text-2xl py-6 text-zinc-900 dark:text-white"
+              aria-label="logo"
+            >
+              📦️ BikinProject
+            </Link>
+          </div>
+          <div className="flex items-center px-4">
+            <button
+              id="hamburger"
+              name="hamburger"
+              type="button"
+              className={cn(
+                'right-4 block absolute lg:hidden outline-none',
+                isOpen && styles.hamburgerActive
+              )}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <span
+                className={`${styles.hamburgerLine} bg-black dark:bg-white origin-top-left transition duration-300 ease-in-out`}
+              ></span>
+              <span
+                className={`${styles.hamburgerLine} bg-black dark:bg-white transition duration-300 ease-in-out`}
+              ></span>
+              <span
+                className={`${styles.hamburgerLine} bg-black dark:bg-white origin-bottom-left transition duration-300 ease-in-out`}
+              ></span>
+            </button>
+
+            <nav
+              id="navMenu"
+              className={cn(
+                'absolute py-5 shadow-lg rounded-lg max-w-[250px] w-full right-4 top-[calc(100%+0.5rem)] lg:block lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none transition-all duration-300',
+                !isOpen && 'hidden',
+                isMobile && 'bg-white/90 dark:bg-zinc-900/90 backdrop-blur-lg'
+              )}
+            >
+              <ul className="block lg:flex lg:items-center">
+                {navlinks?.map((a, i) => (
+                  <li className="group" key={i}>
+                    <Link
+                      to={a.path}
+                      className={cn(
+                        styles.navLink,
+                        'mx-8 lg:mx-4 flex'
+                      )}
+                      activeProps=\{{ className: styles.navLinkActive }}
+                      activeOptions=\{{ exact: a.path === '/' }}
+                    >
+                      {a.title}
+                    </Link>
+                  </li>
+                ))}
+                <li className="ml-8 lg:ml-6 flex items-center gap-6 py-4 lg:py-0">
+                  <Link
+                    to="/login"
+                    className="text-zinc-500 dark:text-zinc-400 font-medium hover:text-zinc-900 dark:hover:text-white transition-colors"
+                  >
+                    Masuk
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    Daftar
+                  </Link>
+                </li>
+
+                <li className="ml-8 lg:ml-4 flex items-center">
+                  <ThemeToggle />
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Navbar;

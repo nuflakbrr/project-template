@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../index.css";
+import "./globals.css";
 {{#if (eq auth "clerk")}}{{#if (eq backend "convex")}}import { ClerkProvider } from "@clerk/nextjs";
 {{/if}}{{/if}}{{#if (and (eq backend "convex") (eq auth "better-auth"))}}
 import { getToken } from "@/lib/auth-server";
 {{/if}}
-import Providers from "@/components/providers";
-import Header from "@/components/header";
+import { siteMetadata } from '@/data/siteMetadata';
+import ThemeProvider from '@/providers/ThemeProvider';
+import ScrollToTop from "@/components/Common/ScrollToTop";
+import Navbar from '@/components/Mixins/Navbar';
+import Footer from '@/components/Mixins/Footer';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,8 +22,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "{{projectName}}",
-  description: "{{projectName}}",
+  metadataBase: new URL(siteMetadata.siteUrl || 'http://localhost:3000'),
+  title: {
+    default: siteMetadata.title,
+    template: `%s | ${siteMetadata.headerTitle}`,
+  },
+  description: siteMetadata.description,
+  openGraph: {
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+    url: './',
+    siteName: siteMetadata.title,
+    images: [siteMetadata.socialBanner],
+    locale: 'id_ID',
+    type: 'website',
+  },
+  twitter: {
+    title: siteMetadata.title,
+    card: 'summary_large_image',
+    images: [siteMetadata.socialBanner],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 {{#if (and (eq backend "convex") (eq auth "better-auth"))}}
@@ -35,12 +67,15 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers initialToken={token}>
-          <div className="grid grid-rows-[auto_1fr] h-svh">
-            <Header />
-            {children}
-          </div>
-        </Providers>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <Navbar />
+
+          <main className="min-h-screen">{children}</main>
+
+          <ScrollToTop />
+
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
@@ -57,18 +92,24 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				{{#if (and (eq auth "clerk") (eq backend "convex"))}}<ClerkProvider>
-					<Providers>
-						<div className="grid grid-rows-[auto_1fr] h-svh">
-							<Header />
-							{children}
-						</div>
-					</Providers>
-				</ClerkProvider>{{else}}<Providers>
-					<div className="grid grid-rows-[auto_1fr] h-svh">
-						<Header />
-						{children}
-					</div>
-				</Providers>{{/if}}
+					<ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <Navbar />
+
+          <main className="min-h-screen">{children}</main>
+
+          <ScrollToTop />
+
+          <Footer />
+        </ThemeProvider>
+				</ClerkProvider>{{else}}<ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <Navbar />
+
+          <main className="min-h-screen">{children}</main>
+
+          <ScrollToTop />
+
+          <Footer />
+        </ThemeProvider>{{/if}}
 			</body>
 		</html>
 	);
