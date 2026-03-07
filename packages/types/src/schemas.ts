@@ -15,17 +15,7 @@ export const RuntimeSchema = z
   .describe("Runtime environment");
 
 export const FrontendSchema = z
-  .enum([
-    "tanstack-router",
-    "react-router",
-    "tanstack-start",
-    "next",
-    "nuxt",
-    "svelte",
-    "solid",
-    "astro",
-    "none",
-  ])
+  .enum(["tanstack-router", "tanstack-start", "next", "nuxt", "svelte", "solid", "astro", "none"])
   .describe("Frontend framework");
 
 export const AddonsSchema = z
@@ -99,8 +89,13 @@ export const ProjectNameSchema = z
   .refine((name) => name.toLowerCase() !== "node_modules", "Project name is reserved")
   .describe("Project name or path");
 
+export const ProjectTypeSchema = z
+  .enum(["frontend", "backend", "fullstack"])
+  .describe("Project type");
+
 export const CreateInputSchema = z.object({
   projectName: z.string().optional(),
+  projectType: ProjectTypeSchema.optional(),
   template: TemplateSchema.optional(),
   yes: z.boolean().optional(),
   yolo: z.boolean().optional(),
@@ -142,6 +137,7 @@ export const CLIInputSchema = CreateInputSchema.extend({
 export const ProjectConfigSchema = z.object({
   projectName: z.string(),
   projectDir: z.string(),
+  projectType: ProjectTypeSchema,
   relativePath: z.string(),
   database: DatabaseSchema,
   orm: ORMSchema,
@@ -158,14 +154,13 @@ export const ProjectConfigSchema = z.object({
   api: APISchema,
   webDeploy: WebDeploySchema,
   serverDeploy: ServerDeploySchema,
-  projectType: z.enum(["frontend", "backend"]),
 });
 
 export const BikinProjectConfigSchema = z.object({
   version: z.string().describe("CLI version used to create this project"),
   createdAt: z.string().describe("Timestamp when the project was created"),
   reproducibleCommand: z.string().optional().describe("Command to reproduce this project setup"),
-  projectType: z.enum(["frontend", "backend"]),
+  projectType: ProjectTypeSchema,
   database: DatabaseSchema,
   orm: ORMSchema,
   backend: BackendSchema,

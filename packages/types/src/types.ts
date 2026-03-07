@@ -23,6 +23,7 @@ import type {
   ProjectConfigSchema,
   BikinProjectConfigSchema,
   InitResultSchema,
+  ProjectTypeSchema,
 } from "./schemas";
 
 // Inferred types from Zod schemas
@@ -42,7 +43,7 @@ export type ServerDeploy = z.infer<typeof ServerDeploySchema>;
 export type DirectoryConflict = z.infer<typeof DirectoryConflictSchema>;
 export type Template = z.infer<typeof TemplateSchema>;
 export type ProjectName = z.infer<typeof ProjectNameSchema>;
-export type ProjectType = "frontend" | "backend" | "fullstack";
+export type ProjectType = z.infer<typeof ProjectTypeSchema>;
 
 export type CreateInput = z.infer<typeof CreateInputSchema>;
 export type AddInput = z.infer<typeof AddInputSchema>;
@@ -53,12 +54,5 @@ export type InitResult = z.infer<typeof InitResultSchema>;
 
 export type WebFrontend = Extract<
   Frontend,
-  | "tanstack-router"
-  | "react-router"
-  | "tanstack-start"
-  | "next"
-  | "nuxt"
-  | "svelte"
-  | "solid"
-  | "none"
+  "tanstack-router" | "tanstack-start" | "next" | "nuxt" | "svelte" | "solid" | "none"
 >;
