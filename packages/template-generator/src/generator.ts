@@ -18,12 +18,8 @@ import {
   processBackendTemplates,
   processDbTemplates,
   processApiTemplates,
-  processConfigPackage,
-  processEnvPackage,
   processAuthTemplates,
-  processPaymentsTemplates,
   processAddonTemplates,
-  processExampleTemplates,
   processExtrasTemplates,
   processDeployTemplates,
 } from "./template-handlers";
@@ -62,17 +58,24 @@ export async function generate(
 
       const vfs = new VirtualFileSystem();
 
+      const isFrontend = config.projectType === "frontend";
+      const isBackend = config.projectType === "backend";
+
       await processBaseTemplate(vfs, templates, config);
-      await processFrontendTemplates(vfs, templates, config);
-      await processBackendTemplates(vfs, templates, config);
-      await processDbTemplates(vfs, templates, config);
+
+      if (isFrontend) {
+        await processFrontendTemplates(vfs, templates, config);
+      }
+
+      if (isBackend) {
+        await processBackendTemplates(vfs, templates, config);
+        await processDbTemplates(vfs, templates, config);
+      }
+
+      // Shared handlers - they will handle internal checks for projectType
       await processApiTemplates(vfs, templates, config);
-      await processConfigPackage(vfs, templates, config);
-      await processEnvPackage(vfs, templates, config);
       await processAuthTemplates(vfs, templates, config);
-      await processPaymentsTemplates(vfs, templates, config);
       await processAddonTemplates(vfs, templates, config);
-      await processExampleTemplates(vfs, templates, config);
       await processExtrasTemplates(vfs, templates, config);
       await processDeployTemplates(vfs, templates, config);
 

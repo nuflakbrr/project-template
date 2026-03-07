@@ -25,11 +25,11 @@ function generateReadmeContent(options: ProjectConfig): string {
   } = options;
 
   const isConvex = backend === "convex";
-  const hasReactRouter = frontend.includes("react-router");
+  const hasTanstackRouter = frontend.includes("tanstack-router");
   const hasSvelte = frontend.includes("svelte");
   const hasAstro = frontend.includes("astro");
   const packageManagerRunCmd = `${packageManager} run`;
-  const webPort = hasReactRouter || hasSvelte ? "5173" : hasAstro ? "4321" : "3001";
+  const webPort = hasSvelte ? "5173" : hasAstro ? "4321" : "3000";
 
   const stackDescription = generateStackDescription(frontend, backend, api, isConvex);
 
@@ -63,7 +63,7 @@ ${packageManagerRunCmd} dev:setup
 
 Follow the prompts to create a new Convex project and connect it to your application.
 
-Copy environment variables from \`packages/backend/.env.local\` to \`apps/*/.env\`.
+Copy environment variables from \`.env.local\` to \`.env\`.
 ${
   auth === "clerk"
     ? `
@@ -71,7 +71,7 @@ ${
 
 - Follow the guide: [Convex + Clerk](https://docs.convex.dev/auth/clerk)
 - Set \`CLERK_JWT_ISSUER_DOMAIN\` in Convex Dashboard
-- Set \`CLERK_PUBLISHABLE_KEY\` in \`apps/*/.env\``
+- Set \`CLERK_PUBLISHABLE_KEY\` in \`.env\``
     : ""
 }`
     : generateDatabaseSetup(options, packageManagerRunCmd)
@@ -85,7 +85,7 @@ ${packageManagerRunCmd} dev
 
 ${generateRunningInstructions(frontend, backend, webPort, isConvex)}
 ${
-  addons.includes("pwa") && hasReactRouter
+  addons.includes("pwa") && hasTanstackRouter
     ? "\n## PWA Support with React Router v7\n\nThere is a known compatibility issue between VitePWA and React Router v7.\nSee: https://github.com/vite-pwa/vite-plugin-pwa/issues/809\n"
     : ""
 }
@@ -114,7 +114,6 @@ function generateStackDescription(
 
   const frontendMap: Record<string, string> = {
     "tanstack-router": "React, TanStack Router",
-    "react-router": "React, React Router",
     next: "Next.js",
     "tanstack-start": "React, TanStack Start",
     svelte: "SvelteKit",
@@ -170,67 +169,40 @@ function generateRunningInstructions(
 function generateProjectStructure(config: ProjectConfig): string {
   const { projectName, frontend, backend, addons, api, auth, database, orm } = config;
   const isConvex = backend === "convex";
-  const structure: string[] = [`${projectName}/`, "├── apps/"];
+  const structure: string[] = [`${projectName}/`];
   const hasFrontend = frontend.length > 0 && !frontend.includes("none");
-  const isBackendSelf = backend === "self";
-  const hasDbPackage = !isConvex && database !== "none" && orm !== "none";
+  const hasDb = !isConvex && database !== "none" && orm !== "none";
+
+  structure.push("├── src/");
 
   if (hasFrontend) {
-    const frontendTypes: Record<string, string> = {
-      "tanstack-router": "React + TanStack Router",
-      "react-router": "React + React Router",
-      next: "Next.js",
-      "tanstack-start": "React + TanStack Start",
-      svelte: "SvelteKit",
-      nuxt: "Nuxt",
-      solid: "SolidJS",
-      astro: "Astro",
-    };
-    const frontendType = frontend.find((f) => frontendTypes[f])
-      ? frontendTypes[frontend.find((f) => frontendTypes[f]) || ""]
-      : "";
-
-    const prefix = isBackendSelf ? "└──" : "├──";
-    const desc = isBackendSelf ? "Fullstack application" : "Frontend application";
-    structure.push(`│   ${prefix} web/         # ${desc} (${frontendType})`);
+    structure.push("│   ├── app/           # Frontend pages & layouts");
+    structure.push("│   ├── components/    # UI components");
   }
 
-  if (addons.includes("starlight")) {
-    structure.push("│   ├── docs/        # Documentation site (Astro Starlight)");
+  if (backend !== "none" && !isConvex) {
+    structure.push("│   ├── server/        # API routes & backend logic");
   }
 
-  if (!isBackendSelf && backend !== "none" && !isConvex) {
-    const backendName = (backend[0]?.toUpperCase() ?? "") + backend.slice(1);
-    const apiName = api !== "none" ? api.toUpperCase() : "";
-    const desc = apiName ? `${backendName}, ${apiName}` : backendName;
-    structure.push(`│   └── server/      # Backend API (${desc})`);
+  if (isConvex) {
+    structure.push("│   ├── convex/        # Convex functions and schema");
   }
 
-  if (isConvex || backend !== "none") {
-    structure.push("├── packages/");
-
-    if (isConvex) {
-      structure.push("│   ├── backend/     # Convex backend functions and schema");
-      if (auth === "clerk") {
-        structure.push(
-          "│   │   ├── convex/    # Convex functions and schema",
-          "│   │   └── .env.local # Convex environment variables",
-        );
-      }
-    }
-
-    if (!isConvex) {
-      if (api !== "none") {
-        structure.push("│   ├── api/         # API layer / business logic");
-      }
-      if (auth !== "none") {
-        structure.push("│   ├── auth/        # Authentication configuration & logic");
-      }
-      if (hasDbPackage) {
-        structure.push("│   └── db/          # Database schema & queries");
-      }
-    }
+  if (api !== "none" && !isConvex) {
+    structure.push("│   ├── api/           # API definitions");
   }
+
+  if (auth !== "none") {
+    structure.push("│   ├── auth/          # Authentication logic");
+  }
+
+  if (hasDb) {
+    structure.push("│   ├── db/            # Database schema & migrations");
+  }
+
+  structure.push("├── public/            # Static assets");
+  structure.push("├── .env               # Environment variables");
+  structure.push("└── package.json       # Project configuration");
 
   return structure.join("\n");
 }
@@ -252,7 +224,6 @@ function generateFeaturesList(
 
   const frontendFeatures: Record<string, string> = {
     "tanstack-router": "- **TanStack Router** - File-based routing with full type safety",
-    "react-router": "- **React Router** - Declarative routing for React",
     next: "- **Next.js** - Full-stack React framework",
     "tanstack-start": "- **TanStack Start** - SSR framework with TanStack Router",
     svelte: "- **SvelteKit** - Web framework for building Svelte apps",
@@ -326,7 +297,6 @@ function generateFeaturesList(
     oxlint: "- **Oxlint** - Oxlint + Oxfmt (linting & formatting)",
     husky: "- **Husky** - Git hooks for code quality",
     starlight: "- **Starlight** - Documentation site with Astro",
-    turborepo: "- **Turborepo** - Optimized monorepo build system",
   };
 
   for (const addon of addons) {
@@ -339,11 +309,10 @@ function generateFeaturesList(
 }
 
 function generateDatabaseSetup(config: ProjectConfig, packageManagerRunCmd: string): string {
-  const { database, orm, dbSetup, backend } = config;
+  const { database, orm, dbSetup } = config;
   if (database === "none") return "";
 
-  const isBackendSelf = backend === "self";
-  const envPath = isBackendSelf ? "apps/web/.env" : "apps/server/.env";
+  const envPath = ".env";
   const ormLabels: Record<ProjectConfig["orm"], string> = {
     drizzle: "Drizzle ORM",
     prisma: "Prisma",
@@ -367,7 +336,7 @@ ${packageManagerRunCmd} db:local
 \`\`\``
 }
 
-2. Update your \`.env\` file in the \`${isBackendSelf ? "apps/web" : "apps/server"}\` directory with the appropriate connection details if needed.`,
+2. Update your \`${envPath}\` file with the appropriate connection details if needed.`,
 
     postgres: `This project uses PostgreSQL${ormDesc}.
 
@@ -403,23 +372,16 @@ ${packageManagerRunCmd} db:push
 function generateScriptsList(packageManagerRunCmd: string, config: ProjectConfig): string {
   const { database, addons, backend, dbSetup } = config;
   const isConvex = backend === "convex";
-  const isBackendSelf = backend === "self";
   const dbSupport = getDbScriptSupport(config);
 
-  let scripts = `- \`${packageManagerRunCmd} dev\`: Start all applications in development mode
-- \`${packageManagerRunCmd} build\`: Build all applications`;
-
-  if (!isBackendSelf) {
-    scripts += `\n- \`${packageManagerRunCmd} dev:web\`: Start only the web application`;
-  }
+  let scripts = `- \`${packageManagerRunCmd} dev\`: Start the development server
+- \`${packageManagerRunCmd} build\`: Build for production`;
 
   if (isConvex) {
     scripts += `\n- \`${packageManagerRunCmd} dev:setup\`: Setup and configure your Convex project`;
-  } else if (backend !== "none" && !isBackendSelf) {
-    scripts += `\n- \`${packageManagerRunCmd} dev:server\`: Start only the server`;
   }
 
-  scripts += `\n- \`${packageManagerRunCmd} check-types\`: Check TypeScript types across all apps`;
+  scripts += `\n- \`${packageManagerRunCmd} check-types\`: Check TypeScript types`;
 
   if (dbSupport.hasDbScripts) {
     scripts += `\n- \`${packageManagerRunCmd} db:push\`: Push schema changes to database`;
@@ -447,12 +409,12 @@ function generateScriptsList(packageManagerRunCmd: string, config: ProjectConfig
   }
 
   if (addons.includes("pwa")) {
-    scripts += `\n- \`cd apps/web && ${packageManagerRunCmd} generate-pwa-assets\`: Generate PWA assets`;
+    scripts += `\n- \`${packageManagerRunCmd} generate-pwa-assets\`: Generate PWA assets`;
   }
 
   if (addons.includes("starlight")) {
-    scripts += `\n- \`cd apps/docs && ${packageManagerRunCmd} dev\`: Start documentation site
-- \`cd apps/docs && ${packageManagerRunCmd} build\`: Build documentation site`;
+    scripts += `\n- \`cd docs && ${packageManagerRunCmd} dev\`: Start documentation site
+- \`cd docs && ${packageManagerRunCmd} build\`: Build documentation site`;
   }
 
   return scripts;
@@ -469,29 +431,11 @@ function generateDeploymentCommands(
 
   const lines: string[] = ["## Deployment (Cloudflare via Alchemy)"];
 
-  if (webDeploy === "cloudflare" && serverDeploy !== "cloudflare") {
-    lines.push(
-      `- Dev: cd apps/web && ${packageManagerRunCmd} alchemy dev`,
-      `- Deploy: cd apps/web && ${packageManagerRunCmd} deploy`,
-      `- Destroy: cd apps/web && ${packageManagerRunCmd} destroy`,
-    );
-  }
-
-  if (serverDeploy === "cloudflare" && webDeploy !== "cloudflare") {
-    lines.push(
-      `- Dev: cd apps/server && ${packageManagerRunCmd} dev`,
-      `- Deploy: cd apps/server && ${packageManagerRunCmd} deploy`,
-      `- Destroy: cd apps/server && ${packageManagerRunCmd} destroy`,
-    );
-  }
-
-  if (webDeploy === "cloudflare" && serverDeploy === "cloudflare") {
-    lines.push(
-      `- Dev: ${packageManagerRunCmd} dev`,
-      `- Deploy: ${packageManagerRunCmd} deploy`,
-      `- Destroy: ${packageManagerRunCmd} destroy`,
-    );
-  }
+  lines.push(
+    `- Dev: ${packageManagerRunCmd} dev`,
+    `- Deploy: ${packageManagerRunCmd} deploy`,
+    `- Destroy: ${packageManagerRunCmd} destroy`,
+  );
 
   lines.push(
     "",

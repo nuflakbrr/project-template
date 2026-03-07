@@ -34,10 +34,14 @@ export function splitFrontends(values: Frontend[] = []): {
 }
 
 export function ensureSingleWeb(frontends: Frontend[]): ValidationResult {
+  if (frontends.includes("none") && frontends.length > 1) {
+    return validationErr("Cannot combine 'none' with other frontends.");
+  }
+
   const { web } = splitFrontends(frontends);
   if (web.length > 1) {
     return validationErr(
-      "Cannot select multiple web frameworks. Choose only one of: tanstack-router, tanstack-start, react-router, next, nuxt, svelte, solid",
+      "Cannot select multiple web frameworks. Choose only one of: tanstack-router, tanstack-start, next, nuxt, svelte, solid, astro",
     );
   }
   return Result.ok(undefined);
@@ -241,6 +245,7 @@ export function validateAddonCompatibility(
   _auth?: Auth,
 ): { isCompatible: boolean; reason?: string } {
   const compatibleFrontends = ADDON_COMPATIBILITY[addon];
+  if (!compatibleFrontends) return { isCompatible: true };
 
   if (compatibleFrontends.length > 0) {
     const hasCompatibleFrontend = frontend.some((f) =>
@@ -280,6 +285,10 @@ export function validateAddonsAgainstFrontends(
   frontends: Frontend[] = [],
   auth?: Auth,
 ): ValidationResult {
+  if (addons.includes("none") && addons.length > 1) {
+    return validationErr("Cannot combine 'none' with other addons.");
+  }
+
   for (const addon of addons) {
     if (addon === "none") continue;
     const { isCompatible, reason } = validateAddonCompatibility(addon, frontends, auth);
@@ -309,48 +318,6 @@ export function validatePaymentsCompatibility(
     if (web.length === 0 && frontends.length > 0) {
       return validationErr(
         "Polar payments requires a web frontend or no frontend. Please select a web frontend or choose a different payments provider.",
-      );
-    }
-  }
-
-  return Result.ok(undefined);
-}
-
-export function validateExamplesCompatibility(
-  examples: string[] | undefined,
-  backend: ProjectConfig["backend"] | undefined,
-  database: ProjectConfig["database"] | undefined,
-  frontend?: Frontend[],
-  api?: API,
-): ValidationResult {
-  const examplesArr = examples ?? [];
-  if (examplesArr.length === 0 || examplesArr.includes("none")) return Result.ok(undefined);
-
-  if (examplesArr.includes("todo") && backend !== "convex") {
-    if (database === "none") {
-      return validationErr(
-        "The 'todo' example requires a database. Cannot use --examples todo when database is 'none'.",
-      );
-    }
-    if (api === "none") {
-      return validationErr(
-        "The 'todo' example requires an API layer (tRPC or oRPC). Cannot use --examples todo when api is 'none'.",
-      );
-    }
-  }
-
-  if (examplesArr.includes("ai") && (frontend ?? []).includes("solid")) {
-    return validationErr("The 'ai' example is not compatible with the Solid frontend.");
-  }
-
-  // Convex AI example only supports React-based frontends
-  if (examplesArr.includes("ai") && backend === "convex") {
-    const frontendArr = frontend ?? [];
-    const includesNuxt = frontendArr.includes("nuxt");
-    const includesSvelte = frontendArr.includes("svelte");
-    if (includesNuxt || includesSvelte) {
-      return validationErr(
-        "The 'ai' example with Convex backend only supports React-based frontends (Next.js, TanStack Router, TanStack Start, React Router). Svelte and Nuxt are not supported with Convex AI.",
       );
     }
   }

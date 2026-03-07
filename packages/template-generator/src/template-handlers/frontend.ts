@@ -9,7 +9,7 @@ export async function processFrontendTemplates(
   config: ProjectConfig,
 ): Promise<void> {
   const hasReactWeb = config.frontend.some((f) =>
-    ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
+    ["tanstack-router", "tanstack-start", "next"].includes(f),
   );
   const hasNuxtWeb = config.frontend.includes("nuxt");
   const hasSvelteWeb = config.frontend.includes("svelte");
@@ -22,7 +22,7 @@ export async function processFrontendTemplates(
       processTemplatesFromPrefix(vfs, templates, "frontend/react/web-base", "apps/web", config);
 
       const reactFramework = config.frontend.find((f) =>
-        ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
+        ["tanstack-router", "tanstack-start", "next"].includes(f),
       );
       if (reactFramework) {
         processTemplatesFromPrefix(

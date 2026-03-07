@@ -1,5 +1,6 @@
 import type { ProjectConfig } from "@bikinproject/types";
 
+import { resolvePackagePath } from "../core/path-resolver";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 import { addPackageDependency, type AvailableDependencies } from "../utils/add-deps";
 
@@ -7,14 +8,14 @@ export function processBackendDeps(vfs: VirtualFileSystem, config: ProjectConfig
   const { backend, runtime, api, auth } = config;
 
   if (backend === "convex") {
-    const convexPath = "packages/backend/package.json";
+    const convexPath = resolvePackagePath(config, "packages/backend/package.json");
     if (vfs.exists(convexPath)) {
       addPackageDependency({ vfs, packagePath: convexPath, dependencies: ["convex"] });
     }
     return;
   }
 
-  const serverPath = "apps/server/package.json";
+  const serverPath = resolvePackagePath(config, "apps/server/package.json");
   if (!vfs.exists(serverPath) || backend === "self" || backend === "none") return;
 
   const deps: AvailableDependencies[] = [];

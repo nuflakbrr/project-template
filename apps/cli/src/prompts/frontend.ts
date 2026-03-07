@@ -27,11 +27,6 @@ export async function getFrontendChoice(
         hint: "Modern and scalable routing for React Applications",
       },
       {
-        value: "react-router" as const,
-        label: "React Router",
-        hint: "A user‑obsessed, standards‑focused, multi‑strategy router",
-      },
-      {
         value: "next" as const,
         label: "Next.js",
         hint: "The React Framework for the Web",

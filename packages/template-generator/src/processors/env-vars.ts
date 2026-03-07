@@ -137,7 +137,6 @@ function buildClientVars(
   auth: ProjectConfig["auth"],
 ): EnvVariable[] {
   const hasNextJs = frontend.includes("next");
-  const hasReactRouter = frontend.includes("react-router");
   const hasTanStackRouter = frontend.includes("tanstack-router");
   const hasTanStackStart = frontend.includes("tanstack-start");
 
@@ -172,7 +171,7 @@ function buildClientVars(
           condition: true,
         },
       );
-    } else if (hasReactRouter || hasTanStackRouter || hasTanStackStart) {
+    } else if (hasTanStackRouter || hasTanStackStart) {
       vars.push({
         key: "VITE_CLERK_PUBLISHABLE_KEY",
         value: "",
@@ -195,7 +194,7 @@ function buildClientVars(
         value: "https://<YOUR_CONVEX_URL>",
         condition: true,
       });
-    } else if (hasReactRouter || hasTanStackRouter || hasTanStackStart) {
+    } else if (hasTanStackRouter || hasTanStackStart) {
       vars.push({
         key: "VITE_CONVEX_SITE_URL",
         value: "https://<YOUR_CONVEX_URL>",
@@ -207,14 +206,9 @@ function buildClientVars(
   return vars;
 }
 
-function buildConvexBackendVars(
-  frontend: string[],
-  auth: ProjectConfig["auth"],
-  examples: ProjectConfig["examples"],
-): EnvVariable[] {
+function buildConvexBackendVars(frontend: string[], auth: ProjectConfig["auth"]): EnvVariable[] {
   const hasNextJs = frontend.includes("next");
   const hasWeb =
-    frontend.includes("react-router") ||
     frontend.includes("tanstack-router") ||
     frontend.includes("tanstack-start") ||
     hasNextJs ||
@@ -222,18 +216,9 @@ function buildConvexBackendVars(
     frontend.includes("solid") ||
     frontend.includes("svelte") ||
     frontend.includes("astro");
-  const defaultSiteUrl = "http://localhost:3001";
+  const defaultSiteUrl = "http://localhost:3000";
 
   const vars: EnvVariable[] = [];
-
-  if (examples?.includes("ai")) {
-    vars.push({
-      key: "GOOGLE_GENERATIVE_AI_API_KEY",
-      value: "",
-      condition: true,
-      comment: "Google AI API key for AI agent",
-    });
-  }
 
   if (auth === "better-auth") {
     if (hasWeb) {
@@ -257,13 +242,8 @@ function buildConvexBackendVars(
   return vars;
 }
 
-function buildConvexCommentBlocks(
-  frontend: string[],
-  auth: ProjectConfig["auth"],
-  examples: ProjectConfig["examples"],
-): string {
+function buildConvexCommentBlocks(frontend: string[], auth: ProjectConfig["auth"]): string {
   const hasWeb =
-    frontend.includes("react-router") ||
     frontend.includes("tanstack-router") ||
     frontend.includes("tanstack-start") ||
     frontend.includes("next") ||
@@ -271,16 +251,9 @@ function buildConvexCommentBlocks(
     frontend.includes("solid") ||
     frontend.includes("svelte") ||
     frontend.includes("astro");
-  const defaultSiteUrl = "http://localhost:3001";
+  const defaultSiteUrl = "http://localhost:3000";
 
   let commentBlocks = "";
-
-  if (examples?.includes("ai")) {
-    commentBlocks += `# Set Google AI API key for AI agent
-# npx convex env set GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key
-
-`;
-  }
 
   if (auth === "better-auth") {
     commentBlocks += `# Set Convex environment variables
@@ -301,19 +274,18 @@ function buildServerVars(
   webDeploy: ProjectConfig["webDeploy"],
   serverDeploy: ProjectConfig["serverDeploy"],
   payments: ProjectConfig["payments"],
-  examples: ProjectConfig["examples"],
 ): EnvVariable[] {
-  const hasReactRouter = frontend.includes("react-router");
+  const hasTanstackRouter = frontend.includes("tanstack-router");
   const hasSvelte = frontend.includes("svelte");
   const hasAstro = frontend.includes("astro");
 
-  let corsOrigin = "http://localhost:3001";
+  let corsOrigin = "http://localhost:3000";
   if (hasAstro) {
     corsOrigin = "http://localhost:4321";
-  } else if (hasReactRouter || hasSvelte) {
+  } else if (hasTanstackRouter || hasSvelte) {
     corsOrigin = "http://localhost:5173";
   } else if (backend === "self") {
-    corsOrigin = "http://localhost:3001";
+    corsOrigin = "http://localhost:3000";
   }
 
   let databaseUrl: string | null = null;
@@ -352,7 +324,7 @@ function buildServerVars(
         backend === "self"
           ? hasAstro
             ? "http://localhost:4321"
-            : "http://localhost:3001"
+            : "http://localhost:3000"
           : "http://localhost:3000",
       condition: hasBetterAuth,
     },
@@ -374,7 +346,7 @@ function buildServerVars(
     {
       key: "GOOGLE_GENERATIVE_AI_API_KEY",
       value: "",
-      condition: examples?.includes("ai") || false,
+      condition: false,
     },
     {
       key: "DATABASE_URL",
@@ -385,20 +357,9 @@ function buildServerVars(
 }
 
 export function processEnvVariables(vfs: VirtualFileSystem, config: ProjectConfig): void {
-  const {
-    backend,
-    frontend,
-    database,
-    auth,
-    examples,
-    dbSetup,
-    webDeploy,
-    serverDeploy,
-    runtime,
-    payments,
-  } = config;
+  const { backend, frontend, database, auth, dbSetup, webDeploy, serverDeploy, runtime, payments } =
+    config;
 
-  const hasReactRouter = frontend.includes("react-router");
   const hasTanStackRouter = frontend.includes("tanstack-router");
   const hasTanStackStart = frontend.includes("tanstack-start");
   const hasNextJs = frontend.includes("next");
@@ -407,7 +368,6 @@ export function processEnvVariables(vfs: VirtualFileSystem, config: ProjectConfi
   const hasSolid = frontend.includes("solid");
   const hasAstro = frontend.includes("astro");
   const hasWebFrontend =
-    hasReactRouter ||
     hasTanStackRouter ||
     hasTanStackStart ||
     hasNextJs ||
@@ -433,7 +393,7 @@ export function processEnvVariables(vfs: VirtualFileSystem, config: ProjectConfi
       const envLocalPath = `${convexBackendDir}/.env.local`;
 
       // Write comment blocks first
-      const commentBlocks = buildConvexCommentBlocks(frontend, auth, examples);
+      const commentBlocks = buildConvexCommentBlocks(frontend, auth);
       if (commentBlocks) {
         let currentContent = "";
         if (vfs.exists(envLocalPath)) {
@@ -443,7 +403,7 @@ export function processEnvVariables(vfs: VirtualFileSystem, config: ProjectConfi
       }
 
       // Then add variables
-      const convexBackendVars = buildConvexBackendVars(frontend, auth, examples);
+      const convexBackendVars = buildConvexBackendVars(frontend, auth);
       if (convexBackendVars.length > 0) {
         let existingContent = "";
         if (vfs.exists(envLocalPath)) {
@@ -469,7 +429,6 @@ export function processEnvVariables(vfs: VirtualFileSystem, config: ProjectConfi
     webDeploy,
     serverDeploy,
     payments,
-    examples,
   );
 
   if (backend === "self") {

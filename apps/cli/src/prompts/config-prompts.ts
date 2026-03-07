@@ -6,7 +6,6 @@ import type {
   Backend,
   Database,
   DatabaseSetup,
-  Examples,
   Frontend,
   ORM,
   PackageManager,
@@ -24,7 +23,6 @@ import { getAuthChoice } from "./auth";
 import { getBackendFrameworkChoice } from "./backend";
 import { getDatabaseChoice } from "./database";
 import { getDBSetupChoice } from "./database-setup";
-import { getExamplesChoice } from "./examples";
 import { getFrontendChoice } from "./frontend";
 import { getGitChoice } from "./git";
 import { getinstallChoice } from "./install";
@@ -48,7 +46,6 @@ type PromptGroupResults = {
   auth: Auth;
   payments: Payments;
   addons: Addons[];
-  examples: Examples[];
   dbSetup: DatabaseSetup;
   git: boolean;
   packageManager: PackageManager;
@@ -76,7 +73,6 @@ export async function gatherConfig(
       auth: flags.auth ?? DEFAULT_CONFIG.auth,
       payments: flags.payments ?? DEFAULT_CONFIG.payments,
       addons: flags.addons ?? [...DEFAULT_CONFIG.addons],
-      examples: flags.examples ?? [...DEFAULT_CONFIG.examples],
       git: flags.git ?? DEFAULT_CONFIG.git,
       packageManager: flags.packageManager ?? DEFAULT_CONFIG.packageManager,
       install: flags.install ?? DEFAULT_CONFIG.install,
@@ -89,7 +85,16 @@ export async function gatherConfig(
 
   const result = await navigableGroup<PromptGroupResults>(
     {
-      projectType: () => getProjectTypeChoice(),
+      projectType: () => {
+        if (flags.projectType) return Promise.resolve(flags.projectType as ProjectType);
+        if (flags.frontend && flags.frontend.length > 0 && !flags.frontend.includes("none")) {
+          return Promise.resolve("frontend" as ProjectType);
+        }
+        if (flags.backend && flags.backend !== "none") {
+          return Promise.resolve("backend" as ProjectType);
+        }
+        return getProjectTypeChoice();
+      },
       frontend: ({ results }) => {
         if (results.projectType === "backend") return Promise.resolve(["none" as Frontend]);
         return getFrontendChoice(flags.frontend, flags.backend, flags.auth);
@@ -130,33 +135,6 @@ export async function gatherConfig(
       },
       addons: ({ results }) => {
         return getAddonsChoice(flags.addons, results.frontend, results.auth);
-      },
-      examples: ({ results }) => {
-        if (results.projectType === "frontend") {
-          return getExamplesChoice(
-            flags.examples,
-            "none",
-            results.frontend,
-            "none",
-            "none",
-          ) as Promise<Examples[]>;
-        }
-        if (results.projectType === "backend") {
-          return getExamplesChoice(
-            flags.examples,
-            results.database,
-            ["none"],
-            results.backend,
-            "none",
-          ) as Promise<Examples[]>;
-        }
-        return getExamplesChoice(
-          flags.examples,
-          results.database,
-          results.frontend,
-          results.backend,
-          results.api,
-        ) as Promise<Examples[]>;
       },
       dbSetup: ({ results }) => {
         if (results.projectType === "frontend") return Promise.resolve("none" as DatabaseSetup);
@@ -209,7 +187,6 @@ export async function gatherConfig(
     auth: result.auth,
     payments: result.payments,
     addons: result.addons,
-    examples: result.examples,
     git: result.git,
     packageManager: result.packageManager,
     install: result.install,
@@ -217,5 +194,6 @@ export async function gatherConfig(
     api: result.api,
     webDeploy: result.webDeploy,
     serverDeploy: result.serverDeploy,
+    projectType: result.projectType,
   };
 }

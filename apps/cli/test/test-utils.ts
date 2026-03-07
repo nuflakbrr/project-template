@@ -12,7 +12,6 @@ import type {
   Runtime,
   Frontend,
   Addons,
-  Examples,
   Auth,
   Payments,
   API,
@@ -27,7 +26,6 @@ import {
   BackendSchema,
   DatabaseSchema,
   DatabaseSetupSchema,
-  ExamplesSchema,
   FrontendSchema,
   ORMSchema,
   PackageManagerSchema,
@@ -78,7 +76,6 @@ export async function runTRPCTest(config: TestConfig): Promise<TestResult> {
     "runtime",
     "frontend",
     "addons",
-    "examples",
     "auth",
     "payments",
     "dbSetup",
@@ -105,7 +102,6 @@ export async function runTRPCTest(config: TestConfig): Promise<TestResult> {
         auth: "none" as Auth,
         payments: "none" as Payments,
         addons: ["none"] as Addons[],
-        examples: ["none"] as Examples[],
         dbSetup: "none" as DatabaseSetup,
         webDeploy: "none" as WebDeploy,
         serverDeploy: "none" as ServerDeploy,
@@ -205,7 +201,6 @@ export const BACKENDS = extractEnumValues(BackendSchema);
 export const RUNTIMES = extractEnumValues(RuntimeSchema);
 export const FRONTENDS = extractEnumValues(FrontendSchema);
 export const ADDONS = extractEnumValues(AddonsSchema);
-export const EXAMPLES = extractEnumValues(ExamplesSchema);
 export const AUTH_PROVIDERS = extractEnumValues(AuthSchema);
 export const PAYMENTS_PROVIDERS = extractEnumValues(PaymentsSchema);
 export const API_TYPES = extractEnumValues(APISchema);

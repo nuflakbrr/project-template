@@ -66,7 +66,7 @@ export async function displayPostInstallInstructions(
   const lefthookInstructions = hasLefthook ? getLefthookInstructions(packageManager) : "";
   const lintingInstructions = hasGitHooksOrLinting ? getLintingInstructions(runCmd) : "";
   const pwaInstructions =
-    addons?.includes("pwa") && frontend?.includes("react-router") ? getPwaInstructions() : "";
+    addons?.includes("pwa") && frontend?.includes("tanstack-router") ? getPwaInstructions() : "";
   const starlightInstructions = addons?.includes("starlight")
     ? getStarlightInstructions(runCmd)
     : "";
@@ -83,20 +83,11 @@ export async function displayPostInstallInstructions(
   );
 
   const hasWeb = frontend?.some((f) =>
-    [
-      "tanstack-router",
-      "react-router",
-      "next",
-      "tanstack-start",
-      "nuxt",
-      "svelte",
-      "solid",
-    ].includes(f),
+    ["tanstack-router", "next", "tanstack-start", "nuxt", "svelte", "solid"].includes(f),
   );
 
-  const hasReactRouter = frontend?.includes("react-router");
   const hasSvelte = frontend?.includes("svelte");
-  const webPort = hasReactRouter || hasSvelte ? "5173" : "3001";
+  const webPort = hasSvelte ? "5173" : "3000";
 
   const betterAuthConvexInstructions =
     isConvex && config.auth === "better-auth"

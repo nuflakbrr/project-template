@@ -11,6 +11,7 @@ import { getDefaultConfig } from "../../constants";
 import { gatherConfig } from "../../prompts/config-prompts";
 import { getProjectName } from "../../prompts/project-name";
 import type { CreateInput, DirectoryConflict, ProjectConfig } from "../../types";
+import type { ProjectType } from "../../types";
 import { trackProjectCreation } from "../../utils/analytics";
 import { isSilent, runWithContextAsync } from "../../utils/context";
 import { displayConfig } from "../../utils/display-config";
@@ -73,7 +74,6 @@ function createEmptyResult(
       runtime: "none",
       frontend: [],
       addons: [],
-      examples: [],
       auth: "none",
       payments: "none",
       git: false,
@@ -83,6 +83,7 @@ function createEmptyResult(
       api: "none",
       webDeploy: "none",
       serverDeploy: "none",
+      projectType: "frontend",
     } satisfies ProjectConfig,
     reproducibleCommand: "",
     timeScaffolded,
@@ -268,7 +269,7 @@ async function createProjectHandlerInternal(
         projectName: finalBaseName,
         projectDir: finalResolvedPath,
         relativePath: finalPathInput,
-      };
+      } as ProjectConfig;
 
       // Validate config compatibility
       const validationResult = validateConfigCompatibility(config, providedFlags, cliInput);
@@ -313,7 +314,7 @@ async function createProjectHandlerInternal(
           },
         }),
       );
-      config = gatherResult;
+      config = gatherResult as ProjectConfig;
     }
 
     // Create the project

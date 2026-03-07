@@ -70,7 +70,7 @@ async function copyBinaryFiles(binaryFiles: string[]) {
   console.log(`\n📁 Copying ${binaryFiles.length} binary files to templates-binary/...`);
 
   if (fs.existsSync(BINARY_OUTPUT_DIR)) {
-    fs.rmSync(BINARY_OUTPUT_DIR, { recursive: true });
+    fs.rmSync(BINARY_OUTPUT_DIR, { recursive: true, force: true });
   }
 
   let totalSize = 0;

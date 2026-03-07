@@ -28,7 +28,6 @@ describe("Deployment Configurations", () => {
             auth: "none",
             api: "trpc",
             addons: ["none"],
-            examples: ["none"],
             dbSetup: "none",
             install: false,
           });
@@ -51,7 +50,6 @@ describe("Deployment Configurations", () => {
         auth: "none",
         api: "trpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -62,7 +60,6 @@ describe("Deployment Configurations", () => {
     it("should work with web deploy + all web frontends", async () => {
       const webFrontends = [
         "tanstack-router",
-        "react-router",
         "tanstack-start",
         "next",
         "nuxt",
@@ -82,7 +79,6 @@ describe("Deployment Configurations", () => {
           orm: "drizzle",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           install: false,
         };
@@ -118,7 +114,6 @@ describe("Deployment Configurations", () => {
             api: "trpc",
             frontend: ["tanstack-router"],
             addons: ["none"],
-            examples: ["none"],
             dbSetup: "none",
             install: false,
           });
@@ -141,7 +136,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -162,7 +156,6 @@ describe("Deployment Configurations", () => {
         api: "none",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         expectError: true,
       });
@@ -187,7 +180,6 @@ describe("Deployment Configurations", () => {
           api: "trpc",
           frontend: ["tanstack-router"],
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           install: false,
           runtime: "workers",
@@ -220,7 +212,6 @@ describe("Deployment Configurations", () => {
         api: "none",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         expectError: true,
       });
@@ -243,7 +234,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "d1",
         install: false,
       });
@@ -263,7 +253,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         expectError: true,
@@ -287,7 +276,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -308,7 +296,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -329,7 +316,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -350,7 +336,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -373,7 +358,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["next"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -394,7 +378,6 @@ describe("Deployment Configurations", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         install: false,
       });
@@ -427,7 +410,6 @@ describe("Deployment Configurations", () => {
           api: "trpc",
           frontend: ["tanstack-router"],
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           install: false,
         };
@@ -436,15 +418,7 @@ describe("Deployment Configurations", () => {
         if (
           webDeploy !== "none" &&
           !config.frontend?.some((f) =>
-            [
-              "tanstack-router",
-              "react-router",
-              "tanstack-start",
-              "next",
-              "nuxt",
-              "svelte",
-              "solid",
-            ].includes(f),
+            ["tanstack-router", "tanstack-start", "next", "nuxt", "svelte", "solid"].includes(f),
           )
         ) {
           config.frontend = ["tanstack-router"]; // Ensure web frontend for web deploy
@@ -477,8 +451,7 @@ describe("Deployment Configurations", () => {
         auth: "none",
         api: "trpc",
         frontend: ["tanstack-router"], // Single web frontend (compatible with PWA)
-        addons: ["pwa", "turborepo"],
-        examples: ["todo"],
+        addons: ["pwa"],
         install: false,
       });
 

@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import type { ProjectType } from "./types";
 import { getUserPkgManager } from "./utils/get-package-manager";
 
 // Re-export from template-generator (single source of truth)
@@ -18,8 +19,7 @@ export const DEFAULT_CONFIG_BASE = {
   orm: "drizzle",
   auth: "better-auth",
   payments: "none",
-  addons: ["turborepo"],
-  examples: [],
+  addons: [],
   git: true,
   install: true,
   dbSetup: "none",
@@ -28,6 +28,7 @@ export const DEFAULT_CONFIG_BASE = {
   api: "trpc",
   webDeploy: "none",
   serverDeploy: "none",
+  projectType: "frontend",
 } as const;
 
 export function getDefaultConfig() {
@@ -37,18 +38,17 @@ export function getDefaultConfig() {
     packageManager: getUserPkgManager(),
     frontend: [...DEFAULT_CONFIG_BASE.frontend],
     addons: [...DEFAULT_CONFIG_BASE.addons],
-    examples: [...DEFAULT_CONFIG_BASE.examples],
+    projectType: DEFAULT_CONFIG_BASE.projectType as ProjectType,
   };
 }
 
 export const DEFAULT_CONFIG = getDefaultConfig();
 
 export const ADDON_COMPATIBILITY = {
-  pwa: ["tanstack-router", "react-router", "solid", "next"],
+  pwa: ["tanstack-router", "solid", "next"],
   biome: [],
   husky: [],
   lefthook: [],
-  turborepo: [],
   starlight: [],
   ultracite: [],
   ruler: [],

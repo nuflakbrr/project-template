@@ -19,7 +19,6 @@ export async function detectProjectConfig(projectDir: string) {
           runtime: bpaConfig.runtime,
           frontend: bpaConfig.frontend,
           addons: bpaConfig.addons,
-          examples: bpaConfig.examples,
           auth: bpaConfig.auth,
           payments: bpaConfig.payments,
           packageManager: bpaConfig.packageManager,
@@ -27,6 +26,7 @@ export async function detectProjectConfig(projectDir: string) {
           api: bpaConfig.api,
           webDeploy: bpaConfig.webDeploy,
           serverDeploy: bpaConfig.serverDeploy,
+          projectType: bpaConfig.projectType,
         };
       }
 

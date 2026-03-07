@@ -1,11 +1,11 @@
 import { describe, it } from "bun:test";
 
-import type { API, Backend, Database, Examples, Frontend, ORM, Runtime } from "../src/types";
+import type { API, Backend, Database, Frontend, ORM, Runtime } from "../src/types";
 import { expectError, expectSuccess, runTRPCTest, type TestConfig } from "./test-utils";
 
 describe("API Configurations", () => {
   describe("tRPC API", () => {
-    const reactFrontends = ["tanstack-router", "react-router", "tanstack-start", "next"];
+    const reactFrontends = ["tanstack-router", "tanstack-start", "next"];
 
     for (const frontend of reactFrontends) {
       it(`should work with tRPC + ${frontend}`, async () => {
@@ -19,7 +19,6 @@ describe("API Configurations", () => {
           orm: "drizzle",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -41,7 +40,6 @@ describe("API Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -62,7 +60,6 @@ describe("API Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -83,7 +80,6 @@ describe("API Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -106,7 +102,6 @@ describe("API Configurations", () => {
           orm: "drizzle",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -122,15 +117,7 @@ describe("API Configurations", () => {
   });
 
   describe("oRPC API", () => {
-    const frontends = [
-      "tanstack-router",
-      "react-router",
-      "tanstack-start",
-      "next",
-      "nuxt",
-      "svelte",
-      "solid",
-    ];
+    const frontends = ["tanstack-router", "tanstack-start", "next", "nuxt", "svelte", "solid"];
 
     for (const frontend of frontends) {
       it(`should work with oRPC + ${frontend}`, async () => {
@@ -144,7 +131,6 @@ describe("API Configurations", () => {
           orm: "drizzle",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -168,7 +154,6 @@ describe("API Configurations", () => {
           orm: "drizzle",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -195,7 +180,6 @@ describe("API Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -216,7 +200,6 @@ describe("API Configurations", () => {
         orm: "none",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -237,49 +220,6 @@ describe("API Configurations", () => {
         orm: "none",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
-        dbSetup: "none",
-        webDeploy: "none",
-        serverDeploy: "none",
-        install: false,
-      });
-
-      expectSuccess(result);
-    });
-
-    it("should fail with API none + examples (non-convex backend)", async () => {
-      const result = await runTRPCTest({
-        projectName: "api-none-examples-fail",
-        api: "none",
-        frontend: ["tanstack-router"],
-        backend: "hono",
-        runtime: "bun",
-        database: "sqlite",
-        orm: "drizzle",
-        auth: "none",
-        addons: ["none"],
-        examples: ["todo"],
-        dbSetup: "none",
-        webDeploy: "none",
-        serverDeploy: "none",
-        expectError: true,
-      });
-
-      expectError(result);
-    });
-
-    it("should work with API none + examples + convex backend", async () => {
-      const result = await runTRPCTest({
-        projectName: "api-none-examples-convex",
-        api: "none",
-        frontend: ["tanstack-router"],
-        backend: "convex",
-        runtime: "none",
-        database: "none",
-        orm: "none",
-        auth: "none",
-        addons: ["none"],
-        examples: ["todo"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -314,7 +254,6 @@ describe("API Configurations", () => {
           runtime: "bun",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -338,7 +277,6 @@ describe("API Configurations", () => {
         database: "sqlite",
         orm: "drizzle",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -359,7 +297,6 @@ describe("API Configurations", () => {
         database: "sqlite",
         orm: "drizzle",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -380,7 +317,6 @@ describe("API Configurations", () => {
         database: "none",
         orm: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -389,78 +325,6 @@ describe("API Configurations", () => {
 
       expectSuccess(result);
     });
-  });
-
-  describe("API with Examples", () => {
-    it("should work with tRPC + todo example", async () => {
-      const result = await runTRPCTest({
-        projectName: "trpc-todo",
-        api: "trpc",
-        examples: ["todo"],
-        frontend: ["tanstack-router"],
-        backend: "hono",
-        runtime: "bun",
-        database: "sqlite",
-        orm: "drizzle",
-        auth: "none",
-        addons: ["none"],
-        dbSetup: "none",
-        webDeploy: "none",
-        serverDeploy: "none",
-        install: false,
-      });
-
-      expectSuccess(result);
-    });
-
-    it("should work with oRPC + AI example", async () => {
-      const result = await runTRPCTest({
-        projectName: "orpc-ai",
-        api: "orpc",
-        examples: ["ai"],
-        frontend: ["tanstack-router"],
-        backend: "hono",
-        runtime: "bun",
-        database: "sqlite",
-        orm: "drizzle",
-        auth: "none",
-        addons: ["none"],
-        dbSetup: "none",
-        webDeploy: "none",
-        serverDeploy: "none",
-        install: false,
-      });
-
-      expectSuccess(result);
-    });
-
-    const apiExampleCombinations = [
-      { api: "trpc", examples: ["todo", "ai"] },
-      { api: "orpc", examples: ["todo", "ai"] },
-    ];
-
-    for (const { api, examples } of apiExampleCombinations) {
-      it(`should work with ${api} + both examples`, async () => {
-        const result = await runTRPCTest({
-          projectName: `${api}-both-examples`,
-          api: api as API,
-          examples: examples as Examples[],
-          frontend: ["tanstack-router"],
-          backend: "hono",
-          runtime: "bun",
-          database: "sqlite",
-          orm: "drizzle",
-          auth: "none",
-          addons: ["none"],
-          dbSetup: "none",
-          webDeploy: "none",
-          serverDeploy: "none",
-          install: false,
-        });
-
-        expectSuccess(result);
-      });
-    }
   });
 
   describe("All API Types", () => {
@@ -472,7 +336,6 @@ describe("API Configurations", () => {
           projectName: `test-api-${api}`,
           api: api as API,
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -513,7 +376,6 @@ describe("API Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -534,7 +396,6 @@ describe("API Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "cloudflare",
@@ -562,7 +423,6 @@ describe("API Configurations", () => {
           orm: "drizzle",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",

@@ -17,7 +17,6 @@ export function generateReproducibleCommand(config: ProjectConfig): string {
   const flags: string[] = [];
   const frontend = normalizeMultiValues(config.frontend);
   const addons = normalizeMultiValues(config.addons);
-  const examples = normalizeMultiValues(config.examples);
 
   flags.push(formatMultiFlag("--frontend", frontend));
 
@@ -30,7 +29,6 @@ export function generateReproducibleCommand(config: ProjectConfig): string {
   flags.push(`--payments ${config.payments}`);
 
   flags.push(formatMultiFlag("--addons", addons));
-  flags.push(formatMultiFlag("--examples", examples));
 
   flags.push(`--db-setup ${config.dbSetup}`);
   flags.push(`--web-deploy ${config.webDeploy}`);

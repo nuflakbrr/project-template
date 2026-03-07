@@ -47,7 +47,6 @@ function uniqueValues<T>(values: T[]): T[] {
 
 function hasReactBasedFrontend(frontend: ProjectConfig["frontend"]): boolean {
   return (
-    frontend.includes("react-router") ||
     frontend.includes("tanstack-router") ||
     frontend.includes("tanstack-start") ||
     frontend.includes("next")

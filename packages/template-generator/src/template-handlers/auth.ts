@@ -10,8 +10,11 @@ export async function processAuthTemplates(
 ): Promise<void> {
   if (!config.auth || config.auth === "none") return;
 
+  const isFrontend = config.projectType === "frontend";
+  const isBackend = config.projectType === "backend";
+
   const hasReactWeb = config.frontend.some((f) =>
-    ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
+    ["tanstack-router", "tanstack-start", "next"].includes(f),
   );
   const hasNuxtWeb = config.frontend.includes("nuxt");
   const hasSvelteWeb = config.frontend.includes("svelte");
@@ -21,17 +24,19 @@ export async function processAuthTemplates(
   const authProvider = config.auth;
 
   if (config.backend === "convex" && authProvider === "clerk") {
-    processTemplatesFromPrefix(
-      vfs,
-      templates,
-      "auth/clerk/convex/backend",
-      "packages/backend",
-      config,
-    );
+    if (!isFrontend) {
+      processTemplatesFromPrefix(
+        vfs,
+        templates,
+        "auth/clerk/convex/backend",
+        "packages/backend",
+        config,
+      );
+    }
 
-    if (hasReactWeb) {
+    if (!isBackend && hasReactWeb) {
       const reactFramework = config.frontend.find((f) =>
-        ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
+        ["tanstack-router", "tanstack-start", "next"].includes(f),
       );
       if (reactFramework) {
         processTemplatesFromPrefix(
@@ -48,15 +53,17 @@ export async function processAuthTemplates(
   }
 
   if (config.backend === "convex" && authProvider === "better-auth") {
-    processTemplatesFromPrefix(
-      vfs,
-      templates,
-      "auth/better-auth/convex/backend",
-      "packages/backend",
-      config,
-    );
+    if (!isFrontend) {
+      processTemplatesFromPrefix(
+        vfs,
+        templates,
+        "auth/better-auth/convex/backend",
+        "packages/backend",
+        config,
+      );
+    }
 
-    if (hasReactWeb) {
+    if (!isBackend && hasReactWeb) {
       processTemplatesFromPrefix(
         vfs,
         templates,
@@ -66,7 +73,7 @@ export async function processAuthTemplates(
       );
 
       const reactFramework = config.frontend.find((f) =>
-        ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
+        ["tanstack-router", "tanstack-start", "next"].includes(f),
       );
       if (reactFramework) {
         processTemplatesFromPrefix(
@@ -83,102 +90,112 @@ export async function processAuthTemplates(
   }
 
   if (config.backend !== "convex" && config.backend !== "none") {
-    processTemplatesFromPrefix(
-      vfs,
-      templates,
-      `auth/${authProvider}/server/base`,
-      "packages/auth",
-      config,
-    );
-
-    if (config.orm !== "none" && config.database !== "none") {
+    if (!isFrontend) {
       processTemplatesFromPrefix(
         vfs,
         templates,
-        `auth/${authProvider}/server/db/${config.orm}/${config.database}`,
-        "packages/db",
-        config,
-      );
-    }
-  }
-
-  if (hasReactWeb) {
-    processTemplatesFromPrefix(
-      vfs,
-      templates,
-      `auth/${authProvider}/web/react/base`,
-      "apps/web",
-      config,
-    );
-
-    const reactFramework = config.frontend.find((f) =>
-      ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
-    );
-    if (reactFramework) {
-      processTemplatesFromPrefix(
-        vfs,
-        templates,
-        `auth/${authProvider}/web/react/${reactFramework}`,
-        "apps/web",
+        `auth/${authProvider}/server/base`,
+        "packages/auth",
         config,
       );
 
-      if (
-        config.backend === "self" &&
-        (reactFramework === "next" || reactFramework === "tanstack-start")
-      ) {
+      if (config.orm !== "none" && config.database !== "none") {
         processTemplatesFromPrefix(
           vfs,
           templates,
-          `auth/${authProvider}/fullstack/${reactFramework}`,
-          "apps/web",
+          `auth/${authProvider}/server/db/${config.orm}/${config.database}`,
+          "packages/db",
           config,
         );
       }
     }
-  } else if (hasNuxtWeb) {
-    if (config.backend === "self") {
+  }
+
+  if (!isBackend) {
+    if (hasReactWeb) {
       processTemplatesFromPrefix(
         vfs,
         templates,
-        `auth/${authProvider}/fullstack/nuxt`,
+        `auth/${authProvider}/web/react/base`,
+        "apps/web",
+        config,
+      );
+
+      const reactFramework = config.frontend.find((f) =>
+        ["tanstack-router", "tanstack-start", "next"].includes(f),
+      );
+      if (reactFramework) {
+        processTemplatesFromPrefix(
+          vfs,
+          templates,
+          `auth/${authProvider}/web/react/${reactFramework}`,
+          "apps/web",
+          config,
+        );
+
+        if (
+          config.backend === "self" &&
+          (reactFramework === "next" || reactFramework === "tanstack-start")
+        ) {
+          processTemplatesFromPrefix(
+            vfs,
+            templates,
+            `auth/${authProvider}/fullstack/${reactFramework}`,
+            "apps/web",
+            config,
+          );
+        }
+      }
+    } else if (hasNuxtWeb) {
+      if (config.backend === "self") {
+        processTemplatesFromPrefix(
+          vfs,
+          templates,
+          `auth/${authProvider}/fullstack/nuxt`,
+          "apps/web",
+          config,
+        );
+      }
+      processTemplatesFromPrefix(
+        vfs,
+        templates,
+        `auth/${authProvider}/web/nuxt`,
+        "apps/web",
+        config,
+      );
+    } else if (hasSvelteWeb) {
+      processTemplatesFromPrefix(
+        vfs,
+        templates,
+        `auth/${authProvider}/web/svelte`,
+        "apps/web",
+        config,
+      );
+    } else if (hasSolidWeb) {
+      processTemplatesFromPrefix(
+        vfs,
+        templates,
+        `auth/${authProvider}/web/solid`,
+        "apps/web",
+        config,
+      );
+    } else if (hasAstroWeb) {
+      if (config.backend === "self" && authProvider === "better-auth") {
+        processTemplatesFromPrefix(
+          vfs,
+          templates,
+          `auth/${authProvider}/fullstack/astro`,
+          "apps/web",
+          config,
+        );
+      }
+      processTemplatesFromPrefix(
+        vfs,
+        templates,
+        `auth/${authProvider}/web/astro`,
         "apps/web",
         config,
       );
     }
-    processTemplatesFromPrefix(vfs, templates, `auth/${authProvider}/web/nuxt`, "apps/web", config);
-  } else if (hasSvelteWeb) {
-    processTemplatesFromPrefix(
-      vfs,
-      templates,
-      `auth/${authProvider}/web/svelte`,
-      "apps/web",
-      config,
-    );
-  } else if (hasSolidWeb) {
-    processTemplatesFromPrefix(
-      vfs,
-      templates,
-      `auth/${authProvider}/web/solid`,
-      "apps/web",
-      config,
-    );
-  } else if (hasAstroWeb) {
-    if (config.backend === "self" && authProvider === "better-auth") {
-      processTemplatesFromPrefix(
-        vfs,
-        templates,
-        `auth/${authProvider}/fullstack/astro`,
-        "apps/web",
-        config,
-      );
-    }
-    processTemplatesFromPrefix(
-      vfs,
-      templates,
-      `auth/${authProvider}/web/astro`,
-      "apps/web",
-      config,
-    );
   }
 }

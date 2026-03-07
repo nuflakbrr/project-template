@@ -11,13 +11,11 @@ import { processDatabaseDeps } from "./db-deps";
 import { processDeployDeps } from "./deploy-deps";
 import { processEnvDeps } from "./env-deps";
 import { processEnvVariables } from "./env-vars";
-import { processExamplesDeps } from "./examples-deps";
 import { processInfraDeps } from "./infra-deps";
 import { processPaymentsDeps } from "./payments-deps";
 import { processPwaPlugins } from "./pwa-plugins";
 import { processReadme } from "./readme-generator";
 import { processRuntimeDeps } from "./runtime-deps";
-import { processTurboConfig } from "./turbo-generator";
 import { processWorkspaceDeps } from "./workspace-deps";
 
 export function processDependencies(vfs: VirtualFileSystem, config: ProjectConfig): void {
@@ -32,8 +30,6 @@ export function processDependencies(vfs: VirtualFileSystem, config: ProjectConfi
   processPaymentsDeps(vfs, config);
   processDeployDeps(vfs, config);
   processAddonsDeps(vfs, config);
-  processExamplesDeps(vfs, config);
-  processTurboConfig(vfs, config);
 }
 
 export {
@@ -44,12 +40,10 @@ export {
   processDatabaseDeps,
   processDeployDeps,
   processEnvDeps,
-  processExamplesDeps,
   processInfraDeps,
   processPaymentsDeps,
   processReadme,
   processRuntimeDeps,
-  processTurboConfig,
   processWorkspaceDeps,
   processAuthPlugins,
   processAlchemyPlugins,

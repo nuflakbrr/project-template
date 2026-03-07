@@ -1,5 +1,6 @@
 import type { ProjectConfig } from "@bikinproject/types";
 
+import { resolvePackagePath } from "../core/path-resolver";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 import { addPackageDependency, type AvailableDependencies } from "../utils/add-deps";
 
@@ -8,8 +9,8 @@ export function processDatabaseDeps(vfs: VirtualFileSystem, config: ProjectConfi
 
   if (backend === "convex" || database === "none") return;
 
-  const dbPkgPath = "packages/db/package.json";
-  const webPkgPath = "apps/web/package.json";
+  const dbPkgPath = resolvePackagePath(config, "packages/db/package.json");
+  const webPkgPath = resolvePackagePath(config, "apps/web/package.json");
 
   if (!vfs.exists(dbPkgPath)) return;
   const webExists = vfs.exists(webPkgPath);

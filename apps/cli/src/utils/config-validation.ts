@@ -6,7 +6,6 @@ import {
   isWebFrontend,
   validateAddonsAgainstFrontends,
   validateApiFrontendCompatibility,
-  validateExamplesCompatibility,
   validatePaymentsCompatibility,
   validateSelfBackendCompatibility,
   validateServerDeployRequiresBackend,
@@ -399,25 +398,6 @@ export function validateFrontendConstraints(
   return Result.ok(undefined);
 }
 
-export function validateApiConstraints(
-  config: Partial<ProjectConfig>,
-  options: CLIInput,
-): ValidationResult {
-  if (config.api === "none") {
-    if (
-      options.examples?.includes("todo") &&
-      options.backend !== "convex" &&
-      options.backend !== "none"
-    ) {
-      return validationErr(
-        "Cannot use '--examples todo' when '--api' is set to 'none'. The todo example requires an API layer. Please remove 'todo' from --examples or choose an API type.",
-      );
-    }
-  }
-
-  return Result.ok(undefined);
-}
-
 export function validateFullConfig(
   config: Partial<ProjectConfig>,
   providedFlags: Set<string>,
@@ -433,8 +413,6 @@ export function validateFullConfig(
     yield* validateBackendConstraints(config, providedFlags, options);
 
     yield* validateFrontendConstraints(config, providedFlags);
-
-    yield* validateApiConstraints(config, options);
 
     yield* validateServerDeployRequiresBackend(config.serverDeploy, config.backend);
 
@@ -461,14 +439,6 @@ export function validateFullConfig(
       yield* validateAddonsAgainstFrontends(config.addons, config.frontend, config.auth);
       config.addons = [...new Set(config.addons)];
     }
-
-    yield* validateExamplesCompatibility(
-      config.examples ?? [],
-      config.backend,
-      config.database,
-      config.frontend ?? [],
-      config.api,
-    );
 
     yield* validatePaymentsCompatibility(
       config.payments,
@@ -501,14 +471,6 @@ export function validateConfigForProgrammaticUse(config: Partial<ProjectConfig>)
     if (config.addons && config.addons.length > 0) {
       yield* validateAddonsAgainstFrontends(config.addons, config.frontend, config.auth);
     }
-
-    yield* validateExamplesCompatibility(
-      config.examples ?? [],
-      config.backend,
-      config.database,
-      config.frontend ?? [],
-      config.api,
-    );
 
     return Result.ok(undefined);
   });

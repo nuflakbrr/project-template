@@ -1,5 +1,6 @@
 import type { ProjectConfig, Frontend, API, Backend } from "@bikinproject/types";
 
+import { resolvePackagePath } from "../core/path-resolver";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 import { addPackageDependency, type AvailableDependencies } from "../utils/add-deps";
 
@@ -13,9 +14,7 @@ type FrontendType = {
 
 function getFrontendType(frontend: Frontend[]): FrontendType {
   return {
-    hasReactWeb: frontend.some((f) =>
-      ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
-    ),
+    hasReactWeb: frontend.some((f) => ["tanstack-router", "tanstack-start", "next"].includes(f)),
     hasNuxtWeb: frontend.includes("nuxt"),
     hasSvelteWeb: frontend.includes("svelte"),
     hasSolidWeb: frontend.includes("solid"),
@@ -28,27 +27,22 @@ export function processApiDeps(vfs: VirtualFileSystem, config: ProjectConfig): v
   const frontendType = getFrontendType(frontend);
 
   if (backend === "convex") {
-    addConvexDeps(vfs, frontend);
+    addConvexDeps(vfs, config, frontend);
     return;
   }
 
   if (api === "none") return;
 
-  addApiPackageDeps(vfs, api, backend, frontend, auth);
-  addServerDeps(vfs, api, backend);
-  addSelfBackendWebDeps(vfs, api, backend, frontendType);
-  addWebClientDeps(vfs, api, backend, frontendType);
-  addQueryDeps(vfs, frontend, backend);
+  addApiPackageDeps(vfs, config);
+  addServerDeps(vfs, config);
+  addSelfBackendWebDeps(vfs, config, frontendType);
+  addWebClientDeps(vfs, config, frontendType);
+  addQueryDeps(vfs, config, frontend);
 }
 
-function addApiPackageDeps(
-  vfs: VirtualFileSystem,
-  api: API,
-  backend: Backend,
-  frontend: Frontend[],
-  auth: ProjectConfig["auth"],
-): void {
-  const pkgPath = "packages/api/package.json";
+function addApiPackageDeps(vfs: VirtualFileSystem, config: ProjectConfig): void {
+  const { api, backend, frontend, auth } = config;
+  const pkgPath = resolvePackagePath(config, "packages/api/package.json");
   if (!vfs.exists(pkgPath)) return;
 
   if (api === "trpc") {
@@ -86,8 +80,9 @@ function addApiPackageDeps(
   }
 }
 
-function addServerDeps(vfs: VirtualFileSystem, api: API, backend: Backend): void {
-  const serverPath = "apps/server/package.json";
+function addServerDeps(vfs: VirtualFileSystem, config: ProjectConfig): void {
+  const { api, backend } = config;
+  const serverPath = resolvePackagePath(config, "apps/server/package.json");
   if (!vfs.exists(serverPath)) return;
 
   if (backend === "convex") return;
@@ -109,13 +104,13 @@ function addServerDeps(vfs: VirtualFileSystem, api: API, backend: Backend): void
 
 function addSelfBackendWebDeps(
   vfs: VirtualFileSystem,
-  api: API,
-  backend: Backend,
+  config: ProjectConfig,
   _frontendType: FrontendType,
 ): void {
+  const { api, backend } = config;
   if (backend !== "self") return;
 
-  const webPath = "apps/web/package.json";
+  const webPath = resolvePackagePath(config, "apps/web/package.json");
   if (!vfs.exists(webPath)) return;
 
   // When backend is "self", add server deps to web too
@@ -136,11 +131,11 @@ function addSelfBackendWebDeps(
 
 function addWebClientDeps(
   vfs: VirtualFileSystem,
-  api: API,
-  backend: Backend,
+  config: ProjectConfig,
   frontendType: FrontendType,
 ): void {
-  const webPath = "apps/web/package.json";
+  const { api, backend } = config;
+  const webPath = resolvePackagePath(config, "apps/web/package.json");
   if (!vfs.exists(webPath) || backend === "convex") return;
 
   if (api === "trpc" && frontendType.hasReactWeb) {
@@ -196,8 +191,9 @@ function addWebClientDeps(
   }
 }
 
-function addQueryDeps(vfs: VirtualFileSystem, frontend: Frontend[], backend: Backend): void {
-  const webPath = "apps/web/package.json";
+function addQueryDeps(vfs: VirtualFileSystem, config: ProjectConfig, frontend: Frontend[]): void {
+  const { backend } = config;
+  const webPath = resolvePackagePath(config, "apps/web/package.json");
   const frontendType = getFrontendType(frontend);
 
   if (frontendType.hasReactWeb && vfs.exists(webPath) && backend !== "convex") {
@@ -219,8 +215,8 @@ function addQueryDeps(vfs: VirtualFileSystem, frontend: Frontend[], backend: Bac
   }
 }
 
-function addConvexDeps(vfs: VirtualFileSystem, frontend: Frontend[]): void {
-  const webPath = "apps/web/package.json";
+function addConvexDeps(vfs: VirtualFileSystem, config: ProjectConfig, frontend: Frontend[]): void {
+  const webPath = resolvePackagePath(config, "apps/web/package.json");
   const webExists = vfs.exists(webPath);
 
   if (webExists) {

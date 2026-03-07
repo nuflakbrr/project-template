@@ -15,10 +15,6 @@ function getAddonDisplay(addon: Addons): { label: string; hint: string } {
   let hint: string;
 
   switch (addon) {
-    case "turborepo":
-      label = "Turborepo";
-      hint = "High-performance build system";
-      break;
     case "pwa":
       label = "PWA";
       hint = "Make your app installable and work offline";
@@ -80,7 +76,7 @@ function getAddonDisplay(addon: Addons): { label: string; hint: string } {
 }
 
 const ADDON_GROUPS = {
-  Tooling: ["turborepo", "biome", "oxlint", "ultracite", "husky", "lefthook"],
+  Tooling: ["biome", "oxlint", "ultracite", "husky", "lefthook"],
   Documentation: ["starlight", "fumadocs"],
   Extensions: ["pwa", "opentui", "wxt"],
   AI: ["ruler", "skills", "mcp"],

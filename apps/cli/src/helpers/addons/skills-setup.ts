@@ -28,9 +28,6 @@ const SKILL_SOURCES = {
   "vercel/ai": {
     label: "Vercel AI SDK",
   },
-  "vercel/turborepo": {
-    label: "Turborepo",
-  },
   "yusukebe/hono-skill": {
     label: "Hono Backend",
   },
@@ -102,7 +99,6 @@ const AVAILABLE_AGENTS: AgentOption[] = [
 
 function hasReactBasedFrontend(frontend: ProjectConfig["frontend"]): boolean {
   return (
-    frontend.includes("react-router") ||
     frontend.includes("tanstack-router") ||
     frontend.includes("tanstack-start") ||
     frontend.includes("next")
@@ -111,7 +107,7 @@ function hasReactBasedFrontend(frontend: ProjectConfig["frontend"]): boolean {
 
 function getRecommendedSourceKeys(config: ProjectConfig): SourceKey[] {
   const sources: SourceKey[] = [];
-  const { frontend, backend, dbSetup, auth, examples, addons, orm } = config;
+  const { frontend, backend, dbSetup, auth, addons, orm } = config;
 
   if (hasReactBasedFrontend(frontend)) {
     sources.push("vercel-labs/agent-skills");
@@ -149,14 +145,6 @@ function getRecommendedSourceKeys(config: ProjectConfig): SourceKey[] {
     sources.push("prisma/skills");
   }
 
-  if (examples.includes("ai")) {
-    sources.push("vercel/ai");
-  }
-
-  if (addons.includes("turborepo")) {
-    sources.push("vercel/turborepo");
-  }
-
   if (backend === "hono") {
     sources.push("yusukebe/hono-skill");
   }
@@ -186,7 +174,6 @@ const CURATED_SKILLS_BY_SOURCE: Record<SourceKey, (config: ProjectConfig) => str
     return skills;
   },
   "vercel/ai": () => ["ai-sdk"],
-  "vercel/turborepo": () => ["turborepo"],
   "yusukebe/hono-skill": () => ["hono"],
   "vercel-labs/next-skills": () => ["next-best-practices", "next-cache-components"],
   "nuxt/ui": () => ["nuxt-ui"],

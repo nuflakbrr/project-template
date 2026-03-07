@@ -5,7 +5,7 @@ import { expectError, expectSuccess, runTRPCTest, type TestConfig } from "./test
 
 describe("Addon Configurations", () => {
   describe("Universal Addons (no frontend restrictions)", () => {
-    const universalAddons = ["biome", "lefthook", "husky", "turborepo", "mcp"];
+    const universalAddons = ["biome", "lefthook", "husky", "none", "mcp"];
 
     for (const addon of universalAddons) {
       it(`should work with ${addon} addon on any frontend`, async () => {
@@ -19,7 +19,6 @@ describe("Addon Configurations", () => {
           orm: "drizzle",
           auth: "none",
           api: "trpc",
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -33,7 +32,7 @@ describe("Addon Configurations", () => {
 
   describe("Frontend-Specific Addons", () => {
     describe("PWA Addon", () => {
-      const pwaCompatibleFrontends = ["tanstack-router", "react-router", "solid", "next"];
+      const pwaCompatibleFrontends = ["tanstack-router", "solid", "next"];
 
       for (const frontend of pwaCompatibleFrontends) {
         it(`should work with PWA + ${frontend}`, async () => {
@@ -46,7 +45,6 @@ describe("Addon Configurations", () => {
             database: "sqlite",
             orm: "drizzle",
             auth: "none",
-            examples: ["none"],
             dbSetup: "none",
             webDeploy: "none",
             serverDeploy: "none",
@@ -78,7 +76,6 @@ describe("Addon Configurations", () => {
             database: "sqlite",
             orm: "drizzle",
             auth: "none",
-            examples: ["none"],
             dbSetup: "none",
             webDeploy: "none",
             serverDeploy: "none",
@@ -94,7 +91,7 @@ describe("Addon Configurations", () => {
           const result = await runTRPCTest(config);
           expectError(
             result,
-            "pwa addon requires one of these frontends: tanstack-router, react-router, solid, next",
+            "pwa addon requires one of these frontends: tanstack-router, solid, next",
           );
         });
       }
@@ -105,7 +102,7 @@ describe("Addon Configurations", () => {
     it("should work with multiple compatible addons", async () => {
       const result = await runTRPCTest({
         projectName: "multiple-addons",
-        addons: ["biome", "husky", "turborepo", "pwa"],
+        addons: ["biome", "husky"],
         frontend: ["tanstack-router"],
         backend: "hono",
         runtime: "bun",
@@ -113,7 +110,6 @@ describe("Addon Configurations", () => {
         orm: "drizzle",
         auth: "none",
         api: "trpc",
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -134,7 +130,6 @@ describe("Addon Configurations", () => {
         orm: "drizzle",
         auth: "none",
         api: "trpc",
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -155,7 +150,6 @@ describe("Addon Configurations", () => {
         orm: "drizzle",
         auth: "none",
         api: "orpc",
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -168,7 +162,7 @@ describe("Addon Configurations", () => {
     it("should deduplicate addons", async () => {
       const result = await runTRPCTest({
         projectName: "duplicate-addons",
-        addons: ["biome", "biome", "turborepo"], // Duplicate biome
+        addons: ["biome", "biome"], // Duplicate biome
         frontend: ["tanstack-router"],
         backend: "hono",
         runtime: "bun",
@@ -176,7 +170,6 @@ describe("Addon Configurations", () => {
         orm: "drizzle",
         auth: "none",
         api: "trpc",
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -199,7 +192,6 @@ describe("Addon Configurations", () => {
         orm: "drizzle",
         auth: "none",
         api: "trpc",
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -220,14 +212,13 @@ describe("Addon Configurations", () => {
         orm: "drizzle",
         auth: "none",
         api: "trpc",
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
         expectError: true,
       });
 
-      expectError(result, "Cannot combine 'none' with other addons");
+      expectError(result, "Cannot combine 'none' with other addons.");
     });
   });
 
@@ -236,7 +227,7 @@ describe("Addon Configurations", () => {
       "pwa",
       "biome",
       "husky",
-      "turborepo",
+      "none",
       "oxlint",
       // Note: starlight, ultracite, ruler, fumadocs are prompt-controlled only
     ];
@@ -252,7 +243,6 @@ describe("Addon Configurations", () => {
           orm: "drizzle",
           auth: "none",
           api: "trpc",
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",

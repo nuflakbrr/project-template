@@ -1,5 +1,6 @@
 import type { ProjectConfig } from "@bikinproject/types";
 
+import { resolvePackagePath } from "../core/path-resolver";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 import { addPackageDependency } from "../utils/add-deps";
 
@@ -15,13 +16,13 @@ export function processDeployDeps(vfs: VirtualFileSystem, config: ProjectConfig)
   if (isCloudflareWeb || isCloudflareServer) {
     addPackageDependency({
       vfs,
-      packagePath: "package.json",
+      packagePath: resolvePackagePath(config, "package.json"),
       devDependencies: ["@cloudflare/workers-types"],
     });
   }
 
   if (isCloudflareServer && !isBackendSelf) {
-    const serverPkgPath = "apps/server/package.json";
+    const serverPkgPath = resolvePackagePath(config, "apps/server/package.json");
     if (vfs.exists(serverPkgPath)) {
       addPackageDependency({
         vfs,
@@ -32,7 +33,7 @@ export function processDeployDeps(vfs: VirtualFileSystem, config: ProjectConfig)
   }
 
   if (isCloudflareWeb) {
-    const webPkgPath = "apps/web/package.json";
+    const webPkgPath = resolvePackagePath(config, "apps/web/package.json");
     if (!vfs.exists(webPkgPath)) return;
 
     if (frontend.includes("next")) {
@@ -66,11 +67,7 @@ export function processDeployDeps(vfs: VirtualFileSystem, config: ProjectConfig)
         packagePath: webPkgPath,
         devDependencies: ["alchemy", "@astrojs/cloudflare", "@cloudflare/workers-types"],
       });
-    } else if (
-      frontend.includes("tanstack-router") ||
-      frontend.includes("react-router") ||
-      frontend.includes("solid")
-    ) {
+    } else if (frontend.includes("tanstack-router") || frontend.includes("solid")) {
       addPackageDependency({ vfs, packagePath: webPkgPath, devDependencies: ["alchemy"] });
     }
   }

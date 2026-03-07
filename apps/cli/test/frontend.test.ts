@@ -6,7 +6,6 @@ describe("Frontend Configurations", () => {
   describe("Single Frontend Options", () => {
     const singleFrontends = [
       "tanstack-router",
-      "react-router",
       "tanstack-start",
       "next",
       "nuxt",
@@ -14,14 +13,7 @@ describe("Frontend Configurations", () => {
       "solid",
       "astro",
     ] satisfies ReadonlyArray<
-      | "tanstack-router"
-      | "react-router"
-      | "tanstack-start"
-      | "next"
-      | "nuxt"
-      | "svelte"
-      | "solid"
-      | "astro"
+      "tanstack-router" | "tanstack-start" | "next" | "nuxt" | "svelte" | "solid" | "astro"
     >;
 
     for (const frontend of singleFrontends) {
@@ -42,7 +34,6 @@ describe("Frontend Configurations", () => {
           config.auth = "none";
           config.api = "orpc"; // tRPC not supported with solid
           config.addons = ["none"];
-          config.examples = ["none"];
           config.dbSetup = "none";
           config.webDeploy = "none";
           config.serverDeploy = "none";
@@ -55,7 +46,6 @@ describe("Frontend Configurations", () => {
           config.auth = "better-auth";
           config.api = "trpc";
           config.addons = ["none"];
-          config.examples = ["none"];
           config.dbSetup = "none";
           config.webDeploy = "none";
           config.serverDeploy = "none";
@@ -67,7 +57,6 @@ describe("Frontend Configurations", () => {
           config.auth = "none";
           config.api = "orpc"; // tRPC not supported with nuxt/svelte
           config.addons = ["none"];
-          config.examples = ["none"];
           config.dbSetup = "none";
           config.webDeploy = "none";
           config.serverDeploy = "none";
@@ -80,7 +69,6 @@ describe("Frontend Configurations", () => {
           config.auth = "none";
           config.api = "orpc"; // tRPC not supported with astro
           config.addons = ["none"];
-          config.examples = ["none"];
           config.dbSetup = "none";
           config.webDeploy = "none";
           config.serverDeploy = "none";
@@ -92,7 +80,6 @@ describe("Frontend Configurations", () => {
           config.auth = "none";
           config.api = "trpc";
           config.addons = ["none"];
-          config.examples = ["none"];
           config.dbSetup = "none";
           config.webDeploy = "none";
           config.serverDeploy = "none";
@@ -116,7 +103,6 @@ describe("Frontend Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -137,7 +123,6 @@ describe("Frontend Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -158,7 +143,6 @@ describe("Frontend Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -179,7 +163,6 @@ describe("Frontend Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -200,7 +183,6 @@ describe("Frontend Configurations", () => {
         orm: "drizzle",
         auth: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -223,7 +205,6 @@ describe("Frontend Configurations", () => {
           orm: "drizzle",
           auth: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -247,7 +228,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -271,7 +251,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -295,7 +274,6 @@ describe("Frontend Configurations", () => {
         auth: "clerk",
         api: "none",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -320,7 +298,6 @@ describe("Frontend Configurations", () => {
           auth: "clerk",
           api: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -331,12 +308,7 @@ describe("Frontend Configurations", () => {
       });
     }
 
-    const compatibleFrontends = [
-      "tanstack-router",
-      "react-router",
-      "tanstack-start",
-      "next",
-    ] as const;
+    const compatibleFrontends = ["tanstack-router", "tanstack-start", "next"] as const;
     for (const frontend of compatibleFrontends) {
       it(`should work with compatible ${frontend} + Clerk + Convex`, async () => {
         const result = await runTRPCTest({
@@ -349,7 +321,6 @@ describe("Frontend Configurations", () => {
           auth: "clerk",
           api: "none",
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -365,7 +336,7 @@ describe("Frontend Configurations", () => {
     it("should fail with multiple web frontends", async () => {
       const result = await runTRPCTest({
         projectName: "multiple-web-fail",
-        frontend: ["tanstack-router", "react-router"],
+        frontend: ["tanstack-router", "next"],
         backend: "hono",
         runtime: "bun",
         database: "sqlite",
@@ -373,7 +344,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "trpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -396,7 +366,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "trpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -417,14 +386,13 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "trpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
         expectError: true,
       });
 
-      expectError(result, "Cannot combine 'none' with other frontend options");
+      expectError(result, "Cannot combine 'none' with other frontends.");
     });
   });
 
@@ -440,7 +408,6 @@ describe("Frontend Configurations", () => {
         auth: "better-auth",
         api: "trpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -461,7 +428,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "trpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -484,7 +450,6 @@ describe("Frontend Configurations", () => {
         auth: "better-auth",
         api: "orpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -505,7 +470,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "orpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -528,7 +492,6 @@ describe("Frontend Configurations", () => {
         auth: "better-auth",
         api: "orpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -549,7 +512,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "orpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -573,7 +535,6 @@ describe("Frontend Configurations", () => {
         auth: "none",
         api: "trpc",
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         serverDeploy: "none",
         install: false,

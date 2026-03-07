@@ -21,8 +21,7 @@ describe("Authentication Configurations", () => {
         orm: "drizzle",
         api: "trpc",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["todo"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -44,8 +43,7 @@ describe("Authentication Configurations", () => {
           orm: "drizzle",
           api: "trpc",
           frontend: ["tanstack-router"],
-          addons: ["turborepo"],
-          examples: ["todo"],
+          addons: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -66,8 +64,7 @@ describe("Authentication Configurations", () => {
         orm: "mongoose",
         api: "trpc",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["todo"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -87,8 +84,7 @@ describe("Authentication Configurations", () => {
         orm: "none",
         api: "trpc",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["none"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -96,7 +92,6 @@ describe("Authentication Configurations", () => {
       });
 
       // This should actually succeed - better-auth can work without a database
-      // if no examples require one
       expectSuccess(result);
     });
 
@@ -110,8 +105,7 @@ describe("Authentication Configurations", () => {
         orm: "none",
         api: "none",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["todo"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -122,7 +116,6 @@ describe("Authentication Configurations", () => {
 
     const compatibleFrontends = [
       "tanstack-router",
-      "react-router",
       "tanstack-start",
       "next",
       "nuxt",
@@ -140,8 +133,7 @@ describe("Authentication Configurations", () => {
           database: "sqlite",
           orm: "drizzle",
           frontend: [frontend as Frontend],
-          addons: ["turborepo"],
-          examples: ["todo"],
+          addons: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -172,8 +164,7 @@ describe("Authentication Configurations", () => {
         orm: "none",
         api: "none",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["todo"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -190,11 +181,10 @@ describe("Authentication Configurations", () => {
         backend: "hono",
         runtime: "bun",
         database: "sqlite",
-        examples: ["todo"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
-        addons: ["turborepo"],
+        addons: ["none"],
         orm: "drizzle",
         api: "trpc",
         frontend: ["tanstack-router"],
@@ -204,7 +194,7 @@ describe("Authentication Configurations", () => {
       expectError(result, "Clerk authentication is only supported with the Convex backend");
     });
 
-    const compatibleFrontends = ["tanstack-router", "react-router", "tanstack-start", "next"];
+    const compatibleFrontends = ["tanstack-router", "tanstack-start", "next"];
 
     for (const frontend of compatibleFrontends) {
       it(`should work with clerk + ${frontend}`, async () => {
@@ -216,9 +206,8 @@ describe("Authentication Configurations", () => {
           database: "none",
           webDeploy: "none",
           serverDeploy: "none",
-          addons: ["turborepo"],
+          addons: ["none"],
           dbSetup: "none",
-          examples: ["todo"],
           orm: "none",
           api: "none",
           frontend: [frontend as Frontend],
@@ -242,8 +231,7 @@ describe("Authentication Configurations", () => {
           orm: "none",
           api: "none",
           frontend: [frontend as Frontend],
-          addons: ["turborepo"],
-          examples: ["todo"],
+          addons: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -266,8 +254,7 @@ describe("Authentication Configurations", () => {
         orm: "drizzle",
         api: "trpc",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["todo"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -278,7 +265,6 @@ describe("Authentication Configurations", () => {
     });
 
     it("should work with auth none + no database", async () => {
-      // When backend is 'none', examples are automatically cleared
       const result = await runTRPCTest({
         projectName: "no-auth-no-db",
         auth: "none",
@@ -288,8 +274,7 @@ describe("Authentication Configurations", () => {
         orm: "none",
         api: "none",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["none"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -309,8 +294,7 @@ describe("Authentication Configurations", () => {
         orm: "none",
         api: "none",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["todo"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -334,8 +318,7 @@ describe("Authentication Configurations", () => {
           orm: "drizzle",
           api: "trpc",
           frontend: backend === "self" ? ["next"] : ["tanstack-router"],
-          addons: ["turborepo"],
-          examples: ["todo"],
+          addons: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -378,8 +361,7 @@ describe("Authentication Configurations", () => {
           orm: orm as ORM,
           api: "trpc",
           frontend: ["tanstack-router"],
-          addons: ["turborepo"],
-          examples: ["todo"],
+          addons: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -398,8 +380,7 @@ describe("Authentication Configurations", () => {
           projectName: `test-${auth}`,
           auth,
           frontend: ["tanstack-router"],
-          addons: ["turborepo"],
-          examples: ["todo"],
+          addons: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -445,8 +426,7 @@ describe("Authentication Configurations", () => {
         orm: "drizzle",
         api: "trpc",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["todo"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "cloudflare",

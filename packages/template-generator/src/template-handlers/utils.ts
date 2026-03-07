@@ -1,5 +1,6 @@
 import type { ProjectConfig } from "@bikinproject/types";
 
+import { resolvePackagePath } from "../core/path-resolver";
 import { processTemplateString, transformFilename, isBinaryFile } from "../core/template-processor";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 
@@ -17,7 +18,7 @@ export function processSingleTemplate(
   vfs: VirtualFileSystem,
   templates: TemplateData,
   templatePath: string,
-  destPath: string,
+  logicalDestPath: string,
   config: ProjectConfig,
 ): void {
   const templateKey = templatePath.endsWith(".hbs") ? templatePath : `${templatePath}.hbs`;
@@ -36,6 +37,7 @@ export function processSingleTemplate(
 
   // Pass original template path for binary files
   const sourcePath = isBinaryFile(templateKey) ? templateKey : undefined;
+  const destPath = resolvePackagePath(config, logicalDestPath);
   vfs.writeFile(destPath, processedContent, sourcePath);
 }
 
@@ -53,7 +55,8 @@ export function processTemplatesFromPrefix(
 
     const relativePath = templatePath.slice(normalizedPrefix.length);
     const outputPath = transformFilename(relativePath);
-    const destPath = destPrefix ? `${destPrefix}/${outputPath}` : outputPath;
+    const logicalDestPath = destPrefix ? `${destPrefix}/${outputPath}` : outputPath;
+    const destPath = resolvePackagePath(config, logicalDestPath);
 
     let processedContent: string;
     if (isBinaryFile(templatePath)) {

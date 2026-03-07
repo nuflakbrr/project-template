@@ -13,6 +13,7 @@ import type {
   PackageManager,
   Payments,
   ProjectConfig,
+  ProjectType,
   Runtime,
   ServerDeploy,
   WebDeploy,
@@ -90,6 +91,10 @@ export function processFlags(options: CLIInput, projectName?: string) {
     config.serverDeploy = options.serverDeploy as ServerDeploy;
   }
 
+  if (options.projectType) {
+    config.projectType = options.projectType as ProjectType;
+  }
+
   const derivedName = deriveProjectName(projectName, options.projectDirectory);
   if (derivedName) {
     config.projectName = projectName || derivedName;
@@ -101,10 +106,6 @@ export function processFlags(options: CLIInput, projectName?: string) {
 
   if (options.addons && options.addons.length > 0) {
     config.addons = processArrayOption(options.addons);
-  }
-
-  if (options.examples && options.examples.length > 0) {
-    config.examples = processArrayOption(options.examples);
   }
 
   return config;
@@ -133,14 +134,11 @@ function validateNoneExclusivity<T>(
 }
 
 export function validateArrayOptions(options: CLIInput): Result<void, ValidationError> {
-  const frontendResult = validateNoneExclusivity(options.frontend, "frontend options");
+  const frontendResult = validateNoneExclusivity(options.frontend, "frontends");
   if (frontendResult.isErr()) return frontendResult;
 
   const addonsResult = validateNoneExclusivity(options.addons, "addons");
   if (addonsResult.isErr()) return addonsResult;
-
-  const examplesResult = validateNoneExclusivity(options.examples, "examples");
-  if (examplesResult.isErr()) return examplesResult;
 
   return Result.ok(undefined);
 }

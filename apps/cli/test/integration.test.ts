@@ -15,8 +15,7 @@ describe("Integration Tests - Real World Scenarios", () => {
         auth: "better-auth",
         api: "trpc",
         frontend: ["tanstack-router"],
-        addons: ["biome", "turborepo"],
-        examples: ["todo", "ai"],
+        addons: ["biome"],
         dbSetup: "none",
         webDeploy: "cloudflare",
         serverDeploy: "cloudflare",
@@ -37,7 +36,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "orpc",
         frontend: ["nuxt"],
         addons: ["biome", "husky"],
-        examples: ["ai"], // AI works with Nuxt
         dbSetup: "none",
         webDeploy: "cloudflare",
         serverDeploy: "cloudflare",
@@ -57,8 +55,7 @@ describe("Integration Tests - Real World Scenarios", () => {
         auth: "better-auth",
         api: "trpc",
         frontend: ["next"],
-        addons: ["biome", "turborepo"],
-        examples: ["todo", "ai"],
+        addons: ["biome"],
         dbSetup: "none",
         webDeploy: "cloudflare",
         serverDeploy: "none", // No server deployment for self backend
@@ -78,8 +75,7 @@ describe("Integration Tests - Real World Scenarios", () => {
         auth: "better-auth",
         api: "orpc",
         frontend: ["svelte"],
-        addons: ["turborepo", "oxlint"],
-        examples: ["todo"], // Todo works with Svelte
+        addons: ["oxlint"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -99,50 +95,7 @@ describe("Integration Tests - Real World Scenarios", () => {
         auth: "clerk",
         api: "none",
         frontend: ["tanstack-router"],
-        addons: ["biome", "turborepo"],
-        examples: ["todo"],
-        dbSetup: "none",
-        webDeploy: "cloudflare",
-        serverDeploy: "none",
-        install: false,
-      });
-
-      expectSuccess(result);
-    });
-
-    it("should create Convex app with AI example + React frontend", async () => {
-      const result = await runTRPCTest({
-        projectName: "convex-ai-react-app",
-        backend: "convex",
-        runtime: "none",
-        database: "none",
-        orm: "none",
-        auth: "better-auth",
-        api: "none",
-        frontend: ["tanstack-router"],
         addons: ["biome"],
-        examples: ["ai"],
-        dbSetup: "none",
-        webDeploy: "cloudflare",
-        serverDeploy: "none",
-        install: false,
-      });
-
-      expectSuccess(result);
-    });
-
-    it("should create Convex app with AI example + Next.js", async () => {
-      const result = await runTRPCTest({
-        projectName: "convex-ai-next-app",
-        backend: "convex",
-        runtime: "none",
-        database: "none",
-        orm: "none",
-        auth: "better-auth",
-        api: "none",
-        frontend: ["next"],
-        addons: ["biome"],
-        examples: ["ai"],
         dbSetup: "none",
         webDeploy: "cloudflare",
         serverDeploy: "none",
@@ -163,7 +116,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["biome"],
-        examples: ["todo"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "cloudflare",
@@ -182,9 +134,8 @@ describe("Integration Tests - Real World Scenarios", () => {
         orm: "mongoose",
         auth: "better-auth",
         api: "trpc",
-        frontend: ["react-router"],
-        addons: ["husky", "turborepo"],
-        examples: ["todo"],
+        frontend: [],
+        addons: ["husky"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -204,8 +155,7 @@ describe("Integration Tests - Real World Scenarios", () => {
         auth: "better-auth",
         api: "trpc",
         frontend: ["next"],
-        addons: ["biome", "turborepo", "pwa"],
-        examples: ["ai"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -226,7 +176,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "orpc",
         frontend: ["solid"],
         addons: ["biome", "pwa"],
-        examples: ["todo"], // AI not compatible with Solid
         dbSetup: "none",
         webDeploy: "cloudflare",
         serverDeploy: "cloudflare",
@@ -249,7 +198,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "none",
         frontend: ["tanstack-router"],
         addons: ["biome", "pwa"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "cloudflare",
         serverDeploy: "none",
@@ -270,7 +218,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "none",
         frontend: ["nuxt"],
         addons: ["biome", "husky"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "cloudflare",
         serverDeploy: "none",
@@ -294,7 +241,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -315,7 +261,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "trpc",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "cloudflare",
@@ -339,7 +284,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "trpc",
         frontend: ["nuxt"], // tRPC not compatible with Nuxt
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -360,7 +304,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "none",
         frontend: ["svelte"], // Clerk + Convex not compatible with Svelte
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -368,51 +311,6 @@ describe("Integration Tests - Real World Scenarios", () => {
       });
 
       expectError(result, "Clerk authentication is not compatible");
-    });
-
-    it("should fail with example incompatibility", async () => {
-      const result = await runTRPCTest({
-        projectName: "ai-solid-fail",
-        backend: "hono",
-        runtime: "bun",
-        database: "sqlite",
-        orm: "drizzle",
-        auth: "none",
-        api: "orpc",
-        frontend: ["solid"],
-        addons: ["none"],
-        examples: ["ai"],
-        dbSetup: "none",
-        webDeploy: "none",
-        serverDeploy: "none",
-        expectError: true,
-      });
-
-      expectError(result, "The 'ai' example is not compatible with the Solid frontend");
-    });
-
-    it("should fail with Convex AI example + incompatible frontend", async () => {
-      const result = await runTRPCTest({
-        projectName: "convex-ai-svelte-fail",
-        backend: "convex",
-        runtime: "none",
-        database: "none",
-        orm: "none",
-        auth: "none",
-        api: "none",
-        frontend: ["svelte"],
-        addons: ["none"],
-        examples: ["ai"],
-        dbSetup: "none",
-        webDeploy: "none",
-        serverDeploy: "none",
-        expectError: true,
-      });
-
-      expectError(
-        result,
-        "The 'ai' example with Convex backend only supports React-based frontends (Next.js, TanStack Router, TanStack Start, React Router). Svelte and Nuxt are not supported with Convex AI.",
-      );
     });
 
     it("should fail with payments incompatibility", async () => {
@@ -426,8 +324,7 @@ describe("Integration Tests - Real World Scenarios", () => {
         payments: "polar",
         api: "trpc",
         frontend: ["tanstack-router"],
-        addons: ["turborepo"],
-        examples: ["none"],
+        addons: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -450,7 +347,6 @@ describe("Integration Tests - Real World Scenarios", () => {
         api: "none",
         frontend: ["tanstack-router"],
         addons: ["none"],
-        examples: ["none"],
         dbSetup: "none",
         webDeploy: "none",
         serverDeploy: "none",
@@ -474,7 +370,6 @@ describe("Integration Tests - Real World Scenarios", () => {
           api: "trpc",
           frontend: ["tanstack-router"],
           addons: ["none"],
-          examples: ["none"],
           dbSetup: "none",
           webDeploy: "none",
           serverDeploy: "none",
@@ -509,7 +404,6 @@ describe("Integration Tests - Real World Scenarios", () => {
           config.auth = "clerk";
           config.api = "none";
           config.addons = ["none"];
-          config.examples = ["none"];
           config.dbSetup = "none";
           config.webDeploy = "none";
           config.serverDeploy = "none";
@@ -519,7 +413,6 @@ describe("Integration Tests - Real World Scenarios", () => {
           config.auth = "none";
           config.api = "trpc";
           config.addons = ["none"];
-          config.examples = ["none"];
           config.dbSetup = "none";
           config.webDeploy = "none";
           config.serverDeploy = "none";

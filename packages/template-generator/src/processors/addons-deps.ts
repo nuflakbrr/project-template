@@ -12,20 +12,17 @@ type PackageJson = {
   [key: string]: unknown;
 };
 
+import { resolvePackagePath } from "../core/path-resolver";
+
 export function processAddonsDeps(vfs: VirtualFileSystem, config: ProjectConfig): void {
   if (!config.addons || config.addons.length === 0) return;
 
-  const hasViteReactFrontend =
-    config.frontend.includes("react-router") || config.frontend.includes("tanstack-router");
-  const hasSolidFrontend = config.frontend.includes("solid");
-  const hasPwaCompatibleFrontend = hasViteReactFrontend || hasSolidFrontend;
-
-  if (config.addons.includes("turborepo")) {
-    addPackageDependency({ vfs, packagePath: "package.json", devDependencies: ["turbo"] });
-  }
+  const hasPwaCompatibleFrontend = config.frontend.some((f) =>
+    ["tanstack-router", "solid"].includes(f),
+  );
 
   if (config.addons.includes("pwa") && hasPwaCompatibleFrontend) {
-    const webPkgPath = "apps/web/package.json";
+    const webPkgPath = resolvePackagePath(config, "apps/web/package.json");
     if (vfs.exists(webPkgPath)) {
       addPackageDependency({
         vfs,

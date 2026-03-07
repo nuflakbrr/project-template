@@ -30,7 +30,6 @@ export type ProjectHistoryEntry = {
     payments: string;
     api: string;
     addons: string[];
-    examples: string[];
     dbSetup: string;
     packageManager: string;
   };
@@ -152,9 +151,8 @@ export async function addToHistory(
       payments: config.payments,
       api: config.api,
       addons: config.addons,
-      examples: config.examples,
       dbSetup: config.dbSetup,
-      packageManager: config.packageManager,
+      packageManager: config.packageManager ?? "bun",
     },
     cliVersion: getLatestCLIVersion(),
     reproducibleCommand,

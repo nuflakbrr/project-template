@@ -24,8 +24,6 @@ import {
   DatabaseSetupSchema,
   type DirectoryConflict,
   DirectoryConflictSchema,
-  type Examples,
-  ExamplesSchema,
   type Frontend,
   FrontendSchema,
   type InitResult,
@@ -78,7 +76,6 @@ export const router = os.router({
           payments: PaymentsSchema.optional(),
           frontend: z.array(FrontendSchema).optional(),
           addons: z.array(AddonsSchema).optional(),
-          examples: z.array(ExamplesSchema).optional(),
           git: z.boolean().optional(),
           packageManager: PackageManagerSchema.optional(),
           install: z.boolean().optional(),
@@ -96,6 +93,10 @@ export const router = os.router({
             .optional()
             .default(false)
             .describe("Skip automatic/manual database setup prompt and use manual setup"),
+          projectType: z
+            .enum(["frontend", "backend"])
+            .optional()
+            .describe("Type of project to create"),
         }),
       ]),
     )
@@ -297,7 +298,6 @@ export async function createVirtual(
     runtime: options.runtime || "bun",
     frontend: options.frontend || ["tanstack-router"],
     addons: options.addons || [],
-    examples: options.examples || [],
     auth: options.auth || "none",
     payments: options.payments || "none",
     git: options.git ?? false,
@@ -307,6 +307,7 @@ export async function createVirtual(
     api: options.api || "trpc",
     webDeploy: options.webDeploy || "none",
     serverDeploy: options.serverDeploy || "none",
+    projectType: options.projectType || "frontend",
   };
 
   return generate({
@@ -325,7 +326,6 @@ export type {
   Runtime,
   Frontend,
   Addons,
-  Examples,
   PackageManager,
   DatabaseSetup,
   API,

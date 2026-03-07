@@ -169,7 +169,6 @@ async function addHandlerInternal(
     runtime: existingConfig.runtime,
     frontend: existingConfig.frontend,
     addons: addonsToAdd, // Only the new addons for template processing
-    examples: existingConfig.examples,
     auth: existingConfig.auth,
     payments: existingConfig.payments,
     git: false,
@@ -179,6 +178,7 @@ async function addHandlerInternal(
     api: existingConfig.api,
     webDeploy: existingConfig.webDeploy,
     serverDeploy: existingConfig.serverDeploy,
+    projectType: existingConfig.projectType,
   };
 
   // Create VFS and process addon templates using template-generator's logic

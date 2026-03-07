@@ -14,8 +14,6 @@ type FumadocsTemplate =
   | "next-mdx"
   | "next-mdx-static"
   | "waku"
-  | "react-router"
-  | "react-router-spa"
   | "tanstack-start"
   | "tanstack-start-spa";
 
@@ -34,16 +32,6 @@ const TEMPLATES = {
     label: "Waku: Content Collections",
     hint: "Template using Waku with content collections",
     value: "waku",
-  },
-  "react-router": {
-    label: "React Router: MDX Remote",
-    hint: "Template for React Router with MDX remote",
-    value: "react-router",
-  },
-  "react-router-spa": {
-    label: "React Router: SPA",
-    hint: "Template for React Router SPA",
-    value: "react-router-spa",
   },
   "tanstack-start": {
     label: "Tanstack Start: MDX Remote",

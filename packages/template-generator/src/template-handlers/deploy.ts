@@ -9,16 +9,17 @@ export async function processDeployTemplates(
   config: ProjectConfig,
 ): Promise<void> {
   const isBackendSelf = config.backend === "self";
+  const isFrontend = config.projectType === "frontend";
+  const isBackend = config.projectType === "backend";
 
   if (config.webDeploy === "cloudflare" || config.serverDeploy === "cloudflare") {
     processTemplatesFromPrefix(vfs, templates, "packages/infra", "packages/infra", config);
   }
 
-  if (config.webDeploy !== "none" && config.webDeploy !== "cloudflare") {
+  if (!isBackend && config.webDeploy !== "none" && config.webDeploy !== "cloudflare") {
     const templateMap: Record<string, string> = {
       "tanstack-router": "react/tanstack-router",
       "tanstack-start": "react/tanstack-start",
-      "react-router": "react/react-router",
       solid: "solid",
       next: "react/next",
       nuxt: "nuxt",
@@ -38,7 +39,12 @@ export async function processDeployTemplates(
     }
   }
 
-  if (config.serverDeploy !== "none" && config.serverDeploy !== "cloudflare" && !isBackendSelf) {
+  if (
+    !isFrontend &&
+    config.serverDeploy !== "none" &&
+    config.serverDeploy !== "cloudflare" &&
+    !isBackendSelf
+  ) {
     processTemplatesFromPrefix(
       vfs,
       templates,

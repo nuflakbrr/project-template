@@ -105,7 +105,6 @@ const HOOKS = {
 function getFrameworksFromFrontend(frontend: string[]): string[] {
   const frameworkMap: Record<string, string> = {
     "tanstack-router": "react",
-    "react-router": "react",
     "tanstack-start": "react",
     next: "next",
     nuxt: "vue",

@@ -1,7 +1,7 @@
 import { UserCancelledError } from "../utils/errors";
 import { isCancel, navigableSelect } from "./navigable";
 
-export type ProjectType = "frontend" | "backend" | "fullstack";
+export type ProjectType = "frontend" | "backend";
 
 export async function getProjectTypeChoice(
   initialValue?: ProjectType,
@@ -17,17 +17,12 @@ export async function getProjectTypeChoice(
       label: "Backend Only",
       hint: "Create an API server (Hono, Express, Fastify, etc.)",
     },
-    {
-      value: "fullstack" as const,
-      label: "Fullstack",
-      hint: "Create a project with both Frontend and Backend",
-    },
   ];
 
   const response = await navigableSelect<ProjectType>({
     message: "What type of project do you want to create?",
     options,
-    initialValue: initialValue ?? "fullstack",
+    initialValue: initialValue ?? "frontend",
   });
 
   if (isCancel(response)) {

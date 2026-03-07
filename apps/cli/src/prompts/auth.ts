@@ -18,7 +18,7 @@ export async function getAuthChoice(
     );
 
     const hasClerkCompatibleFrontends = frontend?.some((f) =>
-      ["react-router", "tanstack-router", "tanstack-start", "next"].includes(f),
+      ["tanstack-router", "tanstack-start", "next"].includes(f),
     );
 
     const options = [];

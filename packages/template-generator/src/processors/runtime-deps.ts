@@ -1,5 +1,6 @@
 import type { ProjectConfig } from "@bikinproject/types";
 
+import { resolvePackagePath } from "../core/path-resolver";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 import { addPackageDependency } from "../utils/add-deps";
 
@@ -13,7 +14,7 @@ export function processRuntimeDeps(vfs: VirtualFileSystem, config: ProjectConfig
 
   if (backend === "convex" || backend === "self" || runtime === "none") return;
 
-  const serverPath = "apps/server/package.json";
+  const serverPath = resolvePackagePath(config, "apps/server/package.json");
   if (!vfs.exists(serverPath)) return;
 
   const pkgJson = vfs.readJson<PackageJson>(serverPath);
