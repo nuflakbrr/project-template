@@ -1,6 +1,6 @@
 {
   "name": "create-bpa",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A modern CLI tool to generate type-safe TypeScript project with best practices and customizable configurations",
   "keywords": [
     "bikinproject",
@@ -65,6 +65,6 @@
     "access": "public"
   },
   "dependencies": {
-    "create-bikinproject-app": "^2.1.0"
+    "create-bikinproject-app": "^2.2.0"
   }
 }
