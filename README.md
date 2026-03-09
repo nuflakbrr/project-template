@@ -3,14 +3,14 @@
 ![BikinProject](./assets/BikinProject.jpg)
 
 <p align="center">
-  <a href="https://badge.fury.io/js/bikinproject.svg">
-    <img src="https://badge.fury.io/js/bikinproject.svg" alt="NPM Verion">
+  <a href="https://badge.fury.io/js/create-bikinproject-app.svg">
+    <img src="https://badge.fury.io/js/create-bikinproject-app.svg" alt="NPM Verion">
   </a>
-  <a href="https://www.npmjs.com/package/bikinproject">
-    <img src="https://img.shields.io/npm/dt/bikinproject" alt="NPM Downloads">
+  <a href="https://www.npmjs.com/package/create-bikinproject-app">
+    <img src="https://img.shields.io/npm/dt/create-bikinproject-app" alt="NPM Downloads">
   </a>
-  <a href="https://www.npmjs.com/package/bikinproject">
-    <img src="https://img.shields.io/npm/l/bikinproject" alt="NPM License">
+  <a href="https://www.npmjs.com/package/create-bikinproject-app">
+    <img src="https://img.shields.io/npm/l/create-bikinproject-app" alt="NPM License">
   </a>
 </p>
 
@@ -29,8 +29,8 @@ BikinProject adalah sebuah package starter project generator yang memudahkan And
   - [Mulai Sekarang](#mulai-sekarang)
   - [Daftar Framework](#daftar-framework)
     - [Frontend](#frontend)
-    - [Backend](#backend)
-    - [Fullstack](#fullstack)
+    - [Backend](#backend) 🚧
+    - [Fullstack](#fullstack) 🚧
   - [Cara Berkontribusi](#cara-berkontribusi)
   - [Lisensi](#lisensi)
   - [Author](#author)
@@ -91,20 +91,24 @@ Lalu Anda dapat menjawan beberapa pertanyaan yang diajukan oleh package `BikinPr
 
 ### Frontend
 
-- React.js (Tailwind + TypeScript)
-- React.js (Tailwind + JavaScript)
-- Next.js App Router (Tailwind + TypeScript)
-- Next.js App Router (Tailwind + JavaScript)
+- Astro
+- Tanstack Router
+- Tanstack Start
+- Next.js App Router
+- Solid 🚧
+- SolidStart 🚧
+- Svelte 🚧
+- SvelteKit 🚧
+- Vue.js 🚧
+- Nuxt.js 🚧
 
 ### Backend
 
-- Node.js 🚧
+- 🚧
 
 ### Fullstack
 
-- Laravel Breeze API w/ Next.js App Router (Tailwind + TypeScript)
-- Laravel Breeze API w/ Next.js App Router (Tailwind + JavaScript) 🚧
-- Laravel + Filament
+- 🚧
 
 ## Cara Berkontribusi
 
