@@ -14,7 +14,7 @@
   </a>
 </p>
 
-@bikinproject/types is a types package that is specifically designed for the [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app) package.
+`@bikinproject/types` is a types package that is specifically designed for the [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app) package.
 
 ## License
 

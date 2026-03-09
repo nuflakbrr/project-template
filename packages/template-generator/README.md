@@ -14,7 +14,7 @@
   </a>
 </p>
 
-@bikinproject/template-generator adalah sebuah package virtual file systems template generator yang dikhususkan untuk package [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app).
+`@bikinproject/template-generator` adalah sebuah package virtual file systems template generator yang dikhususkan untuk package [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app).
 
 ## Lisensi
 

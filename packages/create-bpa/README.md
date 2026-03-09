@@ -14,7 +14,7 @@
   </a>
 </p>
 
-create-bpa adalah sebuah package alias untuk package [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app).
+`create-bpa` adalah sebuah package alias untuk package [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app).
 
 ## Lisensi
 
