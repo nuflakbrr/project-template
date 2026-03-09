@@ -1,9 +1,9 @@
-# @bikinproject/template-generator
+# @bikinproject/types
 
 ![BikinProject](./assets/BikinProject.jpg)
 
 <p align="center">
-  <a href="https://badge.fury.io/js/%40bikinproject%2Ftemplate-generator.svg">
+  <a href="https://badge.fury.io/js/%40bikinproject%2Ftypes.svg">
     <img src="https://badge.fury.io/js/%40bikinproject%2Ftypes.svg" alt="NPM Verion">
   </a>
   <a href="https://www.npmjs.com/package/@bikinproject/types">
@@ -14,17 +14,17 @@
   </a>
 </p>
 
-@bikinproject/types adalah sebuah package types yang dikhususkan untuk package [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app).
+@bikinproject/types is a types package that is specifically designed for the [create-bikinproject-app](https://www.npmjs.com/package/create-bikinproject-app) package.
 
-## Lisensi
+## License
 
-Karya ini dilisensikan dibawah [MIT LICENSE](./LICENSE).
+This work is licensed under the [MIT LICENSE](./LICENSE).
 
 ## Author
 
-Nama author dan info kontak,
+Author name and contact info,
 
-Naufal Akbar Nugroho  
+Naufal Akbar Nugroho
 [Website](https://nuflakbrr.github.io)
 [Github](https://github.com/nuflakbrr)
 [Instagram](https://instagram.com/kbrnugroho)
