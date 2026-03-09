@@ -1,4 +1,4 @@
-# BikinProject
+# create-bikinproject-app
 
 ![BikinProject](./assets/BikinProject.jpg)
 
