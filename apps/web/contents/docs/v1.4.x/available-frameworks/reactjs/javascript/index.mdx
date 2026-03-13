@@ -1,0 +1,278 @@
+---
+title: React.js JavaScript
+description: Learn about the React.js JavaScript framework template.
+---
+
+## Reactjs Template Starter Kit (JavaScript)
+
+This is a [React.js](https://react.dev/) project bootstrapped with [`Vite.js`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md).
+
+## Technologies Used
+
+- [React.js (JavaScript)](https://react.dev/)
+- [Tailwindcss](https://tailwindcss.com/)
+- [Axios](https://axios-http.com/docs/intro/)
+
+## Features
+
+The features included in this project template are:
+
+- Project Architecture.
+- Authentication.
+- Customize `React Hooks`.
+- Some custom functions that [I](https://github.com/nuflakbrr) often use.
+
+### Architecture Projects
+
+There are several important points related to how to run a proper architecture project. For this case study, I have created a customized blank project template that I have implemented how to organize a good architecture project so that it looks tidy.
+
+```plaintext
+/
+├── public/
+├── src/
+│   └── components/
+│   │   └── Common/
+│   │   └── Containers/
+│   │   └── Mixins/
+│   │   └── README.md
+│   └── config/
+│   └── context/
+│   └── data/
+│   └── hooks/
+│   └── layouts/
+│   └── lib/
+│   └── pages/
+│   └── providers/
+│   └── index.css
+│   └── main.jsx
+└── .gitignore
+└── .eslint.config.js
+└── index.html
+└── jsconfig.json
+└── package.json
+└── postcss.config.js
+└── README.md
+└── tailwind.config.js
+└── vite.config.js
+```
+
+#### Common Folder
+
+The `Common` folder is located in `/src/components/`. So what does it contain? The `Common` folder contains small components, such as: buttons, dropdowns, etc.
+
+#### Mixins Folder
+
+The `Mixins` folder is located in `/src/components/`. So what does it contain? The `Mixins` folder contains components that are a combination of small components from the `Common` folder. Such as: navbar (which contains some common things such as buttons, dropdowns, etc.).
+
+#### Containers Folder
+
+The `Containers` folder is located in `/src/components/`. So what does it contain? The `Containers` folder contains a combination of the `Common` folder and the page itself which form 1 page. 1 page 1 `Containers` folder to keep it tidy.
+
+If 1 container has several sections, then you must separate and put them in the `components` folder but still in 1 `Containers` folder. Such as: `/src/components/Containers/Home/components`.
+
+### Authentication
+
+This project template already uses authentication using `React Context`. If the user has authenticated, the user cannot access the `login` or `register` page again.
+
+### React Hooks Customization
+
+You can use, and add your own custom `React Hooks` to the `/src/hooks` folder that has been provided. There is an example of `React Hooks` customization for `Data Fetching` using [Axios](https://axios-http.com/docs/intro).
+
+## Getting Started
+
+This template is available on BikinProject! How to use this template, follow these simple steps:
+
+<Stepper>
+<StepperItem title="Install BikinProject">
+Start by installing BikinProject on your machine.
+
+```bash
+npx bikinproject@latest
+```
+
+</StepperItem>
+
+<StepperItem title="Tell BikinProject Where to Create the Project">
+Input a directory where you want to create your project.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+└  ./your-project # Input your project name, e.g. my-project or .
+```
+
+</StepperItem>
+
+<StepperItem title="Choose a Starter Project">
+Choose a starter project that suits your needs.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  ● React.js (Tailwind + TypeScript)
+│  ○ React.js (Tailwind + JavaScript)
+│  ○ etc.
+└  # Select a project type by using the arrow keys
+```
+
+</StepperItem>
+
+<StepperItem title="Wait for BikinProject to Create the Project">
+Wait for BikinProject to create the project for you.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  React.js (Tailwind + JavaScript)
+│
+◇  ⏳ Creating project...
+```
+
+</StepperItem>
+
+<StepperItem title="Choose include install dependencies">
+Choose to install dependencies or not.
+
+<Note title="Note" type="note">
+  If you choose to install dependencies, BikinProject will install the necessary dependencies for
+  you. Please wait for the installation to complete.
+</Note>
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  React.js (Tailwind + JavaScript)
+│
+◇  ⏳ Creating project...
+│
+◇  ✅ Project created successfully!
+│
+◇  Do you want to install dependencies for ./your-project?
+│  ● Yes / ○ No
+└  # Select Yes or No by using the arrow keys
+```
+
+</StepperItem>
+
+<StepperItem title="Choose package manager">
+Choose package manager to install dependencies.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  React.js (Tailwind + JavaScript)
+│
+◇  ⏳ Creating project...
+│
+◇  ✅ Project created successfully!
+│
+◇  Do you want to install dependencies for ./your-project?
+│  Yes
+│
+◇  Pick a package manager to install dependencies for "./your-project"
+│  ● NPM
+│  ○ Yarn
+│  ○ Bun
+│  ○ PNPM
+└  # Select by using the arrow keys
+```
+
+</StepperItem>
+
+<StepperItem title="Wait for BikinProject to Install Dependencies">
+Wait for BikinProject to install the dependencies for you.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  React.js (Tailwind + JavaScript)
+│
+◇  ⏳ Creating project...
+│
+◇  ✅ Project created successfully!
+│
+◇  Do you want to install dependencies for ./your-project?
+│  Yes
+│
+◇  Pick a package manager to install dependencies for "./your-project"
+│  PNPM
+│
+◇  📦 Installing dependencies using pnpm...
+│
+◇  ✅ Dependencies installed successfully!
+│
+◇  🎉 Project ready to use!
+│
+◇  Next steps. ───────────────╮
+│                             │
+│  cd ./your-project          │
+│  pnpm run dev               │
+│                             │
+│  Happy Coding!              │
+│                             │
+├─────────────────────────────╯
+│
+└  Have a Problems? Report to https://github.com/nuflakbrr/bikinproject/issues
+```
+
+</StepperItem>
+
+<StepperItem title="Start Building Your Project">
+  After BikinProject generate the starter project, you can start building your project.
+</StepperItem>
+
+<StepperItem title="Copy Environment Variable">
+Copy the `environment variable` with the following command
+
+```bash
+cp .env.example .env
+```
+
+</StepperItem>
+
+<StepperItem title="Open Development Server">
+Open [http://localhost:5173](http://localhost:5173) in your browser and see the result.
+
+You can start editing the page by modifying `/src/components/Containers/Home/index.tsx`. The page updates automatically as you edit the file.
+
+</StepperItem>
+
+</Stepper>
+
+## Learn More
+
+To learn more about React.js, see the following resources:
+
+- [Documentation React.js](https://react.dev/learn) - interactive React.js tutorials.
+
+You can check out the [React.js GitHub Repository](https://github.com/facebook/react/) - your feedback and contributions are welcome!
+
+## Author of This Template
+
+Contributor names and contact info,
+
+Naufal Akbar Nugroho  
+[Website](https://nuflakbrr.github.io)
+[Github](https://github.com/nuflakbrr)
+[Instagram](https://instagram.com/kbrnugroho)

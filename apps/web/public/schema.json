@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "description": "JSON Schema reference for validation",
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "description": "CLI version used to create this project"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the project was created"
+    },
+    "reproducibleCommand": {
+      "description": "Command to reproduce this project setup",
+      "type": "string"
+    },
+    "database": {
+      "type": "string",
+      "enum": ["none", "sqlite", "postgres", "mysql", "mongodb"],
+      "description": "Database type"
+    },
+    "orm": {
+      "type": "string",
+      "enum": ["drizzle", "prisma", "mongoose", "none"],
+      "description": "ORM type"
+    },
+    "backend": {
+      "type": "string",
+      "enum": ["hono", "express", "fastify", "convex", "self", "none"],
+      "description": "Backend framework"
+    },
+    "runtime": {
+      "type": "string",
+      "enum": ["bun", "node", "workers", "none"],
+      "description": "Runtime environment"
+    },
+    "frontend": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "tanstack-router",
+          "tanstack-start",
+          "next",
+          "vue",
+          "nuxt",
+          "svelte",
+          "svelte-kit",
+          "solid",
+          "astro",
+          "none"
+        ],
+        "description": "Frontend framework"
+      }
+    },
+    "addons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "pwa",
+          "starlight",
+          "biome",
+          "lefthook",
+          "husky",
+          "ruler",
+          "mcp",
+          "fumadocs",
+          "ultracite",
+          "oxlint",
+          "opentui",
+          "wxt",
+          "skills",
+          "none"
+        ],
+        "description": "Additional addons"
+      }
+    },
+    "auth": {
+      "type": "string",
+      "enum": ["better-auth", "clerk", "none"],
+      "description": "Authentication provider"
+    },
+    "packageManager": {
+      "type": "string",
+      "enum": ["npm", "pnpm", "bun"],
+      "description": "Package manager"
+    },
+    "dbSetup": {
+      "type": "string",
+      "enum": [
+        "turso",
+        "neon",
+        "prisma-postgres",
+        "planetscale",
+        "mongodb-atlas",
+        "supabase",
+        "d1",
+        "docker",
+        "none"
+      ],
+      "description": "Database hosting setup"
+    },
+    "api": {
+      "type": "string",
+      "enum": ["trpc", "orpc", "none"],
+      "description": "API type"
+    },
+    "webDeploy": {
+      "type": "string",
+      "enum": ["cloudflare", "none"],
+      "description": "Web deployment"
+    },
+    "serverDeploy": {
+      "type": "string",
+      "enum": ["cloudflare", "none"],
+      "description": "Server deployment"
+    }
+  },
+  "required": [
+    "version",
+    "createdAt",
+    "database",
+    "orm",
+    "backend",
+    "runtime",
+    "frontend",
+    "addons",
+    "examples",
+    "auth",
+    "payments",
+    "packageManager",
+    "dbSetup",
+    "api",
+    "webDeploy",
+    "serverDeploy"
+  ],
+  "additionalProperties": false,
+  "id": "https://nuflakbrr.github.io/bikinproject/schema.json",
+  "title": "BikinProject Configuration",
+  "description": "Configuration file for BikinProject projects"
+}

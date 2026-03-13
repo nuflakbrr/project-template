@@ -1,0 +1,301 @@
+---
+title: Laravel + Filament
+description: Learn about the Laravel + Filament framework template.
+---
+
+## Laravel + Filament Template Starter Kit
+
+<Note title="Note" type="note">
+  To quickly get started and run it, clone this repo and run `bash install.sh` (Linux / Mac only) in
+  your cloned directory.
+</Note>
+
+## Technologies Used
+
+- [Laravel](https://laravel.com/)
+- [Tailwindcss](https://tailwindcss.com/)
+- [PanPHP](https://github.com/panphp/pan)
+- [Laravel SEO](https://github.com/ralphjsmit/laravel-seo)
+- [Solo for Laravel](https://github.com/aarondfrancis/solo)
+- [Filament](https://filamentphp.com/)
+- [Filament Pan Analytics](https://filamentphp.com/plugins/tallyschmeits-pan-analytics-widget)
+- [Filament Sort Order](https://filamentphp.com/plugins/ibrahim-bougaoua-sort-order)
+- [Filament Umami Analytics](https://filamentphp.com/plugins/tallyschmeits-umami-widgets)
+- [Filament SEO](https://filamentphp.com/plugins/ralphjsmit-seo)
+- [Filament Spatie Media Library](https://filamentphp.com/plugins/filament-spatie-media-library)
+
+## Getting Started
+
+### BikinProject
+
+This template is available on BikinProject! To use this template, follow these simple steps:
+
+<Stepper>
+<StepperItem title="Install BikinProject">
+Start by installing BikinProject on your machine.
+
+```bash
+npx bikinproject@latest
+```
+
+</StepperItem>
+
+<StepperItem title="Tell BikinProject Where to Create the Project">
+Input a directory where you want to create your project.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+└  ./your-project # Input your project name, e.g. my-project or .
+```
+
+</StepperItem>
+
+<StepperItem title="Choose a Starter Project">
+Choose a starter project that suits your needs.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  ● Laravel Breeze API w/ Next.js App Router (Tailwind + TypeScript)
+│  ○ Laravel Breeze API w/ Next.js App Router (Tailwind + JavaScript)
+│  ○ Laravel + Filament
+│  ○ etc.
+└  # Select a project type by using the arrow keys
+```
+
+</StepperItem>
+
+<StepperItem title="Wait for BikinProject to Create the Project">
+Wait for BikinProject to create the project for you.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  Laravel + Filament
+│
+◇  ⏳ Creating project...
+```
+
+</StepperItem>
+
+<StepperItem title="Choose include install dependencies">
+Choose to install dependencies or not.
+
+<Note title="Note" type="note">
+  If you choose to install dependencies, BikinProject will install the necessary dependencies for
+  you. Please wait for the installation to complete.
+</Note>
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  Laravel + Filament
+│
+◇  ⏳ Creating project...
+│
+◇  ✅ Project created successfully!
+│
+◇  Do you want to install dependencies for ./your-project?
+│  ● Yes / ○ No
+└  # Select Yes or No by using the arrow keys
+```
+
+</StepperItem>
+
+<StepperItem title="Choose package manager">
+Choose package manager to install dependencies.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  Laravel + Filament
+│
+◇  ⏳ Creating project...
+│
+◇  ✅ Project created successfully!
+│
+◇  Do you want to install dependencies for ./your-project?
+│  Yes
+│
+◇  Pick a package manager to install dependencies for "./your-project"
+│  ● NPM
+│  ○ Yarn
+│  ○ Bun
+│  ○ PNPM
+└  # Select by using the arrow keys
+```
+
+</StepperItem>
+
+<StepperItem title="Wait for BikinProject to Install Dependencies">
+Wait for BikinProject to install the dependencies for you.
+
+```
+┌   create-bikinproject-app
+│
+◇  Where should we create your project?
+│  ./your-project
+│
+◇  Pick a project type within "./your-project"
+│  Laravel + Filament
+│
+◇  ⏳ Creating project...
+│
+◇  ✅ Project created successfully!
+│
+◇  Do you want to install dependencies for ./your-project?
+│  Yes
+│
+◇  Pick a package manager to install dependencies for "./your-project"
+│  PNPM
+│
+◇  📦 Installing dependencies using pnpm...
+│
+◇  ✅ Dependencies installed successfully!
+│
+◇  🎉 Project ready to use!
+│
+◇  Next steps. ───────────────╮
+│                             │
+│  cd ./your-project          │
+│  pnpm run dev               │
+│                             │
+│  Happy Coding!              │
+│                             │
+├─────────────────────────────╯
+│
+└  Have a Problems? Report to https://github.com/nuflakbrr/bikinproject/issues
+```
+
+</StepperItem>
+
+<StepperItem title="Start Building Your Project">
+  After BikinProject generate the starter project, you can start building your project.
+</StepperItem>
+
+</Stepper>
+
+### Manual
+
+#### Linux / Mac
+
+You can follow the steps below to install the starter kit or you can simply run `bash install.sh` to install it.
+
+<Stepper>
+
+<StepperItem title="Clone the repositories">
+
+```bash
+npx degit nuflakbrr/fullstack-template#laravel-filament <name_of_project>
+```
+
+</StepperItem>
+
+<StepperItem title="Install Dependencies">
+
+```bash
+composer install
+```
+
+</StepperItem>
+
+<StepperItem title="Run Starter Kit Installation">
+
+```bash
+php artisan bikinproject:install
+```
+
+</StepperItem>
+
+</Stepper>
+
+#### Windows
+
+<Stepper>
+
+<StepperItem title="Clone the repositories">
+
+```bash
+npx degit nuflakbrr/fullstack-template#laravel-filament <name_of_project>
+```
+
+</StepperItem>
+
+<StepperItem title="Install Dependencies">
+
+```bash
+composer install --ignore-platform-reqs
+```
+
+</StepperItem>
+
+<StepperItem title="Run Starter Kit Installation">
+
+```bash
+php artisan bikinproject:install
+```
+
+</StepperItem>
+
+</Stepper>
+
+Here's the core of the `install.sh` script:
+
+- Installs required Composer packages (`composer install`)
+- Runs custom artisan script (`php artisan bikinproject:install`)
+- Sets up environment (`.env` file)
+- Installs Node.js dependencies
+- Generates application key
+- Offers to run database migrations
+- Configures project name and URL
+- Offers to remove installation files
+- Provides instructions for starting local development server
+
+## About Laravel
+
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
+
+## Learn Laravel
+
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided in building a modern Laravel application from scratch.
+
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+
+## Author of This Template
+
+Contributor name and contact info,
+
+Naufal Akbar Nugroho  
+[Website](https://nuflakbrr.github.io)
+[Github](https://github.com/nuflakbrr)
+[Instagram](https://instagram.com/kbrnugroho)
