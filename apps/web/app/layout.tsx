@@ -1,18 +1,9 @@
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
-
-import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
 
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
-
-const VersionContextProvider = dynamic(() => import("@/components/context/version"), {
-  ssr: false,
-});
+import { ClientLayout } from "@/components/client-layout";
 
 export const metadata: Metadata = {
   title:
@@ -32,19 +23,7 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable} font-regular`}
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <VersionContextProvider>
-            <Navbar />
-            <Toaster />
-            <main className="sm:container mx-auto w-[88vw] h-auto">{children}</main>
-            <Footer />
-          </VersionContextProvider>
-        </ThemeProvider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

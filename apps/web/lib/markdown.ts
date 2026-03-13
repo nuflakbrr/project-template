@@ -11,6 +11,7 @@ import { visit } from "unist-util-visit";
 
 import Note from "@/components/note";
 import Pre from "@/components/pre";
+import TerminalTabs from "@/components/terminal-tabs";
 import { Stepper, StepperItem } from "@/components/ui/stepper";
 // custom components imports
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +22,7 @@ const components = {
   TabsContent,
   TabsList,
   TabsTrigger,
+  TerminalTabs,
   pre: Pre,
   Note,
   Stepper,

@@ -13,9 +13,13 @@ export default function GetStarted() {
   return (
     <Link
       href={`/docs/${currentVersion}${routes[0].href}`}
-      className={buttonVariants({ className: "px-6", size: "lg" })}
+      className={buttonVariants({
+        className:
+          "px-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white dark:text-white shadow-lg shadow-blue-500/20 transition-all hover:scale-105 active:scale-95 border-none",
+        size: "lg",
+      })}
     >
-      Get Stared
+      Get Started
     </Link>
   );
 }
