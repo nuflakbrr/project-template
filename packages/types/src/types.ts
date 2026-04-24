@@ -11,7 +11,6 @@ import type {
   DatabaseSetupSchema,
   APISchema,
   AuthSchema,
-  PaymentsSchema,
   WebDeploySchema,
   ServerDeploySchema,
   DirectoryConflictSchema,
@@ -37,7 +36,6 @@ export type PackageManager = z.infer<typeof PackageManagerSchema>;
 export type DatabaseSetup = z.infer<typeof DatabaseSetupSchema>;
 export type API = z.infer<typeof APISchema>;
 export type Auth = z.infer<typeof AuthSchema>;
-export type Payments = z.infer<typeof PaymentsSchema>;
 export type WebDeploy = z.infer<typeof WebDeploySchema>;
 export type ServerDeploy = z.infer<typeof ServerDeploySchema>;
 export type DirectoryConflict = z.infer<typeof DirectoryConflictSchema>;
@@ -54,5 +52,13 @@ export type InitResult = z.infer<typeof InitResultSchema>;
 
 export type WebFrontend = Extract<
   Frontend,
-  "tanstack-router" | "tanstack-start" | "next" | "nuxt" | "svelte" | "solid" | "none"
+  | "tanstack-router"
+  | "tanstack-start"
+  | "next"
+  | "vue"
+  | "astro"
+  | "nuxt"
+  | "svelte"
+  | "solid"
+  | "none"
 >;

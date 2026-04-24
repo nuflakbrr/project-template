@@ -2976,9 +2976,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { env } from "@{{projectName}}/env/server";
-{{#if (eq payments "polar")}}
-import { polar, checkout, portal } from "@polar-sh/better-auth";
-import { polarClient } from "./lib/payments";
 {{/if}}
 import prisma from "@{{projectName}}/db";
 
@@ -3005,28 +3002,7 @@ export const auth = betterAuth({
 		},
 	},
 {{/if}}
-	plugins: [
-{{#if (eq payments "polar")}}
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			enableCustomerPortal: true,
-			use: [
-				checkout({
-					products: [
-						{
-							productId: "your-product-id",
-							slug: "pro",
-						},
-					],
-					successUrl: env.POLAR_SUCCESS_URL,
-					authenticatedUsersOnly: true,
-				}),
-				portal(),
-			],
-		}),
-{{/if}}
-	],
+	plugins: [],
 });
 {{/if}}
 
@@ -3035,9 +3011,6 @@ export const auth = betterAuth({
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { env } from "@{{projectName}}/env/server";
-{{#if (eq payments "polar")}}
-import { polar, checkout, portal } from "@polar-sh/better-auth";
-import { polarClient } from "./lib/payments";
 {{/if}}
 import { db } from "@{{projectName}}/db";
 import * as schema from "@{{projectName}}/db/schema/auth";
@@ -3065,28 +3038,7 @@ export const auth = betterAuth({
 		},
 	},
 {{/if}}
-	plugins: [
-{{#if (eq payments "polar")}}
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			enableCustomerPortal: true,
-			use: [
-				checkout({
-					products: [
-						{
-							productId: "your-product-id",
-							slug: "pro",
-						},
-					],
-					successUrl: env.POLAR_SUCCESS_URL,
-					authenticatedUsersOnly: true,
-				}),
-				portal(),
-			],
-		}),
-{{/if}}
-	],
+	plugins: [],
 });
 {{/if}}
 
@@ -3094,10 +3046,6 @@ export const auth = betterAuth({
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { env } from "@{{projectName}}/env/server";
-{{#if (eq payments "polar")}}
-import { polar, checkout, portal } from "@polar-sh/better-auth";
-import { polarClient } from "./lib/payments";
-{{/if}}
 import { db } from "@{{projectName}}/db";
 import * as schema from "@{{projectName}}/db/schema/auth";
 
@@ -3137,12 +3085,11 @@ export const auth = betterAuth({
 		//   domain: "<your-workers-subdomain>",
 		// },
 	},
-{{#if (eq payments "polar")}}
-	plugins: [
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			enableCustomerPortal: true,
+	plugins: [],
+});
+{{/if}}
+
+{{#if (eq orm "mongoose")}}
 			use: [
 				checkout({
 					products: [
@@ -3167,9 +3114,6 @@ export const auth = betterAuth({
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { env } from "@{{projectName}}/env/server";
-{{#if (eq payments "polar")}}
-import { polar, checkout, portal } from "@polar-sh/better-auth";
-import { polarClient } from "./lib/payments";
 {{/if}}
 import { client } from "@{{projectName}}/db";
 
@@ -3190,27 +3134,7 @@ export const auth = betterAuth({
 		},
 	},
 {{/if}}
-{{#if (eq payments "polar")}}
-	plugins: [
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			enableCustomerPortal: true,
-			use: [
-				checkout({
-					products: [
-						{
-							productId: "your-product-id",
-							slug: "pro",
-						},
-					],
-					successUrl: env.POLAR_SUCCESS_URL,
-					authenticatedUsersOnly: true,
-				}),
-				portal(),
-			],
-		}),
-	],
+	plugins: [],
 {{/if}}
 });
 {{/if}}
@@ -3218,9 +3142,6 @@ export const auth = betterAuth({
 {{#if (eq orm "none")}}
 import { betterAuth } from "better-auth";
 import { env } from "@{{projectName}}/env/server";
-{{#if (eq payments "polar")}}
-import { polar, checkout, portal } from "@polar-sh/better-auth";
-import { polarClient } from "./lib/payments";
 {{/if}}
 
 
@@ -3241,28 +3162,7 @@ export const auth = betterAuth({
 		},
 	},
 {{/if}}
-{{#if (eq payments "polar")}}
-	plugins: [
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			enableCustomerPortal: true,
-			use: [
-				checkout({
-					products: [
-						{
-							productId: "your-product-id",
-							slug: "pro",
-						},
-					],
-					successUrl: env.POLAR_SUCCESS_URL,
-					authenticatedUsersOnly: true,
-				}),
-				portal(),
-			],
-		}),
-	],
-{{/if}}
+	plugins: [],
 });
 {{/if}}
 `],
@@ -4101,9 +4001,6 @@ import { authClient } from "../lib/auth-client";
 </script>
 `],
   ["auth/better-auth/web/astro/src/lib/auth-client.ts.hbs", `import { createAuthClient } from "better-auth/client";
-{{#if (eq payments "polar")}}
-import { polarClient } from "@polar-sh/better-auth";
-{{/if}}
 {{#if (ne backend "self")}}
 import { PUBLIC_SERVER_URL } from "astro:env/client";
 {{/if}}
@@ -4111,9 +4008,6 @@ import { PUBLIC_SERVER_URL } from "astro:env/client";
 export const authClient = createAuthClient({
 {{#if (ne backend "self")}}
   baseURL: PUBLIC_SERVER_URL,
-{{/if}}
-{{#if (eq payments "polar")}}
-  plugins: [polarClient()],
 {{/if}}
 });
 `],
@@ -4142,15 +4036,6 @@ import Layout from "../layouts/Layout.astro";
           <div class="rounded-lg bg-neutral-800/50 p-4">
             <p class="text-sm text-neutral-400 mb-2">Server Message</p>
             <p id="api-message" class="text-white">Loading...</p>
-          </div>
-          {{/if}}
-
-          {{#if (eq payments "polar")}}
-          <div class="rounded-lg bg-neutral-800/50 p-4">
-            <p class="text-sm text-neutral-400 mb-2">Subscription</p>
-            <div id="subscription-info" class="space-y-2">
-              <p class="text-white">Loading...</p>
-            </div>
           </div>
           {{/if}}
         </div>
@@ -4202,42 +4087,6 @@ import Layout from "../layouts/Layout.astro";
         apiMessage.textContent = data.message || "Connected to server";
       } catch (e) {
         apiMessage.textContent = "Failed to load server data";
-      }
-      {{/if}}
-
-      {{#if (eq payments "polar")}}
-      try {
-        const { data: customerState } = await authClient.customer.state();
-        const subscriptionInfo = document.getElementById("subscription-info")!;
-        if (customerState?.activeSubscriptions?.length > 0) {
-          subscriptionInfo.innerHTML = \`
-            <p class="text-white">Plan: <span class="text-green-400">Pro</span></p>
-            <button
-              id="manage-subscription"
-              class="mt-2 rounded px-3 py-1.5 text-sm bg-neutral-700 hover:bg-neutral-600 text-white transition-colors"
-            >
-              Manage Subscription
-            </button>
-          \`;
-          document.getElementById("manage-subscription")?.addEventListener("click", async () => {
-            await authClient.customer.portal();
-          });
-        } else {
-          subscriptionInfo.innerHTML = \`
-            <p class="text-white">Plan: <span class="text-neutral-400">Free</span></p>
-            <button
-              id="upgrade-button"
-              class="mt-2 rounded px-3 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
-            >
-              Upgrade to Pro
-            </button>
-          \`;
-          document.getElementById("upgrade-button")?.addEventListener("click", async () => {
-            await authClient.checkout({ slug: "pro" });
-          });
-        }
-      } catch (e) {
-        console.error("Failed to load subscription info", e);
       }
       {{/if}}
 
@@ -4521,28 +4370,11 @@ definePageMeta({
 
 const session = $authClient.useSession()
 
-{{#if (eq payments "polar")}}
-const customerState = ref<any>(null)
-{{/if}}
-
 {{#if (eq api "orpc")}}
 const privateData = useQuery({
   ...$orpc.privateData.queryOptions(),
   enabled: computed(() => !!session.value?.data?.user)
 })
-{{/if}}
-
-{{#if (eq payments "polar")}}
-onMounted(async () => {
-  if (session.value?.data) {
-    const { data } = await $authClient.customer.state()
-    customerState.value = data
-  }
-})
-
-const hasProSubscription = computed(() => 
-  customerState.value?.activeSubscriptions?.length! > 0
-)
 {{/if}}
 </script>
 
@@ -4573,34 +4405,6 @@ const hasProSubscription = computed(() =>
         <div v-else-if="privateData.data.value" class="flex items-center gap-2">
           <UIcon name="i-lucide-check-circle" class="text-success" />
           <span>\\{{ privateData.data.value.message }}</span>
-        </div>
-      </UCard>
-      {{/if}}
-
-      {{#if (eq payments "polar")}}
-      <UCard>
-        <template #header>
-          <div class="font-medium">Subscription</div>
-        </template>
-
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <UIcon :name="hasProSubscription ? 'i-lucide-crown' : 'i-lucide-user'" :class="hasProSubscription ? 'text-warning' : 'text-muted'" />
-            <span>Plan: \\{{ hasProSubscription ? "Pro" : "Free" }}</span>
-          </div>
-          <UButton 
-            v-if="hasProSubscription"
-            variant="outline"
-            @click="() => { $authClient.customer.portal() }"
-          >
-            Manage Subscription
-          </UButton>
-          <UButton 
-            v-else
-            @click="() => { $authClient.checkout({ slug: 'pro' }) }"
-          >
-            Upgrade to Pro
-          </UButton>
         </div>
       </UCard>
       {{/if}}
@@ -4637,18 +4441,13 @@ watchEffect(() => {
 </template>
 `],
   ["auth/better-auth/web/nuxt/app/plugins/auth-client.ts.hbs", `import { createAuthClient } from "better-auth/vue";
-{{#if (eq payments "polar")}}
-import { polarClient } from "@polar-sh/better-auth";
-{{/if}}
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
 
   const authClient = createAuthClient({
     baseURL: config.public.serverUrl,
-    {{#if (eq payments "polar")}}
-    plugins: [polarClient()],
-    {{/if}}
+    plugins: [],
   });
 
   return {
@@ -4659,9 +4458,6 @@ export default defineNuxtPlugin(() => {
 });
 `],
   ["auth/better-auth/web/react/base/src/lib/auth-client.ts.hbs", `import { createAuthClient } from "better-auth/react";
-{{#if (eq payments "polar")}}
-import { polarClient } from "@polar-sh/better-auth";
-{{/if}}
 {{#unless (eq backend "self")}}
 import { env } from "@{{projectName}}/env/web";
 {{/unless}}
@@ -4670,15 +4466,10 @@ export const authClient = createAuthClient({
 {{#unless (eq backend "self")}}
 	baseURL: env.{{#if (includes frontend "next")}}NEXT_PUBLIC_SERVER_URL{{else}}VITE_SERVER_URL{{/if}},
 {{/unless}}
-{{#if (eq payments "polar")}}
-	plugins: [polarClient()]
-{{/if}}
+	plugins: []
 });
 `],
   ["auth/better-auth/web/react/next/src/app/dashboard/dashboard.tsx.hbs", `"use client";
-{{#if (eq payments "polar")}}
-import { Button } from "@/components/ui/button";
-{{/if}}
 import { authClient } from "@/lib/auth-client";
 {{#if (eq api "orpc")}}
 import { useQuery } from "@tanstack/react-query";
@@ -4690,14 +4481,8 @@ import { trpc } from "@/utils/trpc";
 {{/if}}
 
 export default function Dashboard({
-	{{#if (eq payments "polar")}}
-	customerState,
-	{{/if}}
 	session
 }: {
-	{{#if (eq payments "polar")}}
-	customerState: ReturnType<typeof authClient.customer.state>;
-	{{/if}}
 	session: typeof authClient.$Infer.Session;
 }) {
 	{{#if (eq api "orpc")}}
@@ -4707,11 +4492,6 @@ export default function Dashboard({
 	const privateData = useQuery(trpc.privateData.queryOptions());
 	{{/if}}
 
-	{{#if (eq payments "polar")}}
-	const hasProSubscription = customerState?.activeSubscriptions?.length! > 0;
-	console.log("Active subscriptions:", customerState?.activeSubscriptions);
-	{{/if}}
-
 	return (
 		<>
 			{{#if (eq api "orpc")}}
@@ -4719,18 +4499,6 @@ export default function Dashboard({
 			{{/if}}
 			{{#if (eq api "trpc")}}
 			<p>API: {privateData.data?.message}</p>
-			{{/if}}
-			{{#if (eq payments "polar")}}
-			<p>Plan: {hasProSubscription ? "Pro" : "Free"}</p>
-			{hasProSubscription ? (
-				<Button onClick={async () => await authClient.customer.portal()}>
-					Manage Subscription
-				</Button>
-			) : (
-				<Button onClick={async () => await authClient.checkout({ slug: "pro" })}>
-					Upgrade to Pro
-				</Button>
-			)}
 			{{/if}}
 		</>
 	);
@@ -4762,19 +4530,11 @@ export default async function DashboardPage() {
 		redirect("/login");
 	}
 
-	{{#if (eq payments "polar")}}
-	const { data: customerState } = await authClient.customer.state({
-		fetchOptions: {
-			headers: await headers(),
-		},
-	});
-	{{/if}}
-
 	return (
 		<div>
 			<h1>Dashboard</h1>
 			<p>Welcome {session.user.name}</p>
-			<Dashboard session={session} {{#if (eq payments "polar")}}customerState={customerState}{{/if}} />
+			<Dashboard session={session} />
 		</div>
 	);
 }
@@ -5515,10 +5275,7 @@ export default function UserMenu() {
   );
 }
 `],
-  ["auth/better-auth/web/react/react-router/src/routes/dashboard.tsx.hbs", `{{#if (eq payments "polar")}}
-import { Button } from "@/components/ui/button";
-{{/if}}
-import { authClient } from "@/lib/auth-client";
+  ["auth/better-auth/web/react/react-router/src/routes/dashboard.tsx.hbs", `import { authClient } from "@/lib/auth-client";
 {{#if (eq api "orpc")}}
 import { orpc } from "@/utils/orpc";
 {{/if}}
@@ -5534,9 +5291,6 @@ import { useNavigate } from "react-router";
 export default function Dashboard() {
   const { data: session, isPending } = authClient.useSession();
   const navigate = useNavigate();
-  {{#if (eq payments "polar")}}
-  const [customerState, setCustomerState] = useState<any>(null);
-  {{/if}}
 
   {{#if (eq api "orpc")}}
   const privateData = useQuery(orpc.privateData.queryOptions());
@@ -5551,7 +5305,6 @@ export default function Dashboard() {
     }
   }, [session, isPending, navigate]);
 
-  {{#if (eq payments "polar")}}
   useEffect(() => {
     async function fetchCustomerState() {
       if (session) {
@@ -5568,29 +5321,12 @@ export default function Dashboard() {
     return <div>Loading...</div>;
   }
 
-  {{#if (eq payments "polar")}}
-  const hasProSubscription = customerState?.activeSubscriptions?.length! > 0;
-  console.log("Active subscriptions:", customerState?.activeSubscriptions);
-  {{/if}}
-
   return (
     <div>
       <h1>Dashboard</h1>
       <p>Welcome {session?.user.name}</p>
       {{#if ( or (eq api "orpc") (eq api "trpc"))}}
       <p>API: {privateData.data?.message}</p>
-      {{/if}}
-      {{#if (eq payments "polar")}}
-      <p>Plan: {hasProSubscription ? "Pro" : "Free"}</p>
-      {hasProSubscription ? (
-        <Button onClick={async () => await authClient.customer.portal()}>
-          Manage Subscription
-        </Button>
-      ) : (
-        <Button onClick={async () => await authClient.checkout({ slug: "pro" })}>
-          Upgrade to Pro
-        </Button>
-      )}
       {{/if}}
     </div>
   );
@@ -5971,10 +5707,7 @@ export default function UserMenu() {
   );
 }
 `],
-  ["auth/better-auth/web/react/tanstack-router/src/routes/dashboard.tsx.hbs", `{{#if (eq payments "polar")}}
-import { Button } from "@/components/ui/button";
-{{/if}}
-import { authClient } from "@/lib/auth-client";
+  ["auth/better-auth/web/react/tanstack-router/src/routes/dashboard.tsx.hbs", `import { authClient } from "@/lib/auth-client";
 {{#if (eq api "orpc")}}
 import { orpc } from "@/utils/orpc";
 {{/if}}
@@ -5996,17 +5729,12 @@ export const Route = createFileRoute("/dashboard")({
 				throw: true
 			});
 		}
-		{{#if (eq payments "polar")}}
-		const {data: customerState} = await authClient.customer.state()
-		return { session, customerState };
-		{{else}}
 		return { session };
-		{{/if}}
 	}
 });
 
 function RouteComponent() {
-	const { session{{#if (eq payments "polar")}}, customerState{{/if}} } = Route.useRouteContext();
+	const { session } = Route.useRouteContext();
 
 	{{#if (eq api "orpc")}}
 	const privateData = useQuery(orpc.privateData.queryOptions());
@@ -6015,29 +5743,12 @@ function RouteComponent() {
 	const privateData = useQuery(trpc.privateData.queryOptions());
 	{{/if}}
 
-	{{#if (eq payments "polar")}}
-	const hasProSubscription = customerState?.activeSubscriptions?.length! > 0
-    console.log("Active subscriptions:", customerState?.activeSubscriptions)
-	{{/if}}
-
 	return (
 		<div>
 			<h1>Dashboard</h1>
 			<p>Welcome {session.data?.user.name}</p>
 			{{#if ( or (eq api "orpc") (eq api "trpc"))}}
 			<p>API: {privateData.data?.message}</p>
-			{{/if}}
-			{{#if (eq payments "polar")}}
-			<p>Plan: {hasProSubscription ? "Pro" : "Free"}</p>
-			{hasProSubscription ? (
-				<Button onClick={async () => await authClient.customer.portal()}>
-					Manage Subscription
-				</Button>
-			) : (
-				<Button onClick={async () => await authClient.checkout({ slug: "pro" })}>
-					Upgrade to Pro
-				</Button>
-			)}
 			{{/if}}
 		</div>
 	);
@@ -6462,11 +6173,6 @@ export const authMiddleware = createMiddleware().server(
 {{/if}}
 `],
   ["auth/better-auth/web/react/tanstack-start/src/routes/dashboard.tsx.hbs", `import { getUser } from "@/functions/get-user";
-{{#if (eq payments "polar") }}
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
-import { getPayment } from "@/functions/get-payment";
-{{/if}}
 {{#if (eq api "trpc") }}
 import { useTRPC } from "@/utils/trpc";
 import { useQuery } from "@tanstack/react-query";
@@ -6481,12 +6187,7 @@ export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
   beforeLoad: async () => {
     const session = await getUser();
-    {{#if (eq payments "polar") }}
-    const customerState = await getPayment();
-    return { session, customerState };
-    {{else}}
     return { session };
-    {{/if}}
   },
   loader: async ({ context }) => {
     if (!context.session) {
@@ -6498,7 +6199,7 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function RouteComponent() {
-  const { session{{#if (eq payments "polar") }}, customerState{{/if}} } = Route.useRouteContext();
+  const { session } = Route.useRouteContext();
 
   {{#if (eq api "trpc") }}
   const trpc = useTRPC();
@@ -6506,11 +6207,6 @@ function RouteComponent() {
   {{/if}}
   {{#if (eq api "orpc") }}
   const privateData = useQuery(orpc.privateData.queryOptions());
-  {{/if}}
-
-  {{#if (eq payments "polar") }}
-  const hasProSubscription = (customerState?.activeSubscriptions?.length ?? 0) > 0;
-  // For debugging: console.log("Active subscriptions:", customerState?.activeSubscriptions);
   {{/if}}
 
   return (
@@ -6521,26 +6217,6 @@ function RouteComponent() {
       <p>API: {privateData.data?.message}</p>
       {{else if (eq api "orpc") }}
       <p>API: {privateData.data?.message}</p>
-      {{/if}}
-      {{#if (eq payments "polar") }}
-      <p>Plan: {hasProSubscription ? "Pro" : "Free"}</p>
-      {hasProSubscription ? (
-        <Button
-          onClick={async function handlePortal() {
-            await authClient.customer.portal();
-          }}
-        >
-          Manage Subscription
-        </Button>
-      ) : (
-        <Button
-          onClick={async function handleUpgrade() {
-            await authClient.checkout({ slug: "pro" });
-          }}
-        >
-          Upgrade to Pro
-        </Button>
-      )}
       {{/if}}
     </div>
   );
@@ -6895,16 +6571,10 @@ export default function UserMenu() {
 }
 `],
   ["auth/better-auth/web/solid/src/lib/auth-client.ts.hbs", `import { createAuthClient } from "better-auth/solid";
-{{#if (eq payments "polar")}}
-import { polarClient } from "@polar-sh/better-auth";
-{{/if}}
 import { env } from "@{{projectName}}/env/web";
 
 export const authClient = createAuthClient({
 	baseURL: env.VITE_SERVER_URL,
-{{#if (eq payments "polar")}}
-	plugins: [polarClient()]
-{{/if}}
 });
 `],
   ["auth/better-auth/web/solid/src/routes/dashboard.tsx.hbs", `import { authClient } from "@/lib/auth-client";
@@ -6924,12 +6594,7 @@ export const Route = createFileRoute("/dashboard")({
 				throw: true,
 			});
 		}
-		{{#if (eq payments "polar")}}
-		const { data: customerState } = await authClient.customer.state();
-		return { session, customerState };
-		{{else}}
 		return { session };
-		{{/if}}
 	},
 });
 
@@ -6937,17 +6602,9 @@ function RouteComponent() {
 	const context = Route.useRouteContext();
 
 	const session = context().session;
-	{{#if (eq payments "polar")}}
-	const customerState = context().customerState;
-	{{/if}}
 
 	{{#if (eq api "orpc")}}
 	const privateData = useQuery(() => orpc.privateData.queryOptions());
-	{{/if}}
-
-	{{#if (eq payments "polar")}}
-	const hasProSubscription = () =>
-		customerState?.activeSubscriptions?.length! > 0;
 	{{/if}}
 
 	return (
@@ -6956,20 +6613,6 @@ function RouteComponent() {
 			<p>Welcome {session.data?.user.name}</p>
 			{{#if (eq api "orpc")}}
 			<p>API: {privateData.data?.message}</p>
-			{{/if}}
-			{{#if (eq payments "polar")}}
-			<p>Plan: {hasProSubscription() ? "Pro" : "Free"}</p>
-			{hasProSubscription() ? (
-				<button onClick={async () => await authClient.customer.portal()}>
-					Manage Subscription
-				</button>
-			) : (
-				<button
-					onClick={async () => await authClient.checkout({ slug: "pro" })}
-				>
-					Upgrade to Pro
-				</button>
-			)}
 			{{/if}}
 		</div>
 	);
@@ -7307,15 +6950,9 @@ function RouteComponent() {
 `],
   ["auth/better-auth/web/svelte/src/lib/auth-client.ts.hbs", `import { PUBLIC_SERVER_URL } from "$env/static/public";
 import { createAuthClient } from "better-auth/svelte";
-{{#if (eq payments "polar")}}
-import { polarClient } from "@polar-sh/better-auth";
-{{/if}}
 
 export const authClient = createAuthClient({
 	baseURL: PUBLIC_SERVER_URL,
-{{#if (eq payments "polar")}}
-	plugins: [polarClient()]
-{{/if}}
 });
 `],
   ["auth/better-auth/web/svelte/src/routes/dashboard/+page.svelte.hbs", `<script lang="ts">
@@ -7324,9 +6961,6 @@ export const authClient = createAuthClient({
 	{{#if (eq api "orpc")}}
 	import { orpc } from '$lib/orpc';
 	import { createQuery } from '@tanstack/svelte-query';
-	{{/if}}
-	{{#if (eq payments "polar")}}
-	let customerState = $state<{ activeSubscriptions?: unknown[] } | null>(null);
 	{{/if}}
 
 	const sessionQuery = authClient.useSession();
@@ -7340,16 +6974,6 @@ export const authClient = createAuthClient({
 			goto('/login');
 		}
 	});
-
-	{{#if (eq payments "polar")}}
-	$effect(() => {
-		if ($sessionQuery.data) {
-			authClient.customer.state().then(({ data }) => {
-				customerState = data;
-			});
-		}
-	});
-	{{/if}}
 </script>
 
 {#if $sessionQuery.isPending}
@@ -7362,18 +6986,6 @@ export const authClient = createAuthClient({
 		<p>Welcome {$sessionQuery.data.user.name}</p>
 		{{#if (eq api "orpc")}}
 		<p>API: {$privateDataQuery.data?.message}</p>
-		{{/if}}
-		{{#if (eq payments "polar")}}
-		<p>Plan: {customerState?.activeSubscriptions?.length > 0 ? "Pro" : "Free"}</p>
-		{#if customerState?.activeSubscriptions?.length > 0}
-			<button onclick={async () => await authClient.customer.portal()}>
-				Manage Subscription
-			</button>
-		{:else}
-			<button onclick={async () => await authClient.checkout({ slug: "pro" })}>
-				Upgrade to Pro
-			</button>
-		{/if}
 		{{/if}}
 	</div>
 {/if}
@@ -20723,7 +20335,2823 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
 });
+`],
+  ["frontend/vue/_gitattributes", `* text=auto eol=lf
+`],
+  ["frontend/vue/_gitignore", `# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
+
+.eslintcache
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Vitest
+__screenshots__/
+
+# Vite
+*.timestamp-*-*.mjs
+
+test-results/
+playwright-report/
+
+# env
+.env
+.env.local
+.env.test
+.env.staging
+.env.production
+
+# lock file
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+`],
+  ["frontend/vue/.editorconfig.hbs", `[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl}]
+charset = utf-8
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+max_line_length = 100
+`],
+  ["frontend/vue/.oxlintrc.json.hbs", `{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue"],
+  "env": {
+    "browser": true
+  },
+  "categories": {
+    "correctness": "error"
+  }
+}
+`],
+  ["frontend/vue/.prettierrc.json.hbs", `{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "semi": false,
+  "singleQuote": true,
+  "printWidth": 100
+}
+`],
+  ["frontend/vue/env.d.ts", `/// <reference types="vite/client" />
+`],
+  ["frontend/vue/eslint.config.ts.hbs", `import { globalIgnores } from 'eslint/config'
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import pluginVue from 'eslint-plugin-vue'
+import pluginOxlint from 'eslint-plugin-oxlint'
+import skipFormatting from 'eslint-config-prettier/flat'
+
+// To allow more languages other than \`ts\` in \`.vue\` files, uncomment the following lines:
+// import { configureVueProject } from '@vue/eslint-config-typescript'
+// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
+// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
+
+export default defineConfigWithVueTs(
+  {
+    name: 'app/files-to-lint',
+    files: ['**/*.{vue,ts,mts,tsx}'],
+  },
+
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+
+  ...pluginVue.configs['flat/essential'],
+  vueTsConfigs.recommended,
+
+  {
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+
+  ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
+
+  skipFormatting,
+)
+`],
+  ["frontend/vue/index.html.hbs", `<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="/src/index.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>`],
+  ["frontend/vue/package.json.hbs", `{
+  "name": "vue-template",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm generate:seo &&vite",
+    "build": "pnpm generate:seo && run-p type-check \\"build-only {@}\\" --",
+    "preview": "pnpm generate:seo && vite preview",
+    "build-only": "pnpm generate:seo && vite build",
+    "type-check": "vue-tsc --build",
+    "lint": "run-s lint:*",
+    "lint:oxlint": "oxlint . --fix",
+    "lint:eslint": "eslint . --fix --cache",
+    "format": "prettier --write --experimental-cli src/",
+    "generate:seo": "tsx scripts/generate-seo.ts"
+  },
+  "dependencies": {
+    "@unhead/vue": "^2.1.12",
+    "@vueuse/core": "^14.2.1",
+    "axios": "^1.13.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^0.577.0",
+    "moment": "^2.30.1",
+    "smoothscroll-polyfill": "^0.4.4",
+    "tailwind-merge": "^3.5.0",
+    "vue": "^3.5.29",
+    "vue-router": "^5.0.3"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.11.0",
+    "@types/smoothscroll-polyfill": "^0.3.4",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vitejs/plugin-vue-jsx": "^5.1.4",
+    "@vue/eslint-config-typescript": "^14.7.0",
+    "@vue/tsconfig": "^0.8.1",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-oxlint": "~1.50.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "~10.8.0",
+    "globals": "^17.4.0",
+    "jiti": "^2.6.1",
+    "npm-run-all2": "^8.0.4",
+    "oxlint": "~1.50.0",
+    "postcss": "^8.5.8",
+    "prettier": "3.8.1",
+    "tailwindcss": "^3.4.19",
+    "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.21.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "unplugin-vue-router": "^0.19.2",
+    "vite": "^7.3.1",
+    "vite-plugin-vue-devtools": "^8.0.6",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vue-tsc": "^3.2.5"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
+`],
+  ["frontend/vue/postcss.config.js.hbs", `export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+`],
+  ["frontend/vue/public/favicon.ico", `[Binary file]`],
+  ["frontend/vue/public/robots.txt", `User-agent: *
+Allow: /
+
+Sitemap: https://nuflakbrr.github.io/bikinproject/sitemap.xml
+Host: https://nuflakbrr.github.io/bikinproject`],
+  ["frontend/vue/public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/[...path]</loc>
+    <lastmod>2026-04-24T15:49:12.223Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/about</loc>
+    <lastmod>2026-04-24T15:49:12.223Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/contact</loc>
+    <lastmod>2026-04-24T15:49:12.223Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject</loc>
+    <lastmod>2026-04-24T15:49:12.223Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/login</loc>
+    <lastmod>2026-04-24T15:49:12.223Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nuflakbrr.github.io/bikinproject/register</loc>
+    <lastmod>2026-04-24T15:49:12.223Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>`],
+  ["frontend/vue/scripts/generate-seo.ts", `import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+// We'll mimic the siteMetadata here to avoid complex TS import issues in a standalone script
+// If the user changes siteMetadata, they should update it here or we can try to import it if tsx/ts-node setup allows
+const siteMetadata = {
+  title: 'BikinProject React Template by Naufal Akbar Nugroho',
+  siteUrl: 'https://nuflakbrr.github.io/bikinproject', // Change this to your production URL
+  socialBanner: '/static/images/twitter-card.png',
+}
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const PUBLIC_DIR = path.resolve(__dirname, '../public')
+
+const ROUTES_DIR = path.resolve(__dirname, '../src/routes')
+
+/**
+ * Recursively get all routes from the routes directory.
+ * Tailored for TanStack Router file-based routing.
+ */
+function getRoutes(dir: string, base: string = ''): string[] {
+  let routes: string[] = []
+
+  if (!fs.existsSync(dir)) return routes
+
+  const items = fs.readdirSync(dir)
+  for (const item of items) {
+    const fullPath = path.join(dir, item)
+    const isDir = fs.statSync(fullPath).isDirectory()
+
+    if (isDir) {
+      if (item.startsWith('(') && item.endsWith(')')) {
+        // Route groups like (auth), (root) - skip adding to the URL path
+        routes = routes.concat(getRoutes(fullPath, base))
+      } else if (!item.startsWith('_')) {
+        // Regular directory - add to the URL path
+        routes = routes.concat(getRoutes(fullPath, \`\${base}/\${item}\`))
+      }
+    } else {
+      const ext = path.extname(item)
+      if (ext === '.vue') {
+        const name = path.basename(item, ext)
+
+        // Skip layout files (_layout.tsx), root (__root.tsx), or splat ($)
+        if (name.startsWith('_') || name === '$') continue
+
+        if (name === 'index') {
+          // index.tsx maps to the current base path
+          routes.push(base)
+        } else {
+          // about.tsx maps to /about if in root, or /parent/about if in a dir
+          routes.push(\`\${base}/\${name}\`)
+        }
+      }
+    }
+  }
+  return routes
+}
+
+const urls = Array.from(new Set(getRoutes(ROUTES_DIR)))
+
+function generateSitemap() {
+  const sitemap = \`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  \${urls
+    .map((url) => {
+      return \`
+  <url>
+    <loc>\${siteMetadata.siteUrl}\${url}</loc>
+    <lastmod>\${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>\${url === '' ? '1.0' : '0.8'}</priority>
+  </url>\`
+    })
+    .join('')}
+</urlset>\`
+
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), sitemap)
+  console.log('✅ sitemap.xml generated in public/')
+}
+
+function generateRobots() {
+  const robots = \`User-agent: *
+Allow: /
+
+Sitemap: \${siteMetadata.siteUrl}/sitemap.xml
+Host: \${siteMetadata.siteUrl}\`
+
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'robots.txt'), robots)
+  console.log('✅ robots.txt generated in public/')
+}
+
+// Ensure public directory exists
+if (!fs.existsSync(PUBLIC_DIR)) {
+  fs.mkdirSync(PUBLIC_DIR, { recursive: true })
+}
+
+generateSitemap()
+generateRobots()
+`],
+  ["frontend/vue/src/App.vue.hbs", `<script setup lang="ts">
+import { RouterView } from 'vue-router'
+import { useThemeProvider } from '@/providers/ThemeProvider'
+
+useThemeProvider()
+</script>
+
+<template>
+  <RouterView />
+</template>
+`],
+  ["frontend/vue/src/app/(auth)/login.vue.hbs", `<script setup lang="ts">
+import { RouterLink } from 'vue-router'
+import { GitHubIcon } from '@/components/Common/CustomIcons'
+import MainLayout from '@/layouts/MainLayout.vue'
+import { useSeo } from '@/hooks/useSeo'
+
+useSeo({
+  title: 'Login',
+  description: 'Masuk ke akun BikinProject Anda.',
+})
+</script>
+
+<template>
+  <MainLayout>
+    <section
+      class="min-h-screen flex items-center justify-center p-4 bg-white dark:bg-zinc-950 transition-colors duration-300"
+    >
+      <div
+        class="w-full max-w-md bg-white dark:bg-zinc-950 rounded-3xl border-2 border-zinc-100 dark:border-zinc-800 shadow-2xl overflow-hidden"
+      >
+        <div
+          class="bg-zinc-50 dark:bg-zinc-900/50 px-6 py-4 border-b-2 border-zinc-100 dark:border-zinc-800 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-2">
+            <span class="text-xl">📦</span>
+            <span class="font-mono font-bold text-zinc-900 dark:text-white">auth --login</span>
+          </div>
+          <div class="flex gap-1.5 opacity-30">
+            <div class="w-3 h-3 rounded-full bg-zinc-400" />
+            <div class="w-3 h-3 rounded-full bg-zinc-400" />
+            <div class="w-3 h-3 rounded-full bg-zinc-400" />
+          </div>
+        </div>
+
+        <div class="p-8 space-y-8">
+          <div class="text-center space-y-2">
+            <h1 class="text-3xl font-black text-zinc-950 dark:text-white">Selamat Datang</h1>
+            <p class="text-zinc-500 dark:text-zinc-400 font-medium">
+              Masuk untuk mengelola project Anda.
+            </p>
+          </div>
+
+          <form class="space-y-5">
+            <div class="space-y-2">
+              <label
+                for="email"
+                class="block text-sm font-bold text-zinc-700 dark:text-zinc-300 font-mono"
+              >
+                $ user.email
+              </label>
+              <input
+                type="email"
+                id="email"
+                class="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 transition-all font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
+                placeholder="email@example.com"
+                required
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label
+                for="password"
+                class="block text-sm font-bold text-zinc-700 dark:text-zinc-300 font-mono"
+              >
+                $ user.password
+              </label>
+              <input
+                type="password"
+                id="password"
+                class="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 transition-all font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] mt-4"
+            >
+              Masuk Ke Sistem
+            </button>
+
+            <div class="relative flex items-center justify-center">
+              <span class="absolute inset-x-0 h-px bg-zinc-100 dark:bg-zinc-800"></span>
+              <span
+                class="relative bg-white dark:bg-zinc-950 px-4 text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest"
+              >
+                Atau
+              </span>
+            </div>
+
+            <button
+              class="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl border-2 border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all font-bold text-zinc-900 dark:text-white"
+            >
+              <GitHubIcon />
+              <span>GitHub Authentication</span>
+            </button>
+          </form>
+
+          <p class="text-center text-zinc-500 dark:text-zinc-400 font-medium">
+            Belum punya akun?
+            <RouterLink
+              to="/register"
+              class="text-blue-600 dark:text-blue-400 font-bold hover:underline"
+            >
+              Daftar Sekarang
+            </RouterLink>
+          </p>
+        </div>
+      </div>
+    </section>
+  </MainLayout>
+</template>
+`],
+  ["frontend/vue/src/app/(auth)/register.vue.hbs", `<script setup lang="ts">
+import { RouterLink } from 'vue-router'
+import { GitHubIcon } from '@/components/Common/CustomIcons'
+import MainLayout from '@/layouts/MainLayout.vue'
+import { useSeo } from '@/hooks/useSeo'
+
+useSeo({
+  title: 'Register',
+  description: 'Daftar akun baru di BikinProject.',
+})
+</script>
+
+<template>
+  <MainLayout>
+    <section
+      class="min-h-screen flex items-center justify-center p-4 bg-white dark:bg-zinc-950 transition-colors duration-300"
+    >
+      <div
+        class="w-full max-w-md bg-white dark:bg-zinc-950 rounded-3xl border-2 border-zinc-100 dark:border-zinc-800 shadow-2xl overflow-hidden"
+      >
+        <div
+          class="bg-zinc-50 dark:bg-zinc-900/50 px-6 py-4 border-b-2 border-zinc-100 dark:border-zinc-800 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-2">
+            <span class="text-xl">📦</span>
+            <span class="font-mono font-bold text-zinc-900 dark:text-white"> auth --register </span>
+          </div>
+          <div class="flex gap-1.5 opacity-30">
+            <div class="w-3 h-3 rounded-full bg-zinc-400" />
+            <div class="w-3 h-3 rounded-full bg-zinc-400" />
+            <div class="w-3 h-3 rounded-full bg-zinc-400" />
+          </div>
+        </div>
+
+        <div class="p-8 space-y-8">
+          <div class="text-center space-y-2">
+            <h1 class="text-3xl font-black text-zinc-950 dark:text-white">Buat Akun Baru</h1>
+            <p class="text-zinc-500 dark:text-zinc-400 font-medium">
+              Bergabung dengan komunitas BikinProject.
+            </p>
+          </div>
+
+          <form class="space-y-5">
+            <div class="space-y-2">
+              <label
+                for="email"
+                class="block text-sm font-bold text-zinc-700 dark:text-zinc-300 font-mono"
+              >
+                $ user.email
+              </label>
+              <input
+                type="email"
+                id="email"
+                class="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 transition-all font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
+                placeholder="email@example.com"
+                required
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label
+                for="password"
+                class="block text-sm font-bold text-zinc-700 dark:text-zinc-300 font-mono"
+              >
+                $ user.password
+              </label>
+              <input
+                type="password"
+                id="password"
+                class="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 transition-all font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] mt-4"
+            >
+              Daftar Sekarang
+            </button>
+
+            <div class="relative flex items-center justify-center">
+              <span class="absolute inset-x-0 h-px bg-zinc-100 dark:bg-zinc-800"></span>
+              <span
+                class="relative bg-white dark:bg-zinc-950 px-4 text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest"
+              >
+                Atau
+              </span>
+            </div>
+
+            <button
+              class="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl border-2 border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all font-bold text-zinc-900 dark:text-white"
+            >
+              <GitHubIcon />
+              <span>GitHub Authentication</span>
+            </button>
+          </form>
+
+          <p class="text-center text-zinc-500 dark:text-zinc-400 font-medium">
+            Sudah punya akun?
+            <RouterLink
+              to="/login"
+              class="text-blue-600 dark:text-blue-400 font-bold hover:underline"
+            >
+              Masuk Saja
+            </RouterLink>
+          </p>
+        </div>
+      </div>
+    </section>
+  </MainLayout>
+</template>
+`],
+  ["frontend/vue/src/app/(root)/[...path].vue.hbs", `<script setup lang="ts">
+import { computed, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import MainLayout from '@/layouts/MainLayout.vue'
+import ErrorState from '@/components/Common/ErrorState.vue'
+import { useSeo } from '@/hooks/useSeo'
+
+const route = useRoute()
+
+const errorCode = computed(() => {
+  const path = route.params.path as string[]
+  // Detection logic: check if the first path segment is 'error' and has a second segment
+  if (path && path[0] === 'error' && path[1]) {
+    const code = parseInt(path[1])
+    return isNaN(code) ? 404 : code
+  }
+  return 404
+})
+
+watchEffect(() => {
+  useSeo({
+    title: \`Error \${errorCode.value}\`,
+    description: \`Terjadi kesalahan dengan kode \${errorCode.value}.\`,
+  })
+})
+
+const errorMessage = computed(() => {
+  const path = route.params.path as string[]
+  if (path && path[0] === 'error' && path[1] && path[2]) {
+    return path[2]
+  }
+  return undefined
+})
+</script>
+
+<template>
+  <MainLayout>
+    <ErrorState
+      :code="errorCode"
+      :error="errorMessage ? { name: 'Error', message: errorMessage } : undefined"
+    />
+  </MainLayout>
+</template>
+`],
+  ["frontend/vue/src/app/(root)/about.vue.hbs", `<script setup lang="ts">
+import { siteMetadata } from '@/data/siteMetadata'
+import MainLayout from '@/layouts/MainLayout.vue'
+import { useSeo } from '@/hooks/useSeo'
+
+useSeo({
+  title: 'Tentang Kami',
+  description: 'Kenali lebih jauh tentang BikinProject dan visi kami.',
+})
+</script>
+
+<template>
+  <MainLayout>
+    <section
+      class="flex items-center justify-center mx-auto min-h-screen bg-white dark:bg-zinc-950 text-zinc-950 dark:text-white transition-colors duration-300"
+    >
+      <div class="container">
+        <div class="flex flex-wrap">
+          <div class="w-full px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div
+                class="h-64 md:h-[700px] relative group bg-zinc-100 dark:bg-zinc-900 overflow-hidden rounded-3xl shadow-2xl border-2 border-zinc-100 dark:border-zinc-800 transition-all duration-300"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1610465299996-30f240ac2b1c?auto=format&q=75&fit=crop&w=600&h=750"
+                  loading="lazy"
+                  alt="Laptop"
+                  class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/20 to-transparent" />
+              </div>
+
+              <div class="md:pt-8 space-y-6">
+                <h1
+                  class="text-4xl md:text-5xl font-extrabold text-zinc-950 dark:text-white leading-tight"
+                >
+                  Tentang <span class="text-blue-600 dark:text-blue-500">BikinProject.</span>
+                </h1>
+
+                <p
+                  class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 leading-relaxed text-justify font-medium"
+                >
+                  <span
+                    class="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 p-1 px-3 rounded-xl font-mono font-bold border border-blue-100 dark:border-blue-800/50"
+                  >
+                    BikinProject </span
+                  >adalah sebuah CLI-based starter project generator yang dirancang untuk
+                  mempercepat proses inisialisasi aplikasi dengan standar industri. Proyek ini
+                  mendukung berbagai framework populer seperti Next.js, React, dan Laravel.
+                </p>
+
+                <p
+                  class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 leading-relaxed text-justify font-medium"
+                >
+                  Dibuatnya BikinProject berawal dari kebutuhan
+                  <a
+                    :href="siteMetadata.github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-bold underline decoration-blue-500/30 underline-offset-4 transition duration-200"
+                  >
+                    Saya </a
+                  >akan standarisasi struktur proyek saat memulai development baru. Alih-alih
+                  melakukan setup manual yang repetitif, BikinProject mengotomatisasi segalanya
+                  mulai dari pemilihan bahasa, styling framework, hingga struktur folder terbaik.
+                </p>
+
+                <div class="space-y-4">
+                  <p
+                    class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 leading-relaxed text-justify font-medium"
+                  >
+                    Hanya dengan satu perintah di terminal, Anda bisa langsung fokus membangun fitur
+                    tanpa pusing dengan boilerplate:
+                  </p>
+                  <div
+                    class="p-5 bg-zinc-950 rounded-2xl font-mono text-sm md:text-base text-emerald-400 border border-zinc-800 shadow-xl group transition-all duration-300 hover:border-emerald-500/30"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span class="text-zinc-600">$</span>
+                      <span class="group-hover:text-emerald-300 transition-colors">
+                        npx bikinproject@latest
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </MainLayout>
+</template>
+`],
+  ["frontend/vue/src/app/(root)/contact.vue.hbs", `<script setup lang="ts">
+import { siteMetadata } from '@/data/siteMetadata'
+import MainLayout from '@/layouts/MainLayout.vue'
+import { useSeo } from '@/hooks/useSeo'
+
+useSeo({
+  title: 'Kontak',
+  description: 'Hubungi tim BikinProject untuk informasi lebih lanjut.',
+})
+</script>
+
+<template>
+  <MainLayout>
+    <section
+      class="flex items-center justify-center min-h-screen bg-white dark:bg-zinc-950 text-zinc-950 dark:text-white transition-colors duration-300"
+    >
+      <div class="container">
+        <div class="flex flex-wrap">
+          <div class="w-full px-4">
+            <section class="body-font">
+              <div class="container mx-auto flex items-center justify-center flex-col">
+                <div
+                  class="relative group lg:w-2/6 md:w-3/6 w-5/6 mb-10 overflow-hidden rounded-3xl shadow-2xl border-2 border-zinc-100 dark:border-zinc-800 transition-all duration-300"
+                >
+                  <img
+                    src="https://avatars.githubusercontent.com/u/83068205?v=4"
+                    loading="lazy"
+                    alt="hero"
+                    class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/20 to-transparent" />
+                </div>
+
+                <div class="text-center lg:w-2/3 w-full space-y-4">
+                  <h1
+                    class="text-4xl md:text-5xl font-extrabold text-zinc-950 dark:text-white leading-tight"
+                  >
+                    Naufal Akbar Nugroho
+                  </h1>
+
+                  <h2 class="text-xl md:text-2xl font-semibold text-blue-600 dark:text-blue-400">
+                    Fullstack Web Developer | Undergraduate Information Systems Student
+                  </h2>
+
+                  <p
+                    class="max-w-xl mx-auto text-lg md:text-xl text-zinc-700 dark:text-zinc-400 leading-relaxed font-medium"
+                  >
+                    Saya bersemangat memberikan kontribusi untuk memberikan pengetahuan teknologi
+                    bagi semua orang!
+                  </p>
+
+                  <div class="flex justify-center gap-4 pt-6">
+                    <a
+                      :href="siteMetadata.github"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex text-white bg-blue-600 hover:bg-blue-700 border-0 py-3 px-8 focus:outline-none rounded-2xl text-lg font-bold shadow-xl shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      GitHub Saya
+                    </a>
+
+                    <a
+                      :href="\`mailto:\${siteMetadata.email}\`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex text-zinc-900 dark:text-white bg-zinc-100 dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 py-3 px-8 focus:outline-none hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-2xl text-lg font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      Hubungi Saya
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </MainLayout>
+</template>
+`],
+  ["frontend/vue/src/app/(root)/index.vue.hbs", `<script setup lang="ts">
+import MainLayout from '@/layouts/MainLayout.vue'
+import Hero from '@/components/Pages/Home/Hero.vue'
+import Features from '@/components/Pages/Home/Features.vue'
+import Steps from '@/components/Pages/Home/Steps.vue'
+import { useSeo } from '@/hooks/useSeo'
+
+useSeo({
+  title: 'Home',
+  description: 'Simplify your project initialization with our premium Vue.js template.',
+})
+</script>
+
+<template>
+  <MainLayout>
+    <div class="w-full">
+      <Hero />
+      <Features />
+      <Steps />
+    </div>
+  </MainLayout>
+</template>
+`],
+  ["frontend/vue/src/components/Common/CustomIcons.ts.hbs", `import { h, defineComponent } from 'vue';
+
+const createIcon = (name: string, path: string, color: string = 'currentColor') => {
+  return defineComponent({
+    name: \`\${name}Icon\`,
+    render() {
+      return h('span', h('svg', {
+        class: 'w-5 h-5',
+        width: 24,
+        height: 24,
+        viewBox: '0 0 24 24',
+        fill: color,
+        xmlns: 'http://www.w3.org/2000/svg',
+      }, [
+        h('title', name),
+        h('path', { d: path }),
+      ]));
+    },
+  });
+};
+
+export const FacebookIcon = createIcon('Facebook', 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z');
+export const InstagramIcon = createIcon('Instagram', 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z');
+export const TwitterIcon = createIcon('Twitter', 'M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z');
+export const LinkedInIcon = createIcon('LinkedIn', 'M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z');
+export const GitHubIcon = createIcon('GitHub', 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12');
+
+export const GoogleIcon = defineComponent({
+  name: 'GoogleIcon',
+  render() {
+    return h('span', h('svg', {
+      class: 'h-5 w-5 shrink-0',
+      width: 24,
+      height: 24,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      xmlns: 'http://www.w3.org/2000/svg',
+    }, [
+      h('title', 'Google'),
+      h('path', { d: 'M23.7449 12.27C23.7449 11.48 23.6749 10.73 23.5549 10H12.2549V14.51H18.7249C18.4349 15.99 17.5849 17.24 16.3249 18.09V21.09H20.1849C22.4449 19 23.7449 15.92 23.7449 12.27Z', fill: '#4285F4' }),
+      h('path', { d: 'M12.2549 24C15.4949 24 18.2049 22.92 20.1849 21.09L16.3249 18.09C15.2449 18.81 13.8749 19.25 12.2549 19.25C9.12492 19.25 6.47492 17.14 5.52492 14.29H1.54492V17.38C3.51492 21.3 7.56492 24 12.2549 24Z', fill: '#34A853' }),
+      h('path', { d: 'M5.52488 14.29C5.27488 13.57 5.14488 12.8 5.14488 12C5.14488 11.2 5.28488 10.43 5.52488 9.71V6.62H1.54488C0.724882 8.24 0.254883 10.06 0.254883 12C0.254883 13.94 0.724882 15.76 1.54488 17.38L5.52488 14.29Z', fill: '#FBBC05' }),
+      h('path', { d: 'M12.2549 4.75C14.0249 4.75 15.6049 5.36 16.8549 6.55L20.2749 3.13C18.2049 1.19 15.4949 0 12.2549 0C7.56492 0 3.51492 2.7 1.54492 6.62L5.52492 9.71C6.47492 6.86 9.12492 4.75 12.2549 4.75Z', fill: '#EA4335' }),
+    ]));
+  },
+});
+`],
+  ["frontend/vue/src/components/Common/ErrorState.vue.hbs", `<script setup lang="ts">
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import { type ErrorMetadata, type ErrorStateProps, type ErrorTheme } from '@/interfaces/error'
+
+const props = defineProps<ErrorStateProps>()
+
+const getErrorContent = (statusCode: number) => {
+  const is5xx = statusCode >= 500
+
+  const metadataMap: Record<number, ErrorMetadata> = {
+    401: {
+      titlePrefix: 'Sesi Anda',
+      titleSuffix: 'Berakhir',
+      description:
+        'Maaf, sesi Anda telah berakhir atau Anda belum login. Silakan login kembali untuk melanjutkan.',
+      badge: 'Error 401: Unauthorized',
+      theme: 'amber',
+    },
+    403: {
+      titlePrefix: 'Akses',
+      titleSuffix: 'Dibatasi',
+      description:
+        'Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. Silakan hubungi administrator.',
+      badge: 'Error 403: Forbidden',
+      theme: 'amber',
+    },
+    404: {
+      titlePrefix: 'Halaman Tidak',
+      titleSuffix: 'Ditemukan',
+      description:
+        'Waduh! Sepertinya route yang Anda cari tidak ada atau sudah pindah ke tempat lain.',
+      badge: 'Error 404: Not Found',
+      theme: 'rose',
+    },
+    500: {
+      titlePrefix: 'Terjadi Kesalahan',
+      titleSuffix: 'Internal',
+      description: 'Ups! Server kami sedang mengalami gangguan sejenak. Silakan coba lagi nanti.',
+      badge: 'Error 500: Server Error',
+      theme: 'amber',
+    },
+    503: {
+      titlePrefix: 'Layanan Tidak',
+      titleSuffix: 'Tersedia',
+      description: 'Saat ini layanan sedang dalam pemeliharaan. Mohon tunggu beberapa saat lagi.',
+      badge: 'Error 503: Service Unavailable',
+      theme: 'emerald',
+    },
+  }
+
+  const defaultContent: ErrorMetadata = is5xx
+    ? {
+        titlePrefix: 'Terjadi Kesalahan',
+        titleSuffix: 'Server',
+        description:
+          'Server mengalami kendala yang tidak terduga. Mohon maaf atas ketidaknyamanan ini.',
+        badge: \`Error \${statusCode}: Server Exception\`,
+        theme: 'amber',
+      }
+    : {
+        titlePrefix: 'Terjadi Kesalahan',
+        titleSuffix: 'Klien',
+        description: 'Permintaan Anda tidak dapat diproses oleh sistem kami.',
+        badge: \`Error \${statusCode}: Client Error\`,
+        theme: 'rose',
+      }
+
+  const content = metadataMap[statusCode] ?? defaultContent
+
+  const themes: Record<ErrorMetadata['theme'], ErrorTheme> = {
+    amber: {
+      badgeColor:
+        'bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400',
+      pingColor: 'bg-amber-400',
+      dotColor: 'bg-amber-600 dark:bg-amber-500',
+      gradient: 'from-amber-600 to-yellow-400 dark:from-amber-400 dark:to-yellow-400',
+      glowStart: 'bg-amber-600/10',
+      glowEnd: 'bg-yellow-600/10',
+      terminalIcon: 'bg-amber-500/40',
+      borderType: 'text-amber-600 dark:text-amber-400',
+      errorColor: 'text-amber-600 dark:text-amber-400',
+    },
+    rose: {
+      badgeColor:
+        'bg-rose-50 dark:bg-rose-900/30 border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-400',
+      pingColor: 'bg-rose-400',
+      dotColor: 'bg-rose-600 dark:bg-rose-500',
+      gradient: 'from-rose-600 to-orange-400 dark:from-rose-400 dark:to-orange-400',
+      glowStart: 'bg-rose-600/10',
+      glowEnd: 'bg-orange-600/10',
+      terminalIcon: 'bg-rose-500/40',
+      borderType: 'text-rose-600 dark:text-rose-400',
+      errorColor: 'text-rose-600 dark:text-rose-400',
+    },
+    emerald: {
+      badgeColor:
+        'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400',
+      pingColor: 'bg-emerald-400',
+      dotColor: 'bg-emerald-600 dark:bg-emerald-500',
+      gradient: 'from-emerald-600 to-teal-400 dark:from-emerald-400 dark:to-teal-400',
+      glowStart: 'bg-emerald-600/10',
+      glowEnd: 'bg-teal-600/10',
+      terminalIcon: 'bg-emerald-500/40',
+      borderType: 'text-emerald-600 dark:text-emerald-400',
+      errorColor: 'text-emerald-600 dark:text-emerald-400',
+    },
+  }
+
+  return { ...content, ...themes[content.theme] }
+}
+
+const meta = computed(() => getErrorContent(props.code))
+</script>
+
+<template>
+  <section
+    class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-zinc-950 pt-32 pb-20"
+  >
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+      <div
+        :class="[
+          'absolute top-[-10%] left-[-10%] w-[40%] h-[40%] blur-[120px] rounded-full',
+          meta.glowStart,
+        ]"
+      />
+      <div
+        :class="[
+          'absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] blur-[120px] rounded-full',
+          meta.glowEnd,
+        ]"
+      />
+    </div>
+
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-1/2 space-y-8 text-left">
+          <div
+            :class="[
+              'inline-flex items-center gap-2 px-3 py-1 rounded-full border text-sm font-semibold shadow-sm',
+              meta.badgeColor,
+            ]"
+          >
+            <span class="relative flex h-2 w-2">
+              <span
+                :class="[
+                  'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
+                  meta.pingColor,
+                ]"
+              ></span>
+              <span :class="['relative inline-flex rounded-full h-2 w-2', meta.dotColor]"></span>
+            </span>
+            {{ meta.badge }}
+          </div>
+
+          <h1
+            class="text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-950 dark:text-white leading-tight"
+          >
+            {{ meta.titlePrefix }} <br />
+            <span
+              :class="[
+                'inline-block py-1 bg-clip-text text-transparent bg-gradient-to-r',
+                meta.gradient,
+              ]"
+            >
+              {{ meta.titleSuffix }}
+            </span>
+          </h1>
+
+          <p
+            class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 max-w-xl leading-relaxed font-medium"
+          >
+            {{ props.error?.message ? props.error.message.replace(/-/g, ' ') : meta.description }}
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
+            <RouterLink
+              to="/"
+              class="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Kembali ke Beranda
+            </RouterLink>
+          </div>
+        </div>
+
+        <div class="lg:w-1/2 w-full animate-float">
+          <div
+            class="w-full max-w-2xl mx-auto rounded-3xl overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 shadow-2xl"
+          >
+            <div
+              class="bg-zinc-100 dark:bg-zinc-900 px-4 py-3 flex items-center gap-2 border-b-2 border-zinc-200 dark:border-zinc-800"
+            >
+              <div class="flex gap-1.5">
+                <div :class="['w-3.5 h-3.5 rounded-full', meta.terminalIcon]" />
+                <div class="w-3.5 h-3.5 rounded-full bg-amber-500/40" />
+                <div class="w-3.5 h-3.5 rounded-full bg-emerald-500/40" />
+              </div>
+              <div class="mx-auto text-xs font-mono text-zinc-500 font-medium">
+                bash — system-error-{{ props.code }}
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-zinc-950 p-6 font-mono text-sm leading-relaxed overflow-x-auto h-[350px]"
+            >
+              <div class="space-y-2">
+                <p class="text-zinc-400">┌ checking system status...</p>
+                <p class="flex gap-3">
+                  <span :class="meta.borderType">│</span>
+                  <span class="text-zinc-800 dark:text-zinc-200">
+                    ✖ Fatal Error: {{ meta.badge }}
+                  </span>
+                </p>
+                <p class="text-zinc-400">│</p>
+                <p class="flex gap-3">
+                  <span :class="meta.borderType">│</span>
+                  <span class="text-zinc-500"> [stacktrace] </span>
+                </p>
+                <template v-if="props.error">
+                  <p class="flex gap-3 text-xs">
+                    <span :class="meta.borderType">│</span>
+                    <span class="text-rose-500 dark:text-rose-400">
+                      Error: {{ props.error.name }} - {{ props.error.message }}
+                    </span>
+                  </p>
+                </template>
+                <template v-else>
+                  <p class="flex gap-3 text-xs">
+                    <span :class="meta.borderType">│</span>
+                    <span class="text-zinc-500">
+                      at SystemHandler.resolve (internal/core.js:{{ props.code }})
+                    </span>
+                  </p>
+                  <p class="flex gap-3 text-xs">
+                    <span :class="meta.borderType">│</span>
+                    <span class="text-zinc-500">
+                      at RequestPipeline.execute (internal/router.js:123)
+                    </span>
+                  </p>
+                </template>
+                <p class="text-zinc-400">│</p>
+                <p class="text-zinc-400 text-xs text-center">────────────────────────</p>
+                <p :class="['font-bold text-center', meta.errorColor]">
+                  ⚠️ ERROR_CODE: {{ props.code }}
+                </p>
+                <p class="text-zinc-400 text-xs text-center">────────────────────────</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+`],
+  ["frontend/vue/src/components/Common/Loader.vue.hbs", `<template>
+  <div class="loader-container">
+    <div class="clip-loader"></div>
+  </div>
+</template>
+
+<style scoped>
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clip-loader {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #3498db;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
+`],
+  ["frontend/vue/src/components/Common/ScrollToTop.vue.hbs", `<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import smoothscroll from 'smoothscroll-polyfill'
+import { cn } from '@/lib/utils'
+
+const isVisible = ref(false)
+
+const toggleVisibility = () => {
+  if (window.pageYOffset > 300) {
+    isVisible.value = true
+  } else {
+    isVisible.value = false
+  }
+}
+
+const scrollTop = () => {
+  smoothscroll.polyfill()
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', toggleVisibility)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', toggleVisibility)
+})
+</script>
+
+<template>
+  <div class="fixed bottom-6 right-6">
+    <button
+      type="button"
+      @click="scrollTop"
+      :class="cn(
+        isVisible ? 'opacity-100' : 'opacity-0 cursor-default',
+        'flex flex-col justify-center items-center rounded-lg bg-blue-500 p-2 text-white transition-all hover:bg-blue-600'
+      )"
+    >
+      <svg
+        class="h-5 w-5"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 384 512"
+        fill="currentColor"
+      >
+        <path d="M352 352c-8.188 0-16.38-3.125-22.62-9.375L192 205.3l-137.4 137.4c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25C368.4 348.9 360.2 352 352 352z" />
+      </svg>
+    </button>
+  </div>
+</template>
+`],
+  ["frontend/vue/src/components/Common/ThemeToggle.vue.hbs", `<script setup lang="ts">
+import { computed } from 'vue'
+import { useTheme } from '@/providers/ThemeProvider'
+
+const { theme, setTheme, resolvedTheme } = useTheme()
+
+const isDark = computed(() => {
+  return theme.value === 'dark' || (theme.value === 'system' && resolvedTheme.value === 'dark')
+})
+
+const toggleTheme = () => {
+  setTheme(isDark.value ? 'light' : 'dark')
+}
+</script>
+
+<template>
+  <button
+    aria-label="Toggle Dark Mode"
+    @click="toggleTheme"
+    class="ml-3 focus:outline-none transition-transform hover:scale-110 active:scale-95"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      class="h-6 w-6 text-zinc-900 hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400 transition-colors"
+    >
+      <template v-if="isDark">
+        <path
+          fill-rule="evenodd"
+          d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+          clip-rule="evenodd"
+        />
+      </template>
+      <template v-else>
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+      </template>
+    </svg>
+  </button>
+</template>
+`],
+  ["frontend/vue/src/components/Mixins/Footer.vue.hbs", `<script setup lang="ts">
+import { RouterLink } from 'vue-router'
+import { InstagramIcon, LinkedInIcon, TwitterIcon, GitHubIcon } from '../Common/CustomIcons'
+
+const year = new Date().getFullYear()
+
+const footerLinks = [
+  {
+    title: 'Project',
+    links: [
+      { name: 'Fitur', href: '#features' },
+      { name: 'Cara Kerja', href: '#steps' },
+      { name: 'Harga', href: '/pricing' },
+      { name: 'Showcase', href: '/showcase' },
+    ],
+  },
+  {
+    title: 'Perusahaan',
+    links: [
+      { name: 'Tentang Kami', href: '/about' },
+      { name: 'Karir', href: '/career' },
+      { name: 'Blog', href: '/blog' },
+      { name: 'Kontak', href: '/contact' },
+    ],
+  },
+  {
+    title: 'Dukungan',
+    links: [
+      { name: 'Bantuan', href: '/help' },
+      { name: 'FAQ', href: '/faq' },
+      { name: 'Keamanan', href: '/security' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { name: 'Ketentuan', href: '/terms' },
+      { name: 'Privasi', href: '/privacy' },
+      { name: 'Lisensi', href: '/license' },
+    ],
+  },
+]
+
+const socials = [
+  { name: 'GitHub', icon: GitHubIcon, href: '#' },
+  { name: 'Twitter', icon: TwitterIcon, href: '#' },
+  { name: 'LinkedIn', icon: LinkedInIcon, href: '#' },
+  { name: 'Instagram', icon: InstagramIcon, href: '#' },
+]
+</script>
+
+<template>
+  <footer class="w-full bg-zinc-950 text-zinc-400 py-20 border-t border-zinc-900">
+    <div class="container mx-auto px-4">
+      <!-- Top Section: Brand & Newsletter -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 pb-20 border-b border-zinc-900">
+        <div class="lg:col-span-12 xl:col-span-5 space-y-8 text-center lg:text-left">
+          <RouterLink to="/" class="inline-flex items-center gap-3 text-white font-black text-3xl font-primary">
+            📦️ BikinProject
+          </RouterLink>
+          <p class="text-zinc-500 leading-relaxed font-semibold font-secondary text-lg max-w-xl mx-auto lg:mx-0">
+            CLI-based package starter generator yang dirancang untuk mempercepat workflow
+            pengembangan aplikasi Anda dengan standar industri.
+          </p>
+          <div class="flex justify-center lg:justify-start gap-5 pt-2">
+            <a
+              v-for="social in socials"
+              :key="social.name"
+              :href="social.href"
+              class="w-12 h-12 rounded-2xl bg-zinc-900 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all duration-300 border border-zinc-800 hover:scale-110 active:scale-95 shadow-lg group"
+              :aria-label="social.name"
+            >
+              <component :is="social.icon" class="w-6 h-6" />
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-12 xl:col-span-7 mt-8 xl:mt-0">
+          <div class="bg-zinc-900/40 rounded-[2.5rem] p-10 border border-zinc-800/50 space-y-6 backdrop-blur-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-[60px] rounded-full group-hover:bg-blue-600/20 transition-all duration-700" />
+            
+            <h3 class="text-2xl font-black text-white font-primary italic">Dapatkan Update Terbaru</h3>
+            <p class="text-zinc-400 font-medium font-secondary">Jadilah yang pertama tahu tentang fitur dan promo terbaru dari kami.</p>
+            <form class="flex flex-col sm:flex-row gap-4 pt-4 relative z-10">
+              <input
+                type="email"
+                placeholder="name@email.com"
+                class="flex-1 px-6 py-4 rounded-2xl bg-zinc-950 border-2 border-zinc-800 focus:outline-none focus:border-blue-500 transition-all font-mono text-white placeholder:text-zinc-600"
+              />
+              <button
+                type="submit"
+                class="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl transition-all shadow-[0_15px_30px_-10px_rgba(37,99,235,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Langganan
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle Section: Links -->
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-12 py-24">
+        <div v-for="group in footerLinks" :key="group.title" class="space-y-6">
+          <h4 class="text-white font-bold uppercase tracking-wider text-sm">
+            {{ group.title }}
+          </h4>
+          <ul class="space-y-4">
+            <li v-for="link in group.links" :key="link.name">
+              <RouterLink
+                :to="link.href"
+                class="hover:text-blue-500 hover:translate-x-1 inline-block transition-all duration-300"
+              >
+                {{ link.name }}
+              </RouterLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Section: Copyright -->
+      <div class="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-sm tracking-wide">
+        <p>© {{ year }} BikinProject. Seluruh hak cipta dilindungi undang-undang.</p>
+      </div>
+    </div>
+  </footer>
+</template>
+`],
+  ["frontend/vue/src/components/Mixins/Navbar/constant/navLinks.ts.hbs", `export const navlinks = [
+  { title: 'Beranda', path: '/' },
+  { title: 'Fitur', path: '#features' },
+  { title: 'Cara Kerja', path: '#steps' },
+  { title: 'Tentang', path: '/about' },
+  { title: 'Kontak', path: '/contact' },
+];
+`],
+  ["frontend/vue/src/components/Mixins/Navbar/index.vue.hbs", `<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+import { cn } from '@/lib/utils'
+import { navlinks } from './constant/navLinks'
+import ThemeToggle from '@/components/Common/ThemeToggle.vue'
+import { useBreakpoints, breakpointsTailwind } from '@vueuse/core'
+
+const route = useRoute()
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const isMobile = breakpoints.smaller('lg')
+
+const isOpen = ref(false)
+const isScrolled = ref(false)
+
+const handleScroll = () => {
+  isScrolled.value = window.pageYOffset > 0
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+const toggleMenu = () => {
+  isOpen.value = !isOpen.value
+}
+
+const isActive = (path: string) => {
+  if (path === '/') return route.path === '/'
+  return route.path.startsWith(path)
+}
+</script>
+
+<template>
+  <header
+    :class="
+      cn(
+        'fixed top-0 left-0 w-full flex items-center z-[50] transition-all duration-300',
+        isScrolled || (isMobile && isOpen) ? 'navbarFixed' : 'bg-transparent',
+      )
+    "
+  >
+    <div class="container mx-auto">
+      <div class="flex items-center justify-between relative">
+        <div class="px-4">
+          <RouterLink
+            to="/"
+            class="inline-flex items-center gap-2 font-primary font-bold text-xl lg:text-2xl py-6 text-zinc-900 dark:text-white"
+            aria-label="logo"
+          >
+            📦️ BikinProject
+          </RouterLink>
+        </div>
+        <div class="flex items-center px-4">
+          <button
+            id="hamburger"
+            name="hamburger"
+            type="button"
+            :class="
+              cn('right-4 block absolute lg:hidden outline-none', isOpen && 'hamburgerActive')
+            "
+            @click="toggleMenu"
+          >
+            <span
+              :class="
+                cn(
+                  'hamburgerLine',
+                  'bg-black dark:bg-white origin-top-left transition duration-300 ease-in-out',
+                )
+              "
+            ></span>
+            <span
+              :class="
+                cn('hamburgerLine', 'bg-black dark:bg-white transition duration-300 ease-in-out')
+              "
+            ></span>
+            <span
+              :class="
+                cn(
+                  'hamburgerLine',
+                  'bg-black dark:bg-white origin-bottom-left transition duration-300 ease-in-out',
+                )
+              "
+            ></span>
+          </button>
+
+          <nav
+            id="navMenu"
+            :class="
+              cn(
+                'absolute py-5 shadow-lg rounded-lg max-w-[250px] w-full right-4 top-[calc(100%+0.5rem)] lg:block lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none transition-all duration-300',
+                !isOpen && 'hidden',
+                isMobile && 'bg-white/90 dark:bg-zinc-900/90 backdrop-blur-lg',
+              )
+            "
+          >
+            <ul class="block lg:flex lg:items-center">
+              <li v-for="(link, i) in navlinks" :key="i" class="group">
+                <RouterLink
+                  :to="link.path"
+                  :class="
+                    cn('navLink', 'mx-8 lg:mx-4 flex', isActive(link.path) && 'navLinkActive')
+                  "
+                >
+                  {{ link.title }}
+                </RouterLink>
+              </li>
+              <li class="ml-8 lg:ml-6 flex items-center gap-6 py-4 lg:py-0">
+                <RouterLink
+                  to="/login"
+                  class="text-zinc-500 dark:text-zinc-400 font-medium hover:text-zinc-900 dark:hover:text-white transition-colors"
+                >
+                  Masuk
+                </RouterLink>
+                <RouterLink
+                  to="/register"
+                  class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  Daftar
+                </RouterLink>
+              </li>
+
+              <li class="ml-8 lg:ml-4 flex items-center">
+                <ThemeToggle />
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+</template>
+
+<style scoped>
+.navbarFixed {
+  @apply fixed z-[9999] bg-transparent shadow-md backdrop-blur-md;
+}
+
+.hamburgerLine {
+  @apply w-[30px] h-[2px] my-2 block;
+}
+
+.hamburgerActive > span:nth-child(1) {
+  @apply rotate-45;
+}
+
+.hamburgerActive > span:nth-child(2) {
+  @apply scale-0;
+}
+
+.hamburgerActive > span:nth-child(3) {
+  @apply -rotate-45;
+}
+
+.navLink {
+  @apply relative py-2 text-zinc-600 dark:text-zinc-400 font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400;
+}
+
+.navLink::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300;
+}
+
+.navLink:hover::after,
+.navLinkActive::after {
+  @apply w-full;
+}
+
+.navLinkActive {
+  @apply text-blue-600 dark:text-blue-400;
+}
+</style>
+`],
+  ["frontend/vue/src/components/Pages/Home/Features.vue.hbs", `<script setup lang="ts">
+const features = [
+  {
+    title: 'Zero Config',
+    description:
+      'Lupakan setup yang rumit. Mulai project Anda dalam hitungan detik dengan konfigurasi yang sudah dioptimalkan.',
+    icon: '⚙️',
+    color: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+  },
+  {
+    title: 'Interactive CLI',
+    description:
+      'Antarmuka baris perintah yang interaktif dan intuitif, memudahkan Anda memilih opsi project.',
+    icon: '💻',
+    color: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400',
+  },
+  {
+    title: 'Multi-framework',
+    description:
+      'Mendukung berbagai framework populer seperti Next.js, React, Laravel, dan akan terus bertambah.',
+    icon: '📚',
+    color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
+  },
+  {
+    title: 'Standardisasi Kode',
+    description:
+      'Setiap project dihasilkan dengan struktur folder dan standar kode terbaik yang konsisten.',
+    icon: '🛠️',
+    color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  },
+  {
+    title: 'Developer Experience',
+    description:
+      'Dibuat dengan fokus utama pada kenyamanan developer untuk produktivitas maksimal.',
+    icon: '✨',
+    color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+  },
+  {
+    title: 'Open Source',
+    description:
+      'Didukung oleh komunitas dan bebas untuk dikustomisasi sesuai kebutuhan spesifik Anda.',
+    icon: '🌐',
+    color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+  },
+]
+</script>
+
+<template>
+  <section id="features" class="py-24 bg-zinc-50 dark:bg-zinc-900">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <h2 class="text-3xl md:text-5xl font-extrabold text-zinc-950 dark:text-white">
+          Fitur Unggulan Kami
+        </h2>
+        <p class="text-lg text-zinc-700 dark:text-zinc-400 font-medium tracking-tight">
+          Segala yang Anda butuhkan untuk membangun project modern dalam satu platform yang
+          terintegrasi.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div
+          v-for="(feature, index) in features"
+          :key="index"
+          class="p-8 bg-white dark:bg-zinc-950 rounded-3xl border-2 border-zinc-100 dark:border-zinc-800 hover:border-blue-600 dark:hover:border-blue-500 transition-all duration-300 group hover:shadow-2xl hover:shadow-blue-500/10"
+        >
+          <div
+            :class="\`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6 \${feature.color} border border-transparent group-hover:border-current transition-all duration-300 group-hover:scale-110 shadow-sm\`"
+          >
+            {{ feature.icon }}
+          </div>
+          <h3 class="text-xl font-bold text-zinc-950 dark:text-white mb-3">
+            {{ feature.title }}
+          </h3>
+          <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed font-medium">
+            {{ feature.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+`],
+  ["frontend/vue/src/components/Pages/Home/Hero.vue.hbs", `<script setup lang="ts">
+import { RouterLink } from 'vue-router'
+import { Copy } from 'lucide-vue-next'
+
+const copyToClipboard = () => {
+  navigator.clipboard.writeText('npx bikinproject@latest')
+}
+</script>
+
+<template>
+  <section
+    class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-zinc-950 pt-32 pb-20"
+  >
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+      <div
+        class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 dark:bg-blue-500/10 blur-[120px] rounded-full"
+      />
+      <div
+        class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-600/10 dark:bg-cyan-500/10 blur-[120px] rounded-full"
+      />
+    </div>
+
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <!-- Left Side: Content -->
+        <div class="lg:w-1/2 space-y-8 text-left">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400 text-sm font-semibold shadow-sm"
+          >
+            <span class="relative flex h-2 w-2">
+              <span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"
+              ></span>
+              <span
+                class="relative inline-flex rounded-full h-2 w-2 bg-blue-600 dark:bg-blue-500"
+              ></span>
+            </span>
+            CLI-Based Project Generator
+          </div>
+
+          <h1
+            class="text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-950 dark:text-white leading-tight"
+          >
+            Bikin Project Jadi <br />
+            <span
+              class="inline-block py-1 bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-sky-400 dark:from-blue-400 dark:to-cyan-400"
+            >
+              Lebih Sat-Set & Terstruktur
+            </span>
+          </h1>
+
+          <p
+            class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 max-w-xl leading-relaxed font-medium"
+          >
+            Generator starter project yang didesain untuk kenyamanan developer. Lupakan setup
+            manual, cukup satu perintah dan project Anda siap tempur.
+          </p>
+
+          <div
+            class="bg-zinc-100 dark:bg-zinc-900 p-4 rounded-2xl border-2 border-zinc-200 dark:border-zinc-800 font-mono text-sm md:text-base flex items-center justify-between group"
+          >
+            <span class="text-zinc-800 dark:text-zinc-200">
+              <span class="text-blue-600 dark:text-blue-400">$</span> npx bikinproject@latest
+            </span>
+            <button
+              @click="copyToClipboard"
+              class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg transition-colors text-zinc-500 hover:text-blue-600"
+              title="Copy to clipboard"
+            >
+              <Copy :size="20" />
+            </button>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
+            <RouterLink
+              to="/register"
+              class="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Coba Sekarang
+            </RouterLink>
+            <a
+              href="#features"
+              class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white font-bold rounded-2xl border-2 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300"
+            >
+              Lihat Fitur
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Side: Terminal Mock-up -->
+        <div class="lg:w-1/2 w-full animate-float">
+          <div
+            class="w-full max-w-2xl mx-auto rounded-3xl overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 shadow-2xl"
+          >
+            <div
+              class="bg-zinc-100 dark:bg-zinc-900 px-4 py-3 flex items-center gap-2 border-b-2 border-zinc-200 dark:border-zinc-800"
+            >
+              <div class="flex gap-1.5">
+                <div class="w-3.5 h-3.5 rounded-full bg-rose-500/40" />
+                <div class="w-3.5 h-3.5 rounded-full bg-amber-500/40" />
+                <div class="w-3.5 h-3.5 rounded-full bg-emerald-500/40" />
+              </div>
+              <div class="mx-auto text-xs font-mono text-zinc-500 font-medium">
+                bash — create-bikinproject-app
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-zinc-950 p-6 font-mono text-sm leading-relaxed overflow-x-auto h-[400px]"
+            >
+              <div class="space-y-2">
+                <p class="text-zinc-400">┌ create-bikinproject-app</p>
+                <p class="flex gap-3">
+                  <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                  <span class="text-zinc-800 dark:text-zinc-200">
+                    ◇ Where should we create your project?
+                  </span>
+                </p>
+                <p class="flex gap-3">
+                  <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                  <span class="text-cyan-600 dark:text-cyan-400 font-bold underline">
+                    ./your-project
+                  </span>
+                </p>
+                <p class="text-zinc-400">│</p>
+                <p class="flex gap-3">
+                  <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                  <span class="text-zinc-800 dark:text-zinc-200">◇ Pick a project type</span>
+                </p>
+                <p class="flex gap-3">
+                  <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                  <span class="text-cyan-600 dark:text-cyan-400 font-bold">
+                    ● Next.js App Router (Tailwind + TypeScript)
+                  </span>
+                </p>
+                <div class="flex gap-3">
+                  <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                  <span class="text-zinc-500">○ React.js (Tailwind + JavaScript)</span>
+                </div>
+                <p class="text-zinc-400">│</p>
+                <p class="flex gap-3">
+                  <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                  <span class="text-emerald-600 dark:text-emerald-400">
+                    ⏳ Creating project...
+                  </span>
+                </p>
+                <p class="flex gap-3">
+                  <span class="text-cyan-600 dark:text-cyan-400">│</span>
+                  <span class="text-emerald-600 dark:text-emerald-400">
+                    ✅ Project created successfully!
+                  </span>
+                </p>
+                <p class="text-zinc-400">│</p>
+                <p class="text-zinc-400 text-xs">────────────────────────╮</p>
+                <p class="text-blue-600 dark:text-blue-400 font-bold">🎉 Project ready to use!</p>
+                <p class="text-zinc-400 text-xs">────────────────────────╯</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+`],
+  ["frontend/vue/src/components/Pages/Home/Steps.vue.hbs", `<script setup lang="ts">
+const steps = [
+  {
+    number: '01',
+    title: 'Jalankan Command',
+    description:
+      'Buka terminal favorit Anda dan jalankan "npx bikinproject@latest". Tidak perlu instalasi global yang memberatkan sistem.',
+  },
+  {
+    number: '02',
+    title: 'Pilih Konfigurasi',
+    description:
+      'Pilih framework (Next.js, React, Laravel), bahasa (TS/JS), dan CSS framework melalui antarmuka CLI yang interaktif.',
+  },
+  {
+    number: '03',
+    title: 'Project Siap!',
+    description:
+      'BikinProject akan men-generate starter project lengkap dengan best practices, siap untuk Anda kembangkan lebih lanjut.',
+  },
+]
+</script>
+
+<template>
+  <section id="steps" class="py-24 bg-white dark:bg-zinc-950">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-1/2 space-y-8">
+          <h2
+            class="text-3xl md:text-5xl font-extrabold text-zinc-950 dark:text-white leading-tight"
+          >
+            Langkah Sederhana <br />
+            Untuk Project Terpercaya
+          </h2>
+          <p class="text-lg text-zinc-700 dark:text-zinc-400 font-medium tracking-tight">
+            Kami menyederhanakan proses kompleks menjadi langkah-langkah yang mudah dipahami,
+            memastikan Anda selalu terlibat dalam setiap progres.
+          </p>
+          <div class="pt-4">
+            <button
+              class="px-8 py-4 bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 font-bold rounded-2xl hover:scale-105 transition-transform duration-300 shadow-lg shadow-zinc-500/10"
+            >
+              Mulai Konsultasi
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:w-1/2 w-full space-y-8">
+          <div
+            v-for="(step, index) in steps"
+            :key="index"
+            class="flex items-start gap-6 p-6 rounded-3xl border-2 border-transparent hover:border-zinc-100 dark:hover:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-all duration-300 group"
+          >
+            <div
+              class="text-4xl font-black text-blue-600/20 dark:text-blue-500/20 group-hover:text-blue-600 dark:group-hover:text-blue-500 transition-colors duration-300 shrink-0"
+            >
+              {{ step.number }}
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-xl font-bold text-zinc-950 dark:text-white">{{ step.title }}</h3>
+              <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed font-medium text-justify">
+                {{ step.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+`],
+  ["frontend/vue/src/components/README.md", `# Arsitektur Komponen
+
+Terdapat beberapa poin penting terkait bagaimana menjalankan proyek arsitektur yang benar. Untuk studi kasus kali ini, Saya telah membuatkan sebuah templat proyek kosong yang sudah Saya kustomisasi yang sekiranya sudah mengimplementasi bagaimana cara mengatur proyek arsitektur yang baik agar terlihat rapi.
+
+### Common
+
+Folder \`Common\` terletak pada \`/src/components/Common/\`. Folder ini berisi komponen-komponen atomik atau elemen UI dasar yang bersifat reusable dan independen.
+Contoh: Tombol (\`Button\`), Input, Modal, Icon kustom, dll.
+
+### Mixins
+
+Folder \`Mixins\` terletak pada \`/src/components/Mixins/\`. Folder ini berisi komponen-komponen hasil gabungan atau komposisi dari beberapa komponen \`Common\` untuk membentuk fitur yang lebih kompleks.
+Contoh: Navbar (gabungan dari Logo, Links, dan Theme Toggle), Footer, Sidebar, dll.
+
+## Struktur Folder Lainnya
+
+- **app/**: Berisi halaman (pages) dan layout utama menggunakan Next.js App Router.
+- **hooks/**: Berisi custom logic React hooks yang dapat digunakan kembali di berbagai komponen.
+- **lib/**: Berisi fungsi utilitas dan konfigurasi library pihak ketiga.
+- **data/**: Berisi data statis, konstanta, dan metadata situs.
+`],
+  ["frontend/vue/src/data/siteMetadata.ts.hbs", `export const siteMetadata = {
+  title: 'BikinProject Vue Template by Naufal Akbar Nugroho',
+  author: 'Naufal Akbar Nugroho',
+  headerTitle: 'BikinProject',
+  headerMobTitle: 'BikinProject',
+  description:
+    'Saya bersemangat memberikan kontribusi untuk memberikan pengetahuan teknologi bagi semua orang!',
+  language: 'id-ID',
+  theme: 'system', // system, dark or light
+  siteUrl: 'http://localhost:3000', // e.g. https://yourwebsite.com
+  siteRepo: 'https://github.com/nuflakbrr/frontend-template',
+  sitePublicRepo: 'https://github.com/nuflakbrr/frontend-template',
+  siteLogo: '/static/favicons/icon-512x512.png',
+  image: '/static/images/profile-picture.png',
+  socialBanner: '/static/images/twitter-card.png',
+  email: 'naufalakbar378@gmail.com',
+  instagram: 'https://www.instagram.com/kbrnugroho',
+  github: 'https://www.github.com/nuflakbrr',
+  x: 'https://www.twitter.com/nuflakbrr',
+  linkedin: 'https://www.linkedin.com/in/nuflakbrr/',
+  facebook: 'https://www.facebook.com',
+  youtube: 'https://www.youtube.com',
+  locale: 'id-ID',
+  analytics: {
+    // If you want to use an analytics provider you have to add it to the
+    // content security policy in the \`next.config.js\` file.
+    // supports Plausible, Simple Analytics, Umami, Posthog or Google Analytics.
+    umamiAnalytics: {
+      // We use an env variable for this site to avoid other users cloning our analytics ID
+      umamiWebsiteId: import.meta.env.VITE_UMAMI_ID, // e.g. 123e4567-e89b-12d3-a456-426614174000
+      // You may also need to overwrite the script if you're storing data in the US - ex:
+      // src: 'https://us.umami.is/script.js'
+      // Remember to add 'us.umami.is' in \`next.config.js\` as a permitted domain for the CSP
+    },
+    // plausibleAnalytics: {
+    //   plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
+    // If you are hosting your own Plausible.
+    //   src: '', // e.g. https://plausible.my-domain.com/js/script.js
+    // },
+    // simpleAnalytics: {},
+    // posthogAnalytics: {
+    //   posthogProjectApiKey: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
+    // },
+    // googleAnalytics: {
+    //   googleAnalyticsId: '', // e.g. G-XXXXXXX
+    // },
+  },
+  newsletter: {
+    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
+    // Please add your .env file and modify it according to your selection
+    provider: 'buttondown',
+  },
+};
+`],
+  ["frontend/vue/src/hooks/useAxios.ts.hbs", `import axios, { type AxiosInstance } from 'axios';
+import https from 'https';
+
+const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
+export const createNewClient: () => AxiosInstance = () => {
+  const BASE_API = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/';
+
+  return axios.create({
+    baseURL: BASE_API,
+    headers: {
+      Accept: 'application/json',
+    },
+    httpsAgent,
+  });
+};
+
+export const client: AxiosInstance = createNewClient();
+
+type HookType = (accessToken?: string) => AxiosInstance;
+
+export const useAxios: HookType = (accessToken) => {
+  client.interceptors.request.use((config) => {
+    const newConfig = { ...config };
+
+    if (accessToken) {
+      newConfig.headers.Authorization = \`Bearer \${accessToken}\`;
+    }
+
+    return newConfig;
+  });
+
+  return client;
+};
+
+export const { isAxiosError } = axios;
+`],
+  ["frontend/vue/src/hooks/useClipboard.ts.hbs", `const useClipboard = () => {
+  const copy = async (txt: string) => {
+    try {
+      await navigator.clipboard.writeText(txt);
+      alert('Copied to clipboard!'); // replace this line with your toast notification
+    } catch (err) {
+      console.error(err);
+      alert('Failed to copy to clipboard!'); // replace this line with your toast notification
+    }
+  };
+
+  return { copy };
+};
+
+export default useClipboard;
+`],
+  ["frontend/vue/src/hooks/useDebounce.ts.hbs", `import { ref, type Ref } from 'vue';
+
+export const useDebounce = <T>(initialValue: T, delay = 300): [Ref<T>, (value: T) => void] => {
+  const debouncedValue = ref(initialValue) as Ref<T>;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  const setDebouncedHandler = (newValue: T) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      debouncedValue.value = newValue;
+    }, delay);
+  };
+
+  return [debouncedValue, setDebouncedHandler];
+};
+
+export default useDebounce;
+`],
+  ["frontend/vue/src/hooks/useHasMounted.ts.hbs", `import { ref, onMounted } from 'vue';
+
+export function useHasMounted() {
+  const hasMounted = ref(false);
+
+  onMounted(() => {
+    hasMounted.value = true;
+  });
+
+  return hasMounted;
+}
+
+export default useHasMounted;
+`],
+  ["frontend/vue/src/hooks/useMobileResponsive.ts.hbs", `import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
+
+/**
+ * Hook to detect if the current screen size is mobile/tablet (below 'lg' breakpoint).
+ * @returns Ref<boolean>
+ */
+export const useMobileResponsive = () => {
+  const breakpoints = useBreakpoints(breakpointsTailwind);
+  return breakpoints.smaller('lg');
+};
+
+export default useMobileResponsive;
+`],
+  ["frontend/vue/src/hooks/useScreenSize.ts.hbs", `import { computed } from 'vue';
+import { useWindowSize } from '@vueuse/core';
+
+const useScreenSize = () => {
+  const { width } = useWindowSize();
+
+  const screenSize = computed(() => {
+    const w = width.value;
+
+    if (w <= 374) {
+      return 'Mobile XS';
+    } else if (w >= 375 && w <= 424) {
+      return 'Mobile M';
+    } else if (w >= 425 && w <= 767) {
+      return 'Mobile L';
+    } else if (w >= 768 && w <= 1023) {
+      return 'Tablet';
+    } else if (w >= 1024 && w <= 1439) {
+      return 'Laptop';
+    } else if (w >= 1440 && w <= 2559) {
+      return 'Laptop LG';
+    } else if (w >= 2560) {
+      return 'Laptop XL';
+    }
+
+    return undefined;
+  });
+
+  return screenSize;
+};
+
+export default useScreenSize;
+`],
+  ["frontend/vue/src/hooks/useSeo.ts.hbs", `import { useHead, useSeoMeta } from '@unhead/vue'
+import { siteMetadata } from '@/data/siteMetadata'
+
+interface SeoOptions {
+  title?: string
+  description?: string
+  ogType?: 'website' | 'article' | 'profile'
+  ogImage?: string
+  twitterCard?: 'summary' | 'summary_large_image'
+  canonical?: string
+}
+
+export const useSeo = (options: SeoOptions = {}) => {
+  const {
+    title,
+    description = siteMetadata.description,
+    ogType = 'website',
+    ogImage = siteMetadata.socialBanner,
+    twitterCard = 'summary_large_image',
+    canonical,
+  } = options
+
+  const fullTitle = title ? \`\${title} | \${siteMetadata.headerTitle}\` : siteMetadata.title
+
+  useHead({
+    title: fullTitle,
+    link: [
+      {
+        rel: 'canonical',
+        href: canonical || siteMetadata.siteUrl,
+      },
+    ],
+  })
+
+  useSeoMeta({
+    title: fullTitle,
+    description,
+    ogTitle: fullTitle,
+    ogDescription: description,
+    ogType,
+    ogUrl: canonical || siteMetadata.siteUrl,
+    ogImage,
+    twitterTitle: fullTitle,
+    twitterDescription: description,
+    twitterCard,
+    twitterImage: ogImage,
+  })
+}
+`],
+  ["frontend/vue/src/hooks/useSort.ts.hbs", `import { ref, type Ref } from 'vue';
+import { type SortDirection } from '@/interfaces/hooks/useSort';
+
+export type SortHookReturn = {
+  sortBy: Ref<string>;
+  direction: Ref<SortDirection>;
+  handleSort: (field: string) => void;
+};
+
+export function useSort(): SortHookReturn {
+  const direction = ref<SortDirection>({ field: '', direction: '' });
+  const sortBy = ref<string>('');
+
+  const handleSort = (field: string): void => {
+    if (!field) return;
+
+    let newDirection = '';
+
+    if (direction.value.field !== field || direction.value.direction === '') {
+      newDirection = 'asc';
+    } else if (direction.value.direction === 'asc') {
+      newDirection = 'desc';
+    } else if (direction.value.direction === 'desc') {
+      newDirection = '';
+    }
+
+    direction.value = { field, direction: newDirection };
+    const sortParam = newDirection === 'asc' ? field : \`-\${field}\`;
+
+    if (newDirection === '') {
+      deleteSort();
+    } else {
+      handleChangeSort(sortParam);
+    }
+  };
+
+  const deleteSort = (): void => {
+    sortBy.value = '';
+  };
+
+  const handleChangeSort = (field: string): void => {
+    sortBy.value = field;
+  };
+
+  return {
+    sortBy,
+    direction,
+    handleSort,
+  };
+}
+
+export default useSort;
+`],
+  ["frontend/vue/src/index.css.hbs", `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth !important;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth !important;
+}
+`],
+  ["frontend/vue/src/interfaces/error.ts.hbs", `export interface ErrorStateProps {
+  code: number
+  error?: Error
+}
+
+export interface ErrorMetadata {
+  titlePrefix: string
+  titleSuffix: string
+  description: string
+  badge: string
+  theme: 'rose' | 'amber' | 'emerald'
+}
+
+export interface ErrorTheme {
+  badgeColor: string
+  pingColor: string
+  dotColor: string
+  gradient: string
+  glowStart: string
+  glowEnd: string
+  terminalIcon: string
+  borderType: string
+  errorColor: string
+}`],
+  ["frontend/vue/src/interfaces/hooks/useSort.ts.hbs", `import { type Ref } from 'vue';
+
+export interface SortDirection {
+  field: string;
+  direction: string;
+}
+
+export type SortHookReturn = {
+  sortBy: Ref<string>;
+  direction: Ref<SortDirection>;
+  handleSort: (field: string) => void;
+};`],
+  ["frontend/vue/src/interfaces/providers/ThemeProvider.ts.hbs", `export type Theme = 'light' | 'dark' | 'system';
+
+export interface ThemeContextType {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  resolvedTheme: 'light' | 'dark';
+}`],
+  ["frontend/vue/src/interfaces/seo.ts.hbs", `export interface PageSEOProps {
+  title: string;
+  description?: string;
+  image?: string;
+
+  [key: string]: string | number | boolean | undefined;
+}
+`],
+  ["frontend/vue/src/layouts/MainLayout.vue.hbs", `<script setup lang="ts">
+import Navbar from '@/components/Mixins/Navbar/index.vue'
+import Footer from '@/components/Mixins/Footer.vue'
+import ScrollToTop from '@/components/Common/ScrollToTop.vue'
+import { useSeo } from '@/hooks/useSeo'
+
+useSeo()
+</script>
+
+<template>
+  <Navbar />
+  <main class="min-h-screen">
+    <slot />
+  </main>
+  <ScrollToTop />
+  <Footer />
+</template>
+`],
+  ["frontend/vue/src/lib/formatCurrency.ts.hbs", `export const formatCurrency = (num: number) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  }).format(Number(num));
+};
+`],
+  ["frontend/vue/src/lib/formatLocalTime.ts.hbs", `export const formatLocalTime = (time: string | number | Date) => {
+  const date = new Date(time);
+  return \`\${date.getDate()}/\${Number(date.getMonth()) + 1}/\${date.getFullYear()}\`;
+};
+`],
+  ["frontend/vue/src/lib/utils.ts.hbs", `import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+`],
+  ["frontend/vue/src/main.ts.hbs", `import { createApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { routes } from 'vue-router/auto-routes'
+import { createHead } from '@unhead/vue/client'
+
+import App from './App.vue'
+import './index.css'
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
+
+const head = createHead()
+
+createApp(App).use(router).use(head as any).mount('#app')
+`],
+  ["frontend/vue/src/providers/ThemeProvider.ts.hbs", `import { provide, inject, ref, watchEffect, readonly, type InjectionKey, type Ref } from 'vue';
+import { useColorMode, useLocalStorage } from '@vueuse/core';
+
+export type Theme = 'light' | 'dark' | 'system';
+
+export interface ThemeContextType {
+  theme: Ref<Theme>;
+  setTheme: (theme: Theme) => void;
+  resolvedTheme: Ref<'light' | 'dark'>;
+}
+
+export const ThemeSymbol: InjectionKey<ThemeContextType> = Symbol('ThemeContext');
+
+export const useThemeProvider = (defaultTheme: Theme = 'system', storageKey: string = 'theme-preference') => {
+  const theme = useLocalStorage<Theme>(storageKey, defaultTheme);
+  const colorMode = useColorMode({
+    selector: 'html',
+    attribute: 'class',
+    initialValue: defaultTheme,
+    storageKey: storageKey,
+  });
+
+  const resolvedTheme = ref<'light' | 'dark'>(colorMode.value as 'light' | 'dark');
+
+  watchEffect(() => {
+    resolvedTheme.value = colorMode.value as 'light' | 'dark';
+  });
+
+  const setTheme = (newTheme: Theme) => {
+    theme.value = newTheme;
+    colorMode.value = newTheme;
+  };
+
+  const context: ThemeContextType = {
+    theme: theme,
+    setTheme,
+    resolvedTheme: readonly(resolvedTheme),
+  };
+
+  provide(ThemeSymbol, context);
+
+  return context;
+};
+
+export const useTheme = () => {
+  const context = inject(ThemeSymbol);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
+`],
+  ["frontend/vue/src/vite-env.d.ts", `/// <reference types="vite/client" />
+`],
+  ["frontend/vue/tailwind.config.ts.hbs", `import type { Config } from "tailwindcss";
+
+const config: Config = {
+	darkMode: "class",
+	content: [
+		"./src/pages/**/*.{vue,js,ts,jsx,tsx,mdx}",
+		"./src/components/**/*.{vue,js,ts,jsx,tsx,mdx}",
+		"./src/app/**/*.{vue,js,ts,jsx,tsx,mdx}",
+		"./src/**/*.{vue,js,ts,jsx,tsx,mdx}",
+	],
+	theme: {
+		fontFamily: {
+			sans: [
+				'Plus Jakarta Sans',
+				'system-ui',
+				'-apple-system',
+				'sans-serif'
+			]
+		},
+		extend: ({
+			boxShadow: {
+				md: '0px 2px 4px -1px rgba(175, 182, 201, 0.2);',
+				lg: '0 1rem 3rem rgba(0, 0, 0, 0.175)',
+				'dark-md': 'rgba(145, 158, 171, 0.3) 0px 0px 2px 0px, rgba(145, 158, 171, 0.02) 0px 12px 24px -4px',
+				sm: '0 6px 24.2px -10px rgba(41, 52, 61, .22)',
+				'btn-shadow': 'box-shadow: rgba(0, 0, 0, .05) 0 9px 17.5px',
+				tw: 'rgba(175, 182, 201, 0.2) 0px 2px 4px -1px',
+				btnshdw: '0 17px 20px -8px rgba(77, 91, 236, .231372549)',
+				elevation1: '0px 12px 30px -2px rgba(58,75,116,0.14);',
+				elevation2: '0px 24px 24px -12px rgba(0,0,0,0.05);',
+				elevation3: '0px 24px 24px -12px rgba(99,91,255,0.15);',
+				elevation4: '0px 12px 12px -6px rgba(0,0,0,0.15);'
+			},
+			borderRadius: {
+				sm: "6px",
+				md: "9px",
+				lg: "24px",
+				tw: "12px",
+				bb: "20px",
+			},
+			container: {
+				center: true,
+				padding: '20px'
+			},
+			letterSpacing: {
+				tightest: '-.075em',
+				tighter: '-.05em',
+				tight: '-.025em',
+				normal: '0',
+				wide: '.025em',
+				wider: '.05em',
+				widest: '1.5px',
+				'-2': '-0.02em',
+				'6': '0.06em'
+			},
+			gap: {
+				'30': '30px'
+			},
+			padding: {
+				'30': '30px'
+			},
+			margin: {
+				'30': '30px'
+			},
+			fontSize: {
+				'15': '15px',
+				'17': '17px',
+				'13': '13px',
+				'22': '22px',
+				'28': '28px',
+				'34': '34px',
+				'40': ['40px', { lineHeight: '120%', letterSpacing: '-0.02em' }],
+				'44': '44px',
+				'50': '50px',
+				'56': ['56px', { lineHeight: '120%', letterSpacing: '-0.02em' }],
+				'64': '64px',
+				// Hero/Title Text
+				'hero-h1': ['56px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'hero-h2': ['48px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'hero-h3': ['40px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'hero-h4': ['32px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'hero-h5': ['24px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'hero-h6': ['20px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				// Heading Text
+				'heading-h1': ['40px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'heading-h2': ['32px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'heading-h3': ['24px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'heading-h4': ['18px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'heading-h5': ['16px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				'heading-h6': ['14px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '700' }],
+				// Body Text
+				'body-xl': ['20px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '600' }],
+				'body-xl-regular': ['20px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '400' }],
+				'body-l': ['18px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '500' }],
+				'body-l-regular': ['18px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '400' }],
+				'body-m': ['16px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '500' }],
+				'body-m-regular': ['16px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '400' }],
+				'body-s': ['14px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '500' }],
+				'body-s-regular': ['14px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '400' }],
+				'body-xs': ['12px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '600' }],
+				'body-xs-regular': ['12px', { lineHeight: '120%', letterSpacing: '-0.02em', fontWeight: '400' }],
+				// Caption Text
+				'caption-l': ['14px', { lineHeight: '120%', letterSpacing: '0.06em', fontWeight: '500' }],
+				'caption-s': ['12px', { lineHeight: '120%', letterSpacing: '0.06em', fontWeight: '500' }],
+			},
+			colors: {
+				black: '#2A3547',
+				cyan: {
+					'500': 'var(--color-primary)',
+					'600': 'var(--color-primary)',
+					'700': 'var(--color-primary)'
+				},
+				primary: ({ opacityValue, opacityVariable }: { opacityValue?: string; opacityVariable?: string }) => {
+					if (opacityValue !== undefined) {
+						return \`rgba(var(--color-primary-rgb), \${opacityValue})\`;
+					}
+					if (opacityVariable !== undefined) {
+						return \`rgba(var(--color-primary-rgb), var(\${opacityVariable}, 1))\`;
+					}
+					return \`rgb(var(--color-primary-rgb))\`;
+				},
+				secondary: 'var(--color-secondary)',
+				info: 'var(--color-info)',
+				success: 'var(--color-success)',
+				warning: 'var(--color-warning)',
+				// error: 'var(--color-error)',
+				error: ({ opacityValue, opacityVariable }: { opacityValue?: string; opacityVariable?: string }) => {
+					if (opacityValue !== undefined) {
+						return \`rgba(var(--color-error-rgb), \${opacityValue})\`;
+					}
+					if (opacityVariable !== undefined) {
+						return \`rgba(var(--color-error-rgb), var(\${opacityVariable}, 1))\`;
+					}
+					return \`rgb(var(--color-error-rgb))\`;
+				},
+				lightprimary: 'var(--color-lightprimary)',
+				lightsecondary: 'var(--color-lightsecondary)',
+				lightsuccess: 'var( --color-lightsuccess)',
+				lighterror: 'var(--color-lighterror)',
+				lightinfo: 'var(--color-lightinfo)',
+				lightwarning: 'var(--color-lightwarning)',
+				border: 'var(--color-border)',
+				bordergray: 'var(--color-bordergray)',
+				lightgray: 'var( --color-lightgray)',
+				muted: 'var(--color-muted)',
+				lighthover: 'var(--color-lighthover)',
+				surface: 'var(--color-surface-ld)',
+				sky: 'var(--color-sky)',
+				bodytext: 'var(--color-bodytext)',
+				dark: 'var(--color-dark)',
+				link: 'var(--color-link)',
+				darklink: 'var(--color-darklink)',
+				darkborder: 'var(--color-darkborder)',
+				darkgray: 'var(--color-darkgray)',
+				primaryemphasis: 'var(--color-primary-emphasis)',
+				secondaryemphasis: 'var(--color-secondary-emphasis)',
+				warningemphasis: 'var(--color-warning-emphasis)',
+				erroremphasis: 'var(--color-error-emphasis)',
+				successemphasis: 'var(--color-success-emphasis)',
+				infoemphasis: 'var(--color-info-emphasis)',
+				darkmuted: 'var( --color-darkmuted)'
+			}
+		} as any)
+	},
+	plugins: [
+		require("tailwindcss-animate")
+	],
+};
+export default config;
+`],
+  ["frontend/vue/tsconfig.app.json.hbs", `{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "types": ["node"]
+  }
+}
+`],
+  ["frontend/vue/tsconfig.json.hbs", `{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
+}
+`],
+  ["frontend/vue/tsconfig.node.json.hbs", `// TSConfig for modules that run in Node.js environment via either transpilation or type-stripping.
+{
+  "extends": "@tsconfig/node24/tsconfig.json",
+  "include": [
+    "vite.config.*",
+    "vitest.config.*",
+    "cypress.config.*",
+    "nightwatch.conf.*",
+    "playwright.config.*",
+    "eslint.config.*"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "vite-plugin-vue-devtools": ["./node_modules/vite-plugin-vue-devtools/dist/vite.d.ts"]
+    },
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "types": ["node"]
+  }
+}
+`],
+  ["frontend/vue/typed-router.d.ts", `/* eslint-disable */
+/* prettier-ignore */
+// @ts-nocheck
+// noinspection ES6UnusedImports
+// Generated by unplugin-vue-router. !! DO NOT MODIFY THIS FILE !!
+// It's recommended to commit this file.
+// Make sure to add this file to your tsconfig.json file as an "includes" or "files" entry.
+
+declare module 'vue-router/auto-resolver' {
+  export type ParamParserCustom = never
+}
+
+declare module 'vue-router/auto-routes' {
+  import type {
+    RouteRecordInfo,
+    ParamValue,
+    ParamValueOneOrMore,
+    ParamValueZeroOrMore,
+    ParamValueZeroOrOne,
+  } from 'vue-router'
+
+  /**
+   * Route name map generated by unplugin-vue-router
+   */
+  export interface RouteNamedMap {
+    '/(auth)/login': RouteRecordInfo<
+      '/(auth)/login',
+      '/login',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(auth)/register': RouteRecordInfo<
+      '/(auth)/register',
+      '/register',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(root)/': RouteRecordInfo<
+      '/(root)/',
+      '/',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(root)/[...path]': RouteRecordInfo<
+      '/(root)/[...path]',
+      '/:path(.*)',
+      { path: ParamValue<true> },
+      { path: ParamValue<false> },
+      | never
+    >,
+    '/(root)/about': RouteRecordInfo<
+      '/(root)/about',
+      '/about',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(root)/contact': RouteRecordInfo<
+      '/(root)/contact',
+      '/contact',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+  }
+
+  /**
+   * Route file to route info map by unplugin-vue-router.
+   * Used by the \\\`sfc-typed-router\\\` Volar plugin to automatically type \\\`useRoute()\\\`.
+   *
+   * Each key is a file path relative to the project root with 2 properties:
+   * - routes: union of route names of the possible routes when in this page (passed to useRoute<...>())
+   * - views: names of nested views (can be passed to <RouterView name="...">)
+   *
+   * @internal
+   */
+  export interface _RouteFileInfoMap {
+    'src/app/(auth)/login.vue': {
+      routes:
+        | '/(auth)/login'
+      views:
+        | never
+    }
+    'src/app/(auth)/register.vue': {
+      routes:
+        | '/(auth)/register'
+      views:
+        | never
+    }
+    'src/app/(root)/index.vue': {
+      routes:
+        | '/(root)/'
+      views:
+        | never
+    }
+    'src/app/(root)/[...path].vue': {
+      routes:
+        | '/(root)/[...path]'
+      views:
+        | never
+    }
+    'src/app/(root)/about.vue': {
+      routes:
+        | '/(root)/about'
+      views:
+        | never
+    }
+    'src/app/(root)/contact.vue': {
+      routes:
+        | '/(root)/contact'
+      views:
+        | never
+    }
+  }
+
+  /**
+   * Get a union of possible route names in a certain route component file.
+   * Used by the \\\`sfc-typed-router\\\` Volar plugin to automatically type \\\`useRoute()\\\`.
+   *
+   * @internal
+   */
+  export type _RouteNamesForFilePath<FilePath extends string> =
+    _RouteFileInfoMap extends Record<FilePath, infer Info>
+      ? Info['routes']
+      : keyof RouteNamedMap
+}
+`],
+  ["frontend/vue/vite.config.ts.hbs", `import { fileURLToPath, URL } from 'node:url'
+import tsConfigPaths from 'vite-tsconfig-paths'
+
+import VueRouter from 'unplugin-vue-router/vite'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueDevTools from 'vite-plugin-vue-devtools'
+
+// https://vite.dev/config/
+export default defineConfig({
+  server: {
+    port: 3000,
+  },
+  plugins: [
+    VueRouter({
+      routesFolder: 'src/app',
+    }),
+    tsConfigPaths(),
+    vue(),
+    vueJsx(),
+    vueDevTools(),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+})
 `]
 ]);
 
-export const TEMPLATE_COUNT = 436;
+export const TEMPLATE_COUNT = 496;

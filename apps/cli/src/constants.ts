@@ -18,7 +18,6 @@ export const DEFAULT_CONFIG_BASE = {
   database: "sqlite",
   orm: "drizzle",
   auth: "better-auth",
-  payments: "none",
   addons: [],
   git: true,
   install: true,

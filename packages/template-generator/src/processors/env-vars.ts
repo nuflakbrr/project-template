@@ -273,7 +273,6 @@ function buildServerVars(
   runtime: ProjectConfig["runtime"],
   webDeploy: ProjectConfig["webDeploy"],
   serverDeploy: ProjectConfig["serverDeploy"],
-  payments: ProjectConfig["payments"],
 ): EnvVariable[] {
   const hasTanstackRouter = frontend.includes("tanstack-router");
   const hasSvelte = frontend.includes("svelte");
@@ -329,16 +328,6 @@ function buildServerVars(
       condition: hasBetterAuth,
     },
     {
-      key: "POLAR_ACCESS_TOKEN",
-      value: "",
-      condition: payments === "polar",
-    },
-    {
-      key: "POLAR_SUCCESS_URL",
-      value: `${corsOrigin}/success?checkout_id={CHECKOUT_ID}`,
-      condition: payments === "polar",
-    },
-    {
       key: "CORS_ORIGIN",
       value: corsOrigin,
       condition: true,
@@ -357,8 +346,7 @@ function buildServerVars(
 }
 
 export function processEnvVariables(vfs: VirtualFileSystem, config: ProjectConfig): void {
-  const { backend, frontend, database, auth, dbSetup, webDeploy, serverDeploy, runtime, payments } =
-    config;
+  const { backend, frontend, database, auth, dbSetup, webDeploy, serverDeploy, runtime } = config;
 
   const hasTanStackRouter = frontend.includes("tanstack-router");
   const hasTanStackStart = frontend.includes("tanstack-start");
@@ -428,7 +416,6 @@ export function processEnvVariables(vfs: VirtualFileSystem, config: ProjectConfi
     runtime,
     webDeploy,
     serverDeploy,
-    payments,
   );
 
   if (backend === "self") {

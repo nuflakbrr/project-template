@@ -19,7 +19,6 @@ function baseConfig(overrides: Partial<ProjectConfig> = {}): ProjectConfig {
     frontend: ["tanstack-router"],
     addons: [],
     auth: "none",
-    payments: "none",
     git: true,
     packageManager: "bun",
     install: false,

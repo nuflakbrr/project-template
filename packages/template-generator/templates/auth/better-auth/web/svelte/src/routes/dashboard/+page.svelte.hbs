@@ -5,9 +5,6 @@
 	import { orpc } from '$lib/orpc';
 	import { createQuery } from '@tanstack/svelte-query';
 	{{/if}}
-	{{#if (eq payments "polar")}}
-	let customerState = $state<{ activeSubscriptions?: unknown[] } | null>(null);
-	{{/if}}
 
 	const sessionQuery = authClient.useSession();
 
@@ -20,16 +17,6 @@
 			goto('/login');
 		}
 	});
-
-	{{#if (eq payments "polar")}}
-	$effect(() => {
-		if ($sessionQuery.data) {
-			authClient.customer.state().then(({ data }) => {
-				customerState = data;
-			});
-		}
-	});
-	{{/if}}
 </script>
 
 {#if $sessionQuery.isPending}
@@ -42,18 +29,6 @@
 		<p>Welcome {$sessionQuery.data.user.name}</p>
 		{{#if (eq api "orpc")}}
 		<p>API: {$privateDataQuery.data?.message}</p>
-		{{/if}}
-		{{#if (eq payments "polar")}}
-		<p>Plan: {customerState?.activeSubscriptions?.length > 0 ? "Pro" : "Free"}</p>
-		{#if customerState?.activeSubscriptions?.length > 0}
-			<button onclick={async () => await authClient.customer.portal()}>
-				Manage Subscription
-			</button>
-		{:else}
-			<button onclick={async () => await authClient.checkout({ slug: "pro" })}>
-				Upgrade to Pro
-			</button>
-		{/if}
 		{{/if}}
 	</div>
 {/if}

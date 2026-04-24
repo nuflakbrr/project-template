@@ -170,7 +170,6 @@ async function addHandlerInternal(
     frontend: existingConfig.frontend,
     addons: addonsToAdd, // Only the new addons for template processing
     auth: existingConfig.auth,
-    payments: existingConfig.payments,
     git: false,
     packageManager: input.packageManager || existingConfig.packageManager,
     install: input.install ?? false,

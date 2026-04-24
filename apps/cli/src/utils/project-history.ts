@@ -27,7 +27,6 @@ export type ProjectHistoryEntry = {
     orm: string;
     runtime: string;
     auth: string;
-    payments: string;
     api: string;
     addons: string[];
     dbSetup: string;
@@ -148,7 +147,6 @@ export async function addToHistory(
       orm: config.orm,
       runtime: config.runtime,
       auth: config.auth,
-      payments: config.payments,
       api: config.api,
       addons: config.addons,
       dbSetup: config.dbSetup,

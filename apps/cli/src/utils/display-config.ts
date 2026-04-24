@@ -40,21 +40,10 @@ export function displayConfig(config: Partial<ProjectConfig>) {
     configDisplay.push(`${pc.blue("Auth:")} ${String(config.auth)}`);
   }
 
-  if (config.payments !== undefined) {
-    configDisplay.push(`${pc.blue("Payments:")} ${String(config.payments)}`);
-  }
-
   if (config.addons !== undefined) {
     const addons = Array.isArray(config.addons) ? config.addons : [config.addons];
     const addonsText = addons.length > 0 && addons[0] !== undefined ? addons.join(", ") : "none";
     configDisplay.push(`${pc.blue("Addons:")} ${addonsText}`);
-  }
-
-  if (config.examples !== undefined) {
-    const examples = Array.isArray(config.examples) ? config.examples : [config.examples];
-    const examplesText =
-      examples.length > 0 && examples[0] !== undefined ? examples.join(", ") : "none";
-    configDisplay.push(`${pc.blue("Examples:")} ${examplesText}`);
   }
 
   if (config.git !== undefined) {

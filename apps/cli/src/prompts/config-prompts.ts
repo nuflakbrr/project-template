@@ -9,7 +9,6 @@ import type {
   Frontend,
   ORM,
   PackageManager,
-  Payments,
   ProjectConfig,
   Runtime,
   ServerDeploy,
@@ -29,7 +28,6 @@ import { getinstallChoice } from "./install";
 import { navigableGroup } from "./navigable-group";
 import { getORMChoice } from "./orm";
 import { getPackageManagerChoice } from "./package-manager";
-import { getPaymentsChoice } from "./payments";
 import { getProjectTypeChoice, type ProjectType } from "./project-type";
 import { getRuntimeChoice } from "./runtime";
 import { getServerDeploymentChoice } from "./server-deploy";
@@ -44,7 +42,6 @@ type PromptGroupResults = {
   orm: ORM;
   api: API;
   auth: Auth;
-  payments: Payments;
   addons: Addons[];
   dbSetup: DatabaseSetup;
   git: boolean;
@@ -71,7 +68,6 @@ export async function gatherConfig(
       database: flags.database ?? DEFAULT_CONFIG.database,
       orm: flags.orm ?? DEFAULT_CONFIG.orm,
       auth: flags.auth ?? DEFAULT_CONFIG.auth,
-      payments: flags.payments ?? DEFAULT_CONFIG.payments,
       addons: flags.addons ?? [...DEFAULT_CONFIG.addons],
       git: flags.git ?? DEFAULT_CONFIG.git,
       packageManager: flags.packageManager ?? DEFAULT_CONFIG.packageManager,
@@ -129,10 +125,6 @@ export async function gatherConfig(
         if (results.projectType === "backend") return Promise.resolve("none" as Auth);
         return getAuthChoice(flags.auth, results.backend, results.frontend);
       },
-      payments: ({ results }) => {
-        if (results.projectType === "backend") return Promise.resolve("none" as Payments);
-        return getPaymentsChoice(flags.payments, results.auth, results.backend, results.frontend);
-      },
       addons: ({ results }) => {
         return getAddonsChoice(flags.addons, results.frontend, results.auth);
       },
@@ -185,7 +177,6 @@ export async function gatherConfig(
     database: result.database,
     orm: result.orm,
     auth: result.auth,
-    payments: result.payments,
     addons: result.addons,
     git: result.git,
     packageManager: result.packageManager,

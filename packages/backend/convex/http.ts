@@ -27,7 +27,6 @@ http.route({
           addons: body.addons,
           examples: body.examples,
           auth: body.auth,
-          payments: body.payments,
           git: body.git,
           packageManager: body.packageManager,
           install: body.install,

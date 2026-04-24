@@ -71,10 +71,6 @@ export async function displayPostInstallInstructions(
     ? getStarlightInstructions(runCmd)
     : "";
   const clerkInstructions = isConvex && config.auth === "clerk" ? getClerkInstructions() : "";
-  const polarInstructions =
-    config.payments === "polar" && config.auth === "better-auth"
-      ? getPolarInstructions(backend)
-      : "";
   const alchemyDeployInstructions = getAlchemyDeployInstructions(
     runCmd,
     webDeploy,
@@ -180,7 +176,6 @@ export async function displayPostInstallInstructions(
   if (starlightInstructions) output += `\n${starlightInstructions.trim()}\n`;
   if (clerkInstructions) output += `\n${clerkInstructions.trim()}\n`;
   if (betterAuthConvexInstructions) output += `\n${betterAuthConvexInstructions.trim()}\n`;
-  if (polarInstructions) output += `\n${polarInstructions.trim()}\n`;
 
   if (noOrmWarning) output += `\n${noOrmWarning.trim()}\n`;
 
@@ -340,11 +335,6 @@ function getBetterAuthConvexInstructions(hasWeb: boolean, webPort: string, packa
     `${pc.white(`   ${cmd} convex env set BETTER_AUTH_SECRET=$(openssl rand -base64 32)`)}\n` +
     (hasWeb ? `${pc.white(`   ${cmd} convex env set SITE_URL http://localhost:${webPort}`)}\n` : "")
   );
-}
-
-function getPolarInstructions(backend: Backend) {
-  const envPath = backend === "self" ? "apps/web/.env" : "apps/server/.env";
-  return `${pc.bold("Polar Payments Setup:")}\n${pc.cyan("•")} Get access token & product ID from ${pc.underline("https://sandbox.polar.sh/")}\n${pc.cyan("•")} Set POLAR_ACCESS_TOKEN in ${envPath}`;
 }
 
 function getAlchemyDeployInstructions(

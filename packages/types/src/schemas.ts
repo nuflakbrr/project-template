@@ -59,8 +59,6 @@ export const AuthSchema = z
   .enum(["better-auth", "clerk", "none"])
   .describe("Authentication provider");
 
-export const PaymentsSchema = z.enum(["polar", "none"]).describe("Payments provider");
-
 export const WebDeploySchema = z.enum(["cloudflare", "none"]).describe("Web deployment");
 
 export const ServerDeploySchema = z.enum(["cloudflare", "none"]).describe("Server deployment");
@@ -103,7 +101,6 @@ export const CreateInputSchema = z.object({
   database: DatabaseSchema.optional(),
   orm: ORMSchema.optional(),
   auth: AuthSchema.optional(),
-  payments: PaymentsSchema.optional(),
   frontend: z.array(FrontendSchema).optional(),
   addons: z.array(AddonsSchema).optional(),
   git: z.boolean().optional(),
@@ -146,7 +143,6 @@ export const ProjectConfigSchema = z.object({
   frontend: z.array(FrontendSchema),
   addons: z.array(AddonsSchema),
   auth: AuthSchema,
-  payments: PaymentsSchema,
   git: z.boolean(),
   packageManager: PackageManagerSchema,
   install: z.boolean(),
@@ -168,7 +164,6 @@ export const BikinProjectConfigSchema = z.object({
   frontend: z.array(FrontendSchema),
   addons: z.array(AddonsSchema),
   auth: AuthSchema,
-  payments: PaymentsSchema,
   packageManager: PackageManagerSchema,
   dbSetup: DatabaseSetupSchema,
   api: APISchema,
@@ -208,7 +203,6 @@ export const PACKAGE_MANAGER_VALUES = PackageManagerSchema.options;
 export const DATABASE_SETUP_VALUES = DatabaseSetupSchema.options;
 export const API_VALUES = APISchema.options;
 export const AUTH_VALUES = AuthSchema.options;
-export const PAYMENTS_VALUES = PaymentsSchema.options;
 export const WEB_DEPLOY_VALUES = WebDeploySchema.options;
 export const SERVER_DEPLOY_VALUES = ServerDeploySchema.options;
 export const DIRECTORY_CONFLICT_VALUES = DirectoryConflictSchema.options;

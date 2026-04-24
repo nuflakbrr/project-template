@@ -75,7 +75,6 @@ function createEmptyResult(
       frontend: [],
       addons: [],
       auth: "none",
-      payments: "none",
       git: false,
       packageManager: "npm",
       install: false,

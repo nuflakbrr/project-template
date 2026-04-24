@@ -20,7 +20,6 @@ export async function detectProjectConfig(projectDir: string) {
           frontend: bpaConfig.frontend,
           addons: bpaConfig.addons,
           auth: bpaConfig.auth,
-          payments: bpaConfig.payments,
           packageManager: bpaConfig.packageManager,
           dbSetup: bpaConfig.dbSetup,
           api: bpaConfig.api,

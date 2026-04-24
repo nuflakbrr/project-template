@@ -11,7 +11,6 @@ import {
   DatabaseSetupSchema,
   APISchema,
   AuthSchema,
-  PaymentsSchema,
   WebDeploySchema,
   ServerDeploySchema,
   DirectoryConflictSchema,
@@ -63,10 +62,6 @@ export function getAuthJsonSchema() {
   return z.toJSONSchema(AuthSchema);
 }
 
-export function getPaymentsJsonSchema() {
-  return z.toJSONSchema(PaymentsSchema);
-}
-
 export function getWebDeployJsonSchema() {
   return z.toJSONSchema(WebDeploySchema);
 }
@@ -112,7 +107,6 @@ export function getAllJsonSchemas() {
     databaseSetup: getDatabaseSetupJsonSchema(),
     api: getAPIJsonSchema(),
     auth: getAuthJsonSchema(),
-    payments: getPaymentsJsonSchema(),
     webDeploy: getWebDeployJsonSchema(),
     serverDeploy: getServerDeployJsonSchema(),
     directoryConflict: getDirectoryConflictJsonSchema(),

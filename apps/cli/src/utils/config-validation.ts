@@ -6,7 +6,6 @@ import {
   isWebFrontend,
   validateAddonsAgainstFrontends,
   validateApiFrontendCompatibility,
-  validatePaymentsCompatibility,
   validateSelfBackendCompatibility,
   validateServerDeployRequiresBackend,
   validateWebDeployRequiresWebFrontend,
@@ -270,12 +269,6 @@ export function validateBackendNoneConstraints(
     );
   }
 
-  if (has("payments") && config.payments !== "none") {
-    return validationErr(
-      "Backend 'none' requires '--payments none'. Please remove the --payments flag or set it to 'none'.",
-    );
-  }
-
   if (has("dbSetup") && config.dbSetup !== "none") {
     return validationErr(
       "Backend 'none' requires '--db-setup none'. Please remove the --db-setup flag or set it to 'none'.",
@@ -440,13 +433,6 @@ export function validateFullConfig(
       config.addons = [...new Set(config.addons)];
     }
 
-    yield* validatePaymentsCompatibility(
-      config.payments,
-      config.auth,
-      config.backend,
-      config.frontend ?? [],
-    );
-
     return Result.ok(undefined);
   });
 }
@@ -460,13 +446,6 @@ export function validateConfigForProgrammaticUse(config: Partial<ProjectConfig>)
     }
 
     yield* validateApiFrontendCompatibility(config.api, config.frontend);
-
-    yield* validatePaymentsCompatibility(
-      config.payments,
-      config.auth,
-      config.backend,
-      config.frontend,
-    );
 
     if (config.addons && config.addons.length > 0) {
       yield* validateAddonsAgainstFrontends(config.addons, config.frontend, config.auth);

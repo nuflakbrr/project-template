@@ -8,7 +8,6 @@ import type {
   Backend,
   CLIInput,
   Frontend,
-  Payments,
   ProjectConfig,
   ServerDeploy,
   WebDeploy,
@@ -296,31 +295,5 @@ export function validateAddonsAgainstFrontends(
       return validationErr(`Incompatible addon/frontend combination: ${reason}`);
     }
   }
-  return Result.ok(undefined);
-}
-
-export function validatePaymentsCompatibility(
-  payments: Payments | undefined,
-  auth: Auth | undefined,
-  _backend: Backend | undefined,
-  frontends: Frontend[] = [],
-): ValidationResult {
-  if (!payments || payments === "none") return Result.ok(undefined);
-
-  if (payments === "polar") {
-    if (!auth || auth === "none" || auth !== "better-auth") {
-      return validationErr(
-        "Polar payments requires Better Auth. Please use '--auth better-auth' or choose a different payments provider.",
-      );
-    }
-
-    const { web } = splitFrontends(frontends);
-    if (web.length === 0 && frontends.length > 0) {
-      return validationErr(
-        "Polar payments requires a web frontend or no frontend. Please select a web frontend or choose a different payments provider.",
-      );
-    }
-  }
-
   return Result.ok(undefined);
 }

@@ -26,7 +26,6 @@ export function generateReproducibleCommand(config: ProjectConfig): string {
   flags.push(`--orm ${config.orm}`);
   flags.push(`--api ${config.api}`);
   flags.push(`--auth ${config.auth}`);
-  flags.push(`--payments ${config.payments}`);
 
   flags.push(formatMultiFlag("--addons", addons));
 

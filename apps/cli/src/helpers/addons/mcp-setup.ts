@@ -184,15 +184,6 @@ function getRecommendedMcpServers(config: ProjectConfig): McpServerDef[] {
     });
   }
 
-  if (config.payments === "polar") {
-    servers.push({
-      key: "polar",
-      label: "Polar",
-      name: "polar",
-      target: "https://mcp.polar.sh/mcp/polar-mcp",
-    });
-  }
-
   return servers;
 }
 

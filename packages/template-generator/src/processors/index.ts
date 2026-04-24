@@ -12,7 +12,6 @@ import { processDeployDeps } from "./deploy-deps";
 import { processEnvDeps } from "./env-deps";
 import { processEnvVariables } from "./env-vars";
 import { processInfraDeps } from "./infra-deps";
-import { processPaymentsDeps } from "./payments-deps";
 import { processPwaPlugins } from "./pwa-plugins";
 import { processReadme } from "./readme-generator";
 import { processRuntimeDeps } from "./runtime-deps";
@@ -27,7 +26,6 @@ export function processDependencies(vfs: VirtualFileSystem, config: ProjectConfi
   processRuntimeDeps(vfs, config);
   processApiDeps(vfs, config);
   processAuthDeps(vfs, config);
-  processPaymentsDeps(vfs, config);
   processDeployDeps(vfs, config);
   processAddonsDeps(vfs, config);
 }
@@ -41,7 +39,6 @@ export {
   processDeployDeps,
   processEnvDeps,
   processInfraDeps,
-  processPaymentsDeps,
   processReadme,
   processRuntimeDeps,
   processWorkspaceDeps,

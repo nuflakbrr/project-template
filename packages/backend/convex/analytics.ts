@@ -47,7 +47,6 @@ export const ingestEvent = internalMutation({
     addons: v.optional(v.array(v.string())),
     examples: v.optional(v.array(v.string())),
     auth: v.optional(v.string()),
-    payments: v.optional(v.string()),
     git: v.optional(v.boolean()),
     packageManager: v.optional(v.string()),
     install: v.optional(v.boolean()),
@@ -93,7 +92,6 @@ export const ingestEvent = internalMutation({
         dbSetup: incrementKey(existingStats.dbSetup, args.dbSetup),
         webDeploy: incrementKey(existingStats.webDeploy, args.webDeploy),
         serverDeploy: incrementKey(existingStats.serverDeploy, args.serverDeploy),
-        payments: incrementKey(existingStats.payments, args.payments),
         git: incrementBool(existingStats.git, args.git),
         install: incrementBool(existingStats.install, args.install),
         nodeVersion: incrementKey(existingStats.nodeVersion, getMajorVersion(args.node_version)),
@@ -121,7 +119,6 @@ export const ingestEvent = internalMutation({
         dbSetup: incrementKey(emptyDist, args.dbSetup),
         webDeploy: incrementKey(emptyDist, args.webDeploy),
         serverDeploy: incrementKey(emptyDist, args.serverDeploy),
-        payments: incrementKey(emptyDist, args.payments),
         git: incrementBool(emptyDist, args.git),
         install: incrementBool(emptyDist, args.install),
         nodeVersion: incrementKey(emptyDist, getMajorVersion(args.node_version)),
@@ -170,7 +167,6 @@ export const getStats = query({
       dbSetup: distributionValidator,
       webDeploy: distributionValidator,
       serverDeploy: distributionValidator,
-      payments: distributionValidator,
       git: distributionValidator,
       install: distributionValidator,
       nodeVersion: distributionValidator,
@@ -201,7 +197,6 @@ export const getStats = query({
       dbSetup: stats.dbSetup,
       webDeploy: stats.webDeploy,
       serverDeploy: stats.serverDeploy,
-      payments: stats.payments,
       git: stats.git,
       install: stats.install,
       nodeVersion: stats.nodeVersion,
@@ -340,7 +335,6 @@ export const backfillStats = mutation({
       dbSetup: { ...emptyDist },
       webDeploy: { ...emptyDist },
       serverDeploy: { ...emptyDist },
-      payments: { ...emptyDist },
       git: { ...emptyDist },
       install: { ...emptyDist },
       nodeVersion: { ...emptyDist },
@@ -380,7 +374,6 @@ export const backfillStats = mutation({
       stats.dbSetup = incrementKey(stats.dbSetup, ev.dbSetup);
       stats.webDeploy = incrementKey(stats.webDeploy, ev.webDeploy);
       stats.serverDeploy = incrementKey(stats.serverDeploy, ev.serverDeploy);
-      stats.payments = incrementKey(stats.payments, ev.payments);
       stats.git = incrementBool(stats.git, ev.git);
       stats.install = incrementBool(stats.install, ev.install);
       stats.nodeVersion = incrementKey(stats.nodeVersion, getMajorVersion(ev.node_version));

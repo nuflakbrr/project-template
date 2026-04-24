@@ -25,15 +25,6 @@ import Layout from "../layouts/Layout.astro";
             <p id="api-message" class="text-white">Loading...</p>
           </div>
           {{/if}}
-
-          {{#if (eq payments "polar")}}
-          <div class="rounded-lg bg-neutral-800/50 p-4">
-            <p class="text-sm text-neutral-400 mb-2">Subscription</p>
-            <div id="subscription-info" class="space-y-2">
-              <p class="text-white">Loading...</p>
-            </div>
-          </div>
-          {{/if}}
         </div>
       </div>
     </main>
@@ -83,42 +74,6 @@ import Layout from "../layouts/Layout.astro";
         apiMessage.textContent = data.message || "Connected to server";
       } catch (e) {
         apiMessage.textContent = "Failed to load server data";
-      }
-      {{/if}}
-
-      {{#if (eq payments "polar")}}
-      try {
-        const { data: customerState } = await authClient.customer.state();
-        const subscriptionInfo = document.getElementById("subscription-info")!;
-        if (customerState?.activeSubscriptions?.length > 0) {
-          subscriptionInfo.innerHTML = `
-            <p class="text-white">Plan: <span class="text-green-400">Pro</span></p>
-            <button
-              id="manage-subscription"
-              class="mt-2 rounded px-3 py-1.5 text-sm bg-neutral-700 hover:bg-neutral-600 text-white transition-colors"
-            >
-              Manage Subscription
-            </button>
-          `;
-          document.getElementById("manage-subscription")?.addEventListener("click", async () => {
-            await authClient.customer.portal();
-          });
-        } else {
-          subscriptionInfo.innerHTML = `
-            <p class="text-white">Plan: <span class="text-neutral-400">Free</span></p>
-            <button
-              id="upgrade-button"
-              class="mt-2 rounded px-3 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
-            >
-              Upgrade to Pro
-            </button>
-          `;
-          document.getElementById("upgrade-button")?.addEventListener("click", async () => {
-            await authClient.checkout({ slug: "pro" });
-          });
-        }
-      } catch (e) {
-        console.error("Failed to load subscription info", e);
       }
       {{/if}}
 

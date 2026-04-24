@@ -13,7 +13,6 @@ import type {
   Frontend,
   Addons,
   Auth,
-  Payments,
   API,
   WebDeploy,
   ServerDeploy,
@@ -29,7 +28,6 @@ import {
   FrontendSchema,
   ORMSchema,
   PackageManagerSchema,
-  PaymentsSchema,
   RuntimeSchema,
   ServerDeploySchema,
   WebDeploySchema,
@@ -77,7 +75,6 @@ export async function runTRPCTest(config: TestConfig): Promise<TestResult> {
     "frontend",
     "addons",
     "auth",
-    "payments",
     "dbSetup",
     "api",
     "webDeploy",
@@ -100,7 +97,6 @@ export async function runTRPCTest(config: TestConfig): Promise<TestResult> {
         database: "sqlite" as Database,
         orm: "drizzle" as ORM,
         auth: "none" as Auth,
-        payments: "none" as Payments,
         addons: ["none"] as Addons[],
         dbSetup: "none" as DatabaseSetup,
         webDeploy: "none" as WebDeploy,
@@ -202,7 +198,6 @@ export const RUNTIMES = extractEnumValues(RuntimeSchema);
 export const FRONTENDS = extractEnumValues(FrontendSchema);
 export const ADDONS = extractEnumValues(AddonsSchema);
 export const AUTH_PROVIDERS = extractEnumValues(AuthSchema);
-export const PAYMENTS_PROVIDERS = extractEnumValues(PaymentsSchema);
 export const API_TYPES = extractEnumValues(APISchema);
 export const WEB_DEPLOYS = extractEnumValues(WebDeploySchema);
 export const SERVER_DEPLOYS = extractEnumValues(ServerDeploySchema);
