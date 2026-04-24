@@ -99,7 +99,7 @@ Lalu Anda dapat menjawan beberapa pertanyaan yang diajukan oleh package `BikinPr
 - SolidStart 🚧
 - Svelte 🚧
 - SvelteKit 🚧
-- Vue.js 🚧
+- Vue.js
 - Nuxt.js 🚧
 
 ### Backend
