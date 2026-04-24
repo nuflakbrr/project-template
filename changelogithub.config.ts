@@ -1,5 +1,5 @@
 export default {
-  repo: "nuflakbrr/bikinproject",
+  repo: "nuflakbrr/create-bikinproject-app",
   emoji: true,
   contributors: true,
 };

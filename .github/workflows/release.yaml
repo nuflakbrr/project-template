@@ -67,8 +67,8 @@ jobs:
         if: steps.check-version.outputs.exists == 'false'
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          git config --local user.email "amanvarshney.work@gmail.com"
-          git config --local user.name "Aman Varshney"
+          git config --local user.email "naufalakbar378@gmail.com"
+          git config --local user.name "Naufal Akbar Nugroho"
           if ! git rev-parse "v$VERSION" >/dev/null 2>&1; then
             git tag -a "v$VERSION" -m "Release v$VERSION"
             git push --tags

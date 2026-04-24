@@ -4,7 +4,7 @@
   "description": "Convex backend package for bikinproject.",
   "homepage": "https://nuflakbrr.github.io/bikinproject/",
   "bugs": {
-    "url": "https://github.com/nuflakbrr/bikinproject/issues"
+    "url": "https://github.com/nuflakbrr/create-bikinproject-app/issues"
   },
   "license": "MIT",
   "author": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nuflakbrr/bikinproject.git",
+    "url": "git+https://github.com/nuflakbrr/create-bikinproject-app.git",
     "directory": "packages/backend"
   },
   "scripts": {
