@@ -1,6 +1,6 @@
 {
   "name": "@bikinproject/template-generator",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Virtual file system generator for BikinProject templates.",
   "keywords": [
     "bikinproject",
