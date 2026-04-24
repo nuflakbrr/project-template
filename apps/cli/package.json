@@ -1,6 +1,6 @@
 {
   "name": "create-bikinproject-app",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "description": "A modern CLI tool to generate type-safe TypeScript project with best practices and customizable configurations",
   "keywords": [
     "bikinproject",
