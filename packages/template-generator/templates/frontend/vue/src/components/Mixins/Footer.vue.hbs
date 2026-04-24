@@ -102,7 +102,7 @@ const socials = [
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-12 py-24">
         <div v-for="group in footerLinks" :key="group.title" class="space-y-6">
           <h4 class="text-white font-bold uppercase tracking-wider text-sm">
-            {{ group.title }}
+            \{{ group.title }}
           </h4>
           <ul class="space-y-4">
             <li v-for="link in group.links" :key="link.name">
@@ -110,7 +110,7 @@ const socials = [
                 :to="link.href"
                 class="hover:text-blue-500 hover:translate-x-1 inline-block transition-all duration-300"
               >
-                {{ link.name }}
+                \{{ link.name }}
               </RouterLink>
             </li>
           </ul>
@@ -119,7 +119,7 @@ const socials = [
 
       <!-- Bottom Section: Copyright -->
       <div class="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-sm tracking-wide">
-        <p>© {{ year }} BikinProject. Seluruh hak cipta dilindungi undang-undang.</p>
+        <p>© \{{ year }} BikinProject. Seluruh hak cipta dilindungi undang-undang.</p>
       </div>
     </div>
   </footer>

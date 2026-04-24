@@ -15,7 +15,17 @@ export const RuntimeSchema = z
   .describe("Runtime environment");
 
 export const FrontendSchema = z
-  .enum(["tanstack-router", "tanstack-start", "next", "nuxt", "svelte", "solid", "astro", "none"])
+  .enum([
+    "tanstack-router",
+    "tanstack-start",
+    "next",
+    "vue",
+    "nuxt",
+    "svelte",
+    "solid",
+    "astro",
+    "none",
+  ])
   .describe("Frontend framework");
 
 export const AddonsSchema = z

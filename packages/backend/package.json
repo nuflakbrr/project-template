@@ -23,7 +23,7 @@
     "deploy": "convex deploy"
   },
   "dependencies": {
-    "@bikinproject/types": "^1.0.0",
+    "@bikinproject/types": "^2.0.0",
     "@convex-dev/crons": "^0.2.0",
     "@erquhart/convex-oss-stats": "^0.8.2",
     "convex": "^1.31.7",

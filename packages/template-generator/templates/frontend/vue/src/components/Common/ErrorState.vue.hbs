@@ -150,27 +150,27 @@ const meta = computed(() => getErrorContent(props.code))
               ></span>
               <span :class="['relative inline-flex rounded-full h-2 w-2', meta.dotColor]"></span>
             </span>
-            {{ meta.badge }}
+            \{{ meta.badge }}
           </div>
 
           <h1
             class="text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-950 dark:text-white leading-tight"
           >
-            {{ meta.titlePrefix }} <br />
+            \{{ meta.titlePrefix }} <br />
             <span
               :class="[
                 'inline-block py-1 bg-clip-text text-transparent bg-gradient-to-r',
                 meta.gradient,
               ]"
             >
-              {{ meta.titleSuffix }}
+              \{{ meta.titleSuffix }}
             </span>
           </h1>
 
           <p
             class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 max-w-xl leading-relaxed font-medium"
           >
-            {{ props.error?.message ? props.error.message.replace(/-/g, ' ') : meta.description }}
+            \{{ props.error?.message ? props.error.message.replace(/-/g, ' ') : meta.description }}
           </p>
 
           <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
@@ -196,7 +196,7 @@ const meta = computed(() => getErrorContent(props.code))
                 <div class="w-3.5 h-3.5 rounded-full bg-emerald-500/40" />
               </div>
               <div class="mx-auto text-xs font-mono text-zinc-500 font-medium">
-                bash — system-error-{{ props.code }}
+                bash — system-error-\{{ props.code }}
               </div>
             </div>
             <div
@@ -207,7 +207,7 @@ const meta = computed(() => getErrorContent(props.code))
                 <p class="flex gap-3">
                   <span :class="meta.borderType">│</span>
                   <span class="text-zinc-800 dark:text-zinc-200">
-                    ✖ Fatal Error: {{ meta.badge }}
+                    ✖ Fatal Error: \{{ meta.badge }}
                   </span>
                 </p>
                 <p class="text-zinc-400">│</p>
@@ -219,7 +219,7 @@ const meta = computed(() => getErrorContent(props.code))
                   <p class="flex gap-3 text-xs">
                     <span :class="meta.borderType">│</span>
                     <span class="text-rose-500 dark:text-rose-400">
-                      Error: {{ props.error.name }} - {{ props.error.message }}
+                      Error: \{{ props.error.name }} - \{{ props.error.message }}
                     </span>
                   </p>
                 </template>
@@ -227,7 +227,7 @@ const meta = computed(() => getErrorContent(props.code))
                   <p class="flex gap-3 text-xs">
                     <span :class="meta.borderType">│</span>
                     <span class="text-zinc-500">
-                      at SystemHandler.resolve (internal/core.js:{{ props.code }})
+                      at SystemHandler.resolve (internal/core.js:\{{ props.code }})
                     </span>
                   </p>
                   <p class="flex gap-3 text-xs">
@@ -240,7 +240,7 @@ const meta = computed(() => getErrorContent(props.code))
                 <p class="text-zinc-400">│</p>
                 <p class="text-zinc-400 text-xs text-center">────────────────────────</p>
                 <p :class="['font-bold text-center', meta.errorColor]">
-                  ⚠️ ERROR_CODE: {{ props.code }}
+                  ⚠️ ERROR_CODE: \{{ props.code }}
                 </p>
                 <p class="text-zinc-400 text-xs text-center">────────────────────────</p>
               </div>

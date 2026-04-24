@@ -20336,8 +20336,6 @@ export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
 });
 `],
-  ["frontend/vue/_gitattributes", `* text=auto eol=lf
-`],
   ["frontend/vue/_gitignore", `# Logs
 logs
 *.log
@@ -20402,6 +20400,8 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 end_of_line = lf
 max_line_length = 100
+`],
+  ["frontend/vue/.gitattributes", `* text=auto eol=lf
 `],
   ["frontend/vue/.oxlintrc.json.hbs", `{
   "$schema": "./node_modules/oxlint/configuration_schema.json",
@@ -20598,68 +20598,68 @@ Host: https://nuflakbrr.github.io/bikinproject`],
     <priority>0.8</priority>
   </url>
 </urlset>`],
-  ["frontend/vue/scripts/generate-seo.ts", `import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+  ["frontend/vue/scripts/generate-seo.ts", `import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // We'll mimic the siteMetadata here to avoid complex TS import issues in a standalone script
 // If the user changes siteMetadata, they should update it here or we can try to import it if tsx/ts-node setup allows
 const siteMetadata = {
-  title: 'BikinProject React Template by Naufal Akbar Nugroho',
-  siteUrl: 'https://nuflakbrr.github.io/bikinproject', // Change this to your production URL
-  socialBanner: '/static/images/twitter-card.png',
-}
+  title: "BikinProject React Template by Naufal Akbar Nugroho",
+  siteUrl: "https://nuflakbrr.github.io/bikinproject", // Change this to your production URL
+  socialBanner: "/static/images/twitter-card.png",
+};
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const PUBLIC_DIR = path.resolve(__dirname, '../public')
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PUBLIC_DIR = path.resolve(__dirname, "../public");
 
-const ROUTES_DIR = path.resolve(__dirname, '../src/routes')
+const ROUTES_DIR = path.resolve(__dirname, "../src/routes");
 
 /**
  * Recursively get all routes from the routes directory.
  * Tailored for TanStack Router file-based routing.
  */
-function getRoutes(dir: string, base: string = ''): string[] {
-  let routes: string[] = []
+function getRoutes(dir: string, base: string = ""): string[] {
+  let routes: string[] = [];
 
-  if (!fs.existsSync(dir)) return routes
+  if (!fs.existsSync(dir)) return routes;
 
-  const items = fs.readdirSync(dir)
+  const items = fs.readdirSync(dir);
   for (const item of items) {
-    const fullPath = path.join(dir, item)
-    const isDir = fs.statSync(fullPath).isDirectory()
+    const fullPath = path.join(dir, item);
+    const isDir = fs.statSync(fullPath).isDirectory();
 
     if (isDir) {
-      if (item.startsWith('(') && item.endsWith(')')) {
+      if (item.startsWith("(") && item.endsWith(")")) {
         // Route groups like (auth), (root) - skip adding to the URL path
-        routes = routes.concat(getRoutes(fullPath, base))
-      } else if (!item.startsWith('_')) {
+        routes = routes.concat(getRoutes(fullPath, base));
+      } else if (!item.startsWith("_")) {
         // Regular directory - add to the URL path
-        routes = routes.concat(getRoutes(fullPath, \`\${base}/\${item}\`))
+        routes = routes.concat(getRoutes(fullPath, \`\${base}/\${item}\`));
       }
     } else {
-      const ext = path.extname(item)
-      if (ext === '.vue') {
-        const name = path.basename(item, ext)
+      const ext = path.extname(item);
+      if (ext === ".vue") {
+        const name = path.basename(item, ext);
 
         // Skip layout files (_layout.tsx), root (__root.tsx), or splat ($)
-        if (name.startsWith('_') || name === '$') continue
+        if (name.startsWith("_") || name === "$") continue;
 
-        if (name === 'index') {
+        if (name === "index") {
           // index.tsx maps to the current base path
-          routes.push(base)
+          routes.push(base);
         } else {
           // about.tsx maps to /about if in root, or /parent/about if in a dir
-          routes.push(\`\${base}/\${name}\`)
+          routes.push(\`\${base}/\${name}\`);
         }
       }
     }
   }
-  return routes
+  return routes;
 }
 
-const urls = Array.from(new Set(getRoutes(ROUTES_DIR)))
+const urls = Array.from(new Set(getRoutes(ROUTES_DIR)));
 
 function generateSitemap() {
   const sitemap = \`<?xml version="1.0" encoding="UTF-8"?>
@@ -20671,14 +20671,14 @@ function generateSitemap() {
     <loc>\${siteMetadata.siteUrl}\${url}</loc>
     <lastmod>\${new Date().toISOString()}</lastmod>
     <changefreq>daily</changefreq>
-    <priority>\${url === '' ? '1.0' : '0.8'}</priority>
-  </url>\`
+    <priority>\${url === "" ? "1.0" : "0.8"}</priority>
+  </url>\`;
     })
-    .join('')}
-</urlset>\`
+    .join("")}
+</urlset>\`;
 
-  fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), sitemap)
-  console.log('✅ sitemap.xml generated in public/')
+  fs.writeFileSync(path.join(PUBLIC_DIR, "sitemap.xml"), sitemap);
+  console.log("✅ sitemap.xml generated in public/");
 }
 
 function generateRobots() {
@@ -20686,19 +20686,19 @@ function generateRobots() {
 Allow: /
 
 Sitemap: \${siteMetadata.siteUrl}/sitemap.xml
-Host: \${siteMetadata.siteUrl}\`
+Host: \${siteMetadata.siteUrl}\`;
 
-  fs.writeFileSync(path.join(PUBLIC_DIR, 'robots.txt'), robots)
-  console.log('✅ robots.txt generated in public/')
+  fs.writeFileSync(path.join(PUBLIC_DIR, "robots.txt"), robots);
+  console.log("✅ robots.txt generated in public/");
 }
 
 // Ensure public directory exists
 if (!fs.existsSync(PUBLIC_DIR)) {
-  fs.mkdirSync(PUBLIC_DIR, { recursive: true })
+  fs.mkdirSync(PUBLIC_DIR, { recursive: true });
 }
 
-generateSitemap()
-generateRobots()
+generateSitemap();
+generateRobots();
 `],
   ["frontend/vue/src/App.vue.hbs", `<script setup lang="ts">
 import { RouterView } from 'vue-router'
@@ -21379,27 +21379,27 @@ const meta = computed(() => getErrorContent(props.code))
               ></span>
               <span :class="['relative inline-flex rounded-full h-2 w-2', meta.dotColor]"></span>
             </span>
-            {{ meta.badge }}
+            \\{{ meta.badge }}
           </div>
 
           <h1
             class="text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-950 dark:text-white leading-tight"
           >
-            {{ meta.titlePrefix }} <br />
+            \\{{ meta.titlePrefix }} <br />
             <span
               :class="[
                 'inline-block py-1 bg-clip-text text-transparent bg-gradient-to-r',
                 meta.gradient,
               ]"
             >
-              {{ meta.titleSuffix }}
+              \\{{ meta.titleSuffix }}
             </span>
           </h1>
 
           <p
             class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 max-w-xl leading-relaxed font-medium"
           >
-            {{ props.error?.message ? props.error.message.replace(/-/g, ' ') : meta.description }}
+            \\{{ props.error?.message ? props.error.message.replace(/-/g, ' ') : meta.description }}
           </p>
 
           <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
@@ -21425,7 +21425,7 @@ const meta = computed(() => getErrorContent(props.code))
                 <div class="w-3.5 h-3.5 rounded-full bg-emerald-500/40" />
               </div>
               <div class="mx-auto text-xs font-mono text-zinc-500 font-medium">
-                bash — system-error-{{ props.code }}
+                bash — system-error-\\{{ props.code }}
               </div>
             </div>
             <div
@@ -21436,7 +21436,7 @@ const meta = computed(() => getErrorContent(props.code))
                 <p class="flex gap-3">
                   <span :class="meta.borderType">│</span>
                   <span class="text-zinc-800 dark:text-zinc-200">
-                    ✖ Fatal Error: {{ meta.badge }}
+                    ✖ Fatal Error: \\{{ meta.badge }}
                   </span>
                 </p>
                 <p class="text-zinc-400">│</p>
@@ -21448,7 +21448,7 @@ const meta = computed(() => getErrorContent(props.code))
                   <p class="flex gap-3 text-xs">
                     <span :class="meta.borderType">│</span>
                     <span class="text-rose-500 dark:text-rose-400">
-                      Error: {{ props.error.name }} - {{ props.error.message }}
+                      Error: \\{{ props.error.name }} - \\{{ props.error.message }}
                     </span>
                   </p>
                 </template>
@@ -21456,7 +21456,7 @@ const meta = computed(() => getErrorContent(props.code))
                   <p class="flex gap-3 text-xs">
                     <span :class="meta.borderType">│</span>
                     <span class="text-zinc-500">
-                      at SystemHandler.resolve (internal/core.js:{{ props.code }})
+                      at SystemHandler.resolve (internal/core.js:\\{{ props.code }})
                     </span>
                   </p>
                   <p class="flex gap-3 text-xs">
@@ -21469,7 +21469,7 @@ const meta = computed(() => getErrorContent(props.code))
                 <p class="text-zinc-400">│</p>
                 <p class="text-zinc-400 text-xs text-center">────────────────────────</p>
                 <p :class="['font-bold text-center', meta.errorColor]">
-                  ⚠️ ERROR_CODE: {{ props.code }}
+                  ⚠️ ERROR_CODE: \\{{ props.code }}
                 </p>
                 <p class="text-zinc-400 text-xs text-center">────────────────────────</p>
               </div>
@@ -21713,7 +21713,7 @@ const socials = [
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-12 py-24">
         <div v-for="group in footerLinks" :key="group.title" class="space-y-6">
           <h4 class="text-white font-bold uppercase tracking-wider text-sm">
-            {{ group.title }}
+            \\{{ group.title }}
           </h4>
           <ul class="space-y-4">
             <li v-for="link in group.links" :key="link.name">
@@ -21721,7 +21721,7 @@ const socials = [
                 :to="link.href"
                 class="hover:text-blue-500 hover:translate-x-1 inline-block transition-all duration-300"
               >
-                {{ link.name }}
+                \\{{ link.name }}
               </RouterLink>
             </li>
           </ul>
@@ -21730,7 +21730,7 @@ const socials = [
 
       <!-- Bottom Section: Copyright -->
       <div class="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-sm tracking-wide">
-        <p>© {{ year }} BikinProject. Seluruh hak cipta dilindungi undang-undang.</p>
+        <p>© \\{{ year }} BikinProject. Seluruh hak cipta dilindungi undang-undang.</p>
       </div>
     </div>
   </footer>
@@ -21852,7 +21852,7 @@ const isActive = (path: string) => {
                     cn('navLink', 'mx-8 lg:mx-4 flex', isActive(link.path) && 'navLinkActive')
                   "
                 >
-                  {{ link.title }}
+                  \\{{ link.title }}
                 </RouterLink>
               </li>
               <li class="ml-8 lg:ml-6 flex items-center gap-6 py-4 lg:py-0">
@@ -21990,13 +21990,13 @@ const features = [
           <div
             :class="\`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6 \${feature.color} border border-transparent group-hover:border-current transition-all duration-300 group-hover:scale-110 shadow-sm\`"
           >
-            {{ feature.icon }}
+            \\{{ feature.icon }}
           </div>
           <h3 class="text-xl font-bold text-zinc-950 dark:text-white mb-3">
-            {{ feature.title }}
+            \\{{ feature.title }}
           </h3>
           <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed font-medium">
-            {{ feature.description }}
+            \\{{ feature.description }}
           </p>
         </div>
       </div>
@@ -22225,12 +22225,12 @@ const steps = [
             <div
               class="text-4xl font-black text-blue-600/20 dark:text-blue-500/20 group-hover:text-blue-600 dark:group-hover:text-blue-500 transition-colors duration-300 shrink-0"
             >
-              {{ step.number }}
+              \\{{ step.number }}
             </div>
             <div class="space-y-2">
-              <h3 class="text-xl font-bold text-zinc-950 dark:text-white">{{ step.title }}</h3>
+              <h3 class="text-xl font-bold text-zinc-950 dark:text-white">\\{{ step.title }}</h3>
               <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed font-medium text-justify">
-                {{ step.description }}
+                \\{{ step.description }}
               </p>
             </div>
           </div>
@@ -23004,61 +23004,55 @@ declare module 'vue-router/auto-resolver' {
   export type ParamParserCustom = never
 }
 
-declare module 'vue-router/auto-routes' {
+declare module "vue-router/auto-routes" {
   import type {
     RouteRecordInfo,
     ParamValue,
     ParamValueOneOrMore,
     ParamValueZeroOrMore,
     ParamValueZeroOrOne,
-  } from 'vue-router'
+  } from "vue-router";
 
   /**
    * Route name map generated by unplugin-vue-router
    */
   export interface RouteNamedMap {
-    '/(auth)/login': RouteRecordInfo<
-      '/(auth)/login',
-      '/login',
+    "/(auth)/login": RouteRecordInfo<
+      "/(auth)/login",
+      "/login",
       Record<never, never>,
       Record<never, never>,
-      | never
-    >,
-    '/(auth)/register': RouteRecordInfo<
-      '/(auth)/register',
-      '/register',
+      never
+    >;
+    "/(auth)/register": RouteRecordInfo<
+      "/(auth)/register",
+      "/register",
       Record<never, never>,
       Record<never, never>,
-      | never
-    >,
-    '/(root)/': RouteRecordInfo<
-      '/(root)/',
-      '/',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/(root)/[...path]': RouteRecordInfo<
-      '/(root)/[...path]',
-      '/:path(.*)',
+      never
+    >;
+    "/(root)/": RouteRecordInfo<"/(root)/", "/", Record<never, never>, Record<never, never>, never>;
+    "/(root)/[...path]": RouteRecordInfo<
+      "/(root)/[...path]",
+      "/:path(.*)",
       { path: ParamValue<true> },
       { path: ParamValue<false> },
-      | never
-    >,
-    '/(root)/about': RouteRecordInfo<
-      '/(root)/about',
-      '/about',
+      never
+    >;
+    "/(root)/about": RouteRecordInfo<
+      "/(root)/about",
+      "/about",
       Record<never, never>,
       Record<never, never>,
-      | never
-    >,
-    '/(root)/contact': RouteRecordInfo<
-      '/(root)/contact',
-      '/contact',
+      never
+    >;
+    "/(root)/contact": RouteRecordInfo<
+      "/(root)/contact",
+      "/contact",
       Record<never, never>,
       Record<never, never>,
-      | never
-    >,
+      never
+    >;
   }
 
   /**
@@ -23072,42 +23066,30 @@ declare module 'vue-router/auto-routes' {
    * @internal
    */
   export interface _RouteFileInfoMap {
-    'src/app/(auth)/login.vue': {
-      routes:
-        | '/(auth)/login'
-      views:
-        | never
-    }
-    'src/app/(auth)/register.vue': {
-      routes:
-        | '/(auth)/register'
-      views:
-        | never
-    }
-    'src/app/(root)/index.vue': {
-      routes:
-        | '/(root)/'
-      views:
-        | never
-    }
-    'src/app/(root)/[...path].vue': {
-      routes:
-        | '/(root)/[...path]'
-      views:
-        | never
-    }
-    'src/app/(root)/about.vue': {
-      routes:
-        | '/(root)/about'
-      views:
-        | never
-    }
-    'src/app/(root)/contact.vue': {
-      routes:
-        | '/(root)/contact'
-      views:
-        | never
-    }
+    "src/app/(auth)/login.vue": {
+      routes: "/(auth)/login";
+      views: never;
+    };
+    "src/app/(auth)/register.vue": {
+      routes: "/(auth)/register";
+      views: never;
+    };
+    "src/app/(root)/index.vue": {
+      routes: "/(root)/";
+      views: never;
+    };
+    "src/app/(root)/[...path].vue": {
+      routes: "/(root)/[...path]";
+      views: never;
+    };
+    "src/app/(root)/about.vue": {
+      routes: "/(root)/about";
+      views: never;
+    };
+    "src/app/(root)/contact.vue": {
+      routes: "/(root)/contact";
+      views: never;
+    };
   }
 
   /**
@@ -23117,9 +23099,7 @@ declare module 'vue-router/auto-routes' {
    * @internal
    */
   export type _RouteNamesForFilePath<FilePath extends string> =
-    _RouteFileInfoMap extends Record<FilePath, infer Info>
-      ? Info['routes']
-      : keyof RouteNamedMap
+    _RouteFileInfoMap extends Record<FilePath, infer Info> ? Info["routes"] : keyof RouteNamedMap;
 }
 `],
   ["frontend/vue/vite.config.ts.hbs", `import { fileURLToPath, URL } from 'node:url'

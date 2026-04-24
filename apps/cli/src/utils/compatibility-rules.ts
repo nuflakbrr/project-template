@@ -40,7 +40,7 @@ export function ensureSingleWeb(frontends: Frontend[]): ValidationResult {
   const { web } = splitFrontends(frontends);
   if (web.length > 1) {
     return validationErr(
-      "Cannot select multiple web frameworks. Choose only one of: tanstack-router, tanstack-start, next, nuxt, svelte, solid, astro",
+      "Cannot select multiple web frameworks. Choose only one of: tanstack-router, tanstack-start, next, vue, nuxt, svelte, solid, astro",
     );
   }
   return Result.ok(undefined);
@@ -148,13 +148,26 @@ export function validateApiFrontendCompatibility(
   api: API | undefined,
   frontends: Frontend[] = [],
 ): ValidationResult {
+  const includesVue = frontends.includes("vue");
   const includesNuxt = frontends.includes("nuxt");
   const includesSvelte = frontends.includes("svelte");
   const includesSolid = frontends.includes("solid");
   const includesAstro = frontends.includes("astro");
-  if ((includesNuxt || includesSvelte || includesSolid || includesAstro) && api === "trpc") {
+  if (
+    (includesVue || includesNuxt || includesSvelte || includesSolid || includesAstro) &&
+    api === "trpc"
+  ) {
+    const fw = includesVue
+      ? "vue"
+      : includesNuxt
+        ? "nuxt"
+        : includesSvelte
+          ? "svelte"
+          : includesSolid
+            ? "solid"
+            : "astro";
     return validationErr(
-      `tRPC API is not supported with '${includesNuxt ? "nuxt" : includesSvelte ? "svelte" : includesSolid ? "solid" : "astro"}' frontend. Please use --api orpc or --api none or remove '${includesNuxt ? "nuxt" : includesSvelte ? "svelte" : includesSolid ? "solid" : "astro"}' from --frontend.`,
+      `tRPC API is not supported with '${fw}' frontend. Please use --api orpc or --api none or remove '${fw}' from --frontend.`,
     );
   }
   return Result.ok(undefined);
@@ -176,12 +189,13 @@ export function isFrontendAllowedWithBackend(
 }
 
 export function allowedApisForFrontends(frontends: Frontend[] = []) {
+  const includesVue = frontends.includes("vue");
   const includesNuxt = frontends.includes("nuxt");
   const includesSvelte = frontends.includes("svelte");
   const includesSolid = frontends.includes("solid");
   const includesAstro = frontends.includes("astro");
   const base: API[] = ["trpc", "orpc", "none"];
-  if (includesNuxt || includesSvelte || includesSolid || includesAstro) {
+  if (includesVue || includesNuxt || includesSvelte || includesSolid || includesAstro) {
     return ["orpc", "none"];
   }
   return base;

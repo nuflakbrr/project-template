@@ -32,6 +32,11 @@ export async function getFrontendChoice(
         hint: "The React Framework for the Web",
       },
       {
+        value: "vue" as const,
+        label: "Vue",
+        hint: "The Progressive JavaScript Framework",
+      },
+      {
         value: "nuxt" as const,
         label: "Nuxt",
         hint: "The Progressive Web Framework for Vue.js",

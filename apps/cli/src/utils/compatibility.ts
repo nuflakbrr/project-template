@@ -4,6 +4,7 @@ export const WEB_FRAMEWORKS: readonly Frontend[] = [
   "tanstack-router",
   "tanstack-start",
   "next",
+  "vue",
   "nuxt",
   "svelte",
   "solid",

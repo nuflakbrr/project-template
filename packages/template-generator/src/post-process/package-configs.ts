@@ -58,6 +58,7 @@ function updateRootPackageJson(vfs: VirtualFileSystem, config: ProjectConfig): v
   const isTanstackStart = frontend.includes("tanstack-start");
   const isTanstackRouter = frontend.includes("tanstack-router");
   const isAstro = frontend.includes("astro");
+  const isVue = frontend.includes("vue");
 
   if (isNext) {
     scripts.dev = "next dev --turbopack";
@@ -80,12 +81,16 @@ function updateRootPackageJson(vfs: VirtualFileSystem, config: ProjectConfig): v
     scripts.format = "prettier --write .";
     scripts["format:check"] = "prettier --check .";
     scripts["generate:seo"] = "tsx scripts/generate-seo.ts";
+  } else if (isVue) {
+    scripts.dev = "pnpm generate:seo && vite";
+    scripts.build = 'pnpm generate:seo && run-p type-check "build-only {@}" --';
+    scripts.preview = "pnpm generate:seo && vite preview";
   } else {
     scripts.dev = pmConfig.dev;
     scripts.build = pmConfig.build;
   }
 
-  if (!isTanstackStart && !isTanstackRouter && !isAstro) {
+  if (!isTanstackStart && !isTanstackRouter && !isAstro && !isVue && !isNext) {
     scripts["check-types"] = pmConfig.checkTypes;
   }
 

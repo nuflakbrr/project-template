@@ -12,12 +12,13 @@ export async function processFrontendTemplates(
     ["tanstack-router", "tanstack-start", "next"].includes(f),
   );
   const hasNuxtWeb = config.frontend.includes("nuxt");
+  const hasVueWeb = config.frontend.includes("vue");
   const hasSvelteWeb = config.frontend.includes("svelte");
   const hasSolidWeb = config.frontend.includes("solid");
   const hasAstroWeb = config.frontend.includes("astro");
   const isConvex = config.backend === "convex";
 
-  if (hasReactWeb || hasNuxtWeb || hasSvelteWeb || hasSolidWeb || hasAstroWeb) {
+  if (hasReactWeb || hasNuxtWeb || hasVueWeb || hasSvelteWeb || hasSolidWeb || hasAstroWeb) {
     if (hasReactWeb) {
       processTemplatesFromPrefix(vfs, templates, "frontend/react/web-base", "apps/web", config);
 
@@ -35,6 +36,8 @@ export async function processFrontendTemplates(
       }
     } else if (hasNuxtWeb) {
       processTemplatesFromPrefix(vfs, templates, "frontend/nuxt", "apps/web", config);
+    } else if (hasVueWeb) {
+      processTemplatesFromPrefix(vfs, templates, "frontend/vue", "apps/web", config);
     } else if (hasSvelteWeb) {
       processTemplatesFromPrefix(vfs, templates, "frontend/svelte", "apps/web", config);
     } else if (hasSolidWeb) {
